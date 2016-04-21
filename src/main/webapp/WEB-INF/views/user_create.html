@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Create a user</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1> Create a new user</h1>
+
+    <div class="row">
+        <form role="form" name="form" class="col-sm-8" action="" method="post" th:object="${form}">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 form-control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" th:value="${form.name}"
+                           required="required" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 form-control-label">Email address</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" name="email" id="email" th:value="${form.email}"
+                           required="required" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 form-control-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password" id="password" required="required"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="passwordRepeated" class="col-sm-2 form-control-label">Repeat</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="passwordRepeated" id="passwordRepeated"
+                           required="required"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="role" class="col-sm-2 form-control-label">Role</label>
+                <div class="col-sm-10">
+                    <select name="role" class="form-control" id="role" required="required">
+                        <option>ADMIN</option>
+                        <option>MANAGER</option>
+                        <option>WAITER</option>
+                        <option>CASHER</option>
+                        <option>COOK</option>
+                    </select></div>
+            </div>
+            <div class="form-group row">
+                <label for="role" class="col-sm-2 form-control-label">Status</label>
+                <div class="col-sm-10">
+                    <select name="role" class=" form-control" id="role" required="required">
+                        <option>NORMAL</option>
+                        <option>TRAINEE</option>
+                        <option>TRAINER</option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="form-group row">
+                <button type="submit" class="btn btn-primary col-sm-2">Save</button>
+                <ul class="col-sm-10">
+                    <li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+                        <span th:text="${e.message}">The error message</span>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
