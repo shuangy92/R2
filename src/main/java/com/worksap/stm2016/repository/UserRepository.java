@@ -7,26 +7,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
-@RepositoryRestResource(collectionResourceRel = "user", path = "user")
+@Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long>,
         JpaSpecificationExecutor {
 
-    public Optional<User> findOneByEmail(String email);
+    /*@Override
+    User save(User user);
 
-    public Page<User> findByNameContainingIgnoreCase(Pageable pageable, String name);
+    @Override
+    void delete(Long id);*/
 
-    public Page<User> findByRole(Pageable pageable, Role role);
+    @Override
+    User findOne(Long id);
 
-    public Page<User> findByStatus(Pageable pageable, UserStatus status);
+    @Override
+    Page<User> findAll();
 
-    public Long countByName(String name);
-
-    public Long countByRole(Role role);
-
-    public Long countByStatus(UserStatus status);
+    Optional<User> findOneByEmail(String email);
 
 }

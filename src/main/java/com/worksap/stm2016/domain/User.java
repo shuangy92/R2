@@ -41,4 +41,8 @@ public class User implements Serializable {
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 }

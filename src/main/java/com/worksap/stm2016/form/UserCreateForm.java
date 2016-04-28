@@ -23,7 +23,7 @@ public class UserCreateForm {
     private String passwordRepeated = "";
 
     @NotNull
-    private Role role = Role.WAITER;
+    private Role role = Role.EMPLOYEE;
 
     @NotNull
     private UserStatus status = UserStatus.NORMAL;

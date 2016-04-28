@@ -1,11 +1,11 @@
 package com.worksap.stm2016.controller;
 
-import com.worksap.stm2016.domain.CurrentUser;
-import com.worksap.stm2016.domain.Request.Request;
+import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
-import com.worksap.stm2016.repository.RequestRepository;
+import com.worksap.stm2016.repository.message.RequestRepository;
 import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

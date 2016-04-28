@@ -7153,7 +7153,7 @@
 
       var self = this;
 
-      // Request the remote document
+      // message the remote document
       jQuery.ajax({
         url: url,
         type: type,
