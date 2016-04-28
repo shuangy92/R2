@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:400,300,600" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+</head>
+<body>
+<div th:fragment="email_form">
+
+    <h1>Spring email with Thymeleaf</h1>
+    <h2>Editable HTML email</h2>
+    <form action="sent.html" method="post">
+        <fieldset>
+            <input type="text" class="subject"
+                   placeholder="subject" required="required" size="60" /> <br />
+            <input type="email" class="to"
+                   placeholder="johnsmith@example.com" required="required" size="60" /> <br />
+            <input type="text" class="toName"
+                   placeholder="johnsmith" required="required" size="60" /> <br />
+            <input type="text" class="fromName"
+                   placeholder="me" required="required" size="60" /> <br />
+            <textarea id="body" class="body"
+                      required="required"></textarea>
+            <!--<script>
+                CKEDITOR.replace('body', {
+                    allowedContent : true,
+                    height: '400px'
+                });
+            </script>-->
+            <br />
+            <input type="submit" value="Send mail" class="button-primary" />
+        </fieldset>
+    </form>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        jQuery(document).ready(function ($) {
+            $("form").submit(function(e) {
+                e.preventDefault();
+                data = {};
+                data.fromName = $(".fromName").val();
+                data.to = $(".to").val();
+                data.toName = $(".toName").val();
+                data.subject = $(".subject").val();
+                data.body = $(".body").val();
+
+                var csrfName = [[${_csrf.parameterName}]];
+                data[csrfName] = [[${_csrf.token}]];
+                $.post("/api/email", data)
+                        .done(function (data) {
+                            console.log(data);
+
+                            });
+                        });
+        });
+
+
+    </script>
+</div>
+</body>
+</html>

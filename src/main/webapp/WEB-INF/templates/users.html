@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Employee List</title>
+
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
+          media="screen" type="text/css"/>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1>Employee List</h1>
+    <!--<table class="table table-hover">
+
+            <td><a th:href="@{'/user/' + ${user.id} + '/schedule'}" th:text="${'Schedules (' + ')'}">Schedules</a></td>
+
+            <td><a th:href="@{'/user/' + ${user.id} + '/Shifts'}">Shifts</a></td>
+
+    </table>-->
+
+    <table id="table"
+           data-toolbar="#toolbar"
+           data-sortable="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-pagination="true"
+           data-side-pagination="server"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-detail-view="true"
+           data-minimum-count-columns="1"
+           data-id-field="id"
+           smartDisplay="true">
+    </table>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        function initTable() {
+            var $table = $('#table');
+            $table.bootstrapTable({
+                columns: [{
+                    field: 'id',
+                    title: 'Emp No.',
+                    sortable: true,
+                    filterControl: 'input'
+                }, {
+                    field: 'name',
+                    title: 'Name',
+                    sortable: true,
+                    filterControl: 'input',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.id + '/profile">' + row.name + '</a>';
+                    }
+                }, {
+                    field: 'role',
+                    title: 'Role',
+                    sortable: true,
+                    filterControl: 'select'
+                }, {
+                    field: 'status',
+                    title: 'Status',
+                    sortable: true,
+                    filterControl: 'select'
+                }],
+                url: '/api/user',
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    console.log(p);
+                    var data = {};
+                    var csrfName = [[${_csrf.parameterName}]];
+                    data[csrfName] = [[${_csrf.token}]];
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "id";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                detailFormatter: function (index, row, element) {
+                    var url = '/api/user/' + row.id;
+                    var result;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        success: function (user) {
+                            var basic =
+                            '<div class="row" id="user-info">' +
+                            '<dl class="col-md-4 dl-horizontal">' +
+                            '<dt>Name</dt>' + '<dd>' + user.name + '</dd>' +
+                            '<dt>Emp No.</dt>' + '<dd>' + user.id + '</dd>' +
+                            '</dl>' +
+                            '<dl class="col-md-4 dl-horizontal">' +
+                            '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
+                            '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
+                            '<dt>Status</dt>' + '<dd>' + user.status + '</dd>' +
+                            '</dl>';
+                            var active = "";
+                            if (user.active == false) {
+                                active =
+                                        '<dl class="col-md-4 dl-horizontal">' +
+                                        '<strong>This employee has resigned</strong>' +
+                                        '</dl>';
+                            }
+
+                            result = basic + active + '</div>';
+                        },
+                        async: false,
+                    });
+
+                    return result;
+                },
+                onPostBody: function () {
+                    $(".filterControl input").attr('placeholder', 'Search');
+                },
+                filterControl: true,
+
+            });
+        }
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        })
+    </script>
+</div>
+</body>
+</html>

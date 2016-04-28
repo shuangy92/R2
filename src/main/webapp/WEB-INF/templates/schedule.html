@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Schedule</title>
+    <script type="text/javascript" th:src="@{/static/js/weekpicker.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.autosave.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment-with-locales.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/chosen/chosen.jquery.js}"></script>
+    <link th:href="@{/static/bower_components/chosen/chosen.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <h1 th:text="${user.name} + '\'s Schedule Table'">Schedule Table</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form>
+                <h4>Select a time zone<br/>
+                    <small>The default time zone is guessed based on your location.</small>
+                </h4>
+                <select class="timezone-select" name="timezone-select"></select>
+                <h4>Select a week</h4>
+                <input type="text" id="weekpicker" th:required="required" name="newsdate"/>
+            </form>
+        </div>
+        <div class="panel-body">
+            <div class="schedule-wrapper row" id="schedule-wrapper"></div>
+        </div>
+        <div class="panel-footer" style="height: 40px;"><p class="info">Saved!</p></div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var aschedule;
+        var scheduleId;
+        var aweek;
+        function initSechduleSetChart() {
+            aschedule =
+                    '<form class="time-slot">' +
+                        //'<div class="boxes">' +
+                    '<div class="box"><input class="box-time startTime" type="text" name="startTime"/></div>' +
+                    '<div class="box"><input class="box-time endTime" type="text" name="endTime"/></div>' +
+                        //'</div>' +
+                    '</form>';
+            var aday =
+                    '<div class="list a-day col-lg-1 col-md-3 col-sm-4 col-xs-6" style="display: block;">' +
+                    '<Label class="date-label"></Label>' +
+                    '<div class="time-slots" style="display: block;"></div>' +
+                    '<button type="button" class="btn btn-default btn-sm btn-add-time-slot"><span class="glyphicon glyphicon-plus"></span> Add time slot</button>' +
+                    '</div>';
+            var i;
+            aweek = "";
+            for (i = 0; i < 7; i++) {
+                aweek += aday;
+            }
+        }
+
+        function handleSelectedDate(startDate) {
+            document.getElementById("schedule-wrapper").innerHTML = aweek;
+            $(".schedule-wrapper").show();
+
+            var dateLabels = document.getElementsByClassName("date-label");
+            var day = document.getElementsByClassName("a-day");
+
+            for (var i = 0; i < 7; i++) {
+                var dat = startDate;
+                dateLabels[i].innerHTML = dat.toString("ddd d MMMM");
+                day[i].setAttribute("date", dat.toString("yyyyMMdd"));
+                day[i].setAttribute("id", "day-" + i);
+                dat.setDate(dat.getDate() + 1);
+            }
+            //before create new form, load available schedule id
+            var url = window.location.pathname + '/search';
+            var data = {};
+            var csrfName = [[${_csrf.parameterName}]];
+            data[csrfName] = [[${_csrf.token}]];
+            data.startDate = parseInt($("#day-0").attr("date"));
+            data.user = [[${currentUser.user}]];
+            $.post(url, data)
+                    .done(function (data) {
+                        if (data) {
+                            scheduleId = data.scheduleId;
+                            var timeSlots = data.timeSlots;
+                            $.each(timeSlots, function (i, v) {
+                                var m_date = v.date;
+                                var m_slot_id = v.id;
+                                var m_time_slots = $('.a-day').filter('[date=' + m_date + ']').find('.time-slots');
+                                var m_time_form = $(aschedule).appendTo(m_time_slots).attr("date", m_date).attr("slot-id", v.id);
+                                if (v.startTime) {
+                                    $(m_time_form.find(".startTime")).timepicker({'timeFormat': 'H:i'});
+                                    var time = moment(v.startTime, "HH:mm");
+                                    $(m_time_form.find(".startTime")).timepicker('setTime', new Date(time));
+                                }
+                                if (v.endTime) {
+                                    $(m_time_form.find(".endTime")).timepicker({'timeFormat': 'H:i'});
+                                    var time = moment(v.endTime, "HH:mm");
+                                    $(m_time_form.find(".endTime")).timepicker('setTime', new Date(time));
+                                }
+                                $(m_time_form).slotAutoSave($('[slot-id=' + m_slot_id + ']'), m_slot_id, m_date);
+                                $(".panel-footer .info").hide();
+                            });
+                        } else {
+                            scheduleId = (new Date()).valueOf();
+                            $(".panel-footer .info").html("No schedule set for this week").show();
+                        }
+                    });
+            $(".schedule-wrapper").attr("schedule-id", scheduleId);
+        }
+        function postData(btn) {
+            var date = btn.parent().attr("date");
+            var slotId = moment.utc().valueOf();
+
+            $(aschedule).appendTo(btn.prev()).attr("date", date).attr("index", btn.prev().children().length - 1).attr("slot-id", slotId)
+                    .slotAutoSave($('[slot-id=' + slotId + ']'), slotId, date);
+
+        }
+        function initTimeZoneSelect() {
+            var timezoneList = moment.tz.names();
+            var localTimezone = moment.tz.guess();
+            $(timezoneList).each(function (i, v) {
+                if (v == localTimezone) {
+                    $(".timezone-select").append($("<option>").attr("value", v).text(v).attr("selected", "selected"));
+                } else {
+                    $(".timezone-select").append($("<option>").attr("value", v).text(v));
+                }
+            });
+            $(".timezone-select").chosen({
+                search_contains: true
+            });
+            $(".guessed-timezone").trigger('chosen:updated');
+        }
+        jQuery(document).ready(function ($) {
+
+            initSechduleSetChart();
+            initTimeZoneSelect();
+
+            var curr = new Date; // get current date
+            var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+            var last = first + 6;
+            var startDate = new Date(curr.setDate(first));
+            var endDate = new Date(curr.setDate(last));
+            $('#weekpicker').val($.datepicker.formatDate('mm/dd/yy', startDate)
+                    + ' - ' + $.datepicker.formatDate('mm/dd/yy', endDate));
+            handleSelectedDate(startDate);
+
+            $('.chosen-search').on('focus', 'input', function () {
+                $(this).attr("placeholder", "eg: Shanghai, +8, UTC");
+            });
+
+            $('.schedule-wrapper').on('focus', '.box-time', function () {
+                $(this).timepicker({'timeFormat': 'H:i'});
+            });
+            $("body").on('click', '.btn-add-time-slot', function () {
+                postData($(this));
+            });
+
+            $.fn.slotAutoSave = function (slot, slotId, date) {
+                slot.autosave({
+                    callbacks: {
+                        save: {
+                            method: "ajax",
+                            options: {
+                                url: window.location.pathname + '/save',
+                                success: function (data) {
+                                    $(".info").html("Saved").fadeIn().delay(800).fadeOut();
+                                },
+                                fail: function () {
+                                    $(".info").html("Error: failed to save data").fadeIn();
+                                },
+                                method: "POST",
+                            }
+                        },
+                        data: function (options, $inputs, formData) {
+                            var data = {};
+                            /* data of time slot */
+                            $.each($inputs.serializeArray(), function (i, field) {
+                                if (field.name == "startTime" || field.name == "endTime") {
+                                    var time = field.value;
+                                    time = Date.parse(time);
+                                    time = time.toString('HH:mm');
+                                    data[field.name] = time;
+                                } else {
+                                    data[field.name] = field.value;
+                                }
+                            });
+                            /*var aa = $('[slot-id=' + slotId + ']').find($('.startTime'));
+                             var aa = $('[slot-id=' + slotId + ']').find($('.endTime'));
+                             $.delay(1000);
+                             console.log(aa.val());
+                             console.log(bb.val());*/
+
+                            data.slotId = slotId;
+                            data.date = parseInt(date);
+
+                            /* data of schedule */
+                            data.scheduleId = scheduleId;
+                            data.startDate = parseInt($("#day-0").attr("date"));
+                            data.user = [[${currentUser.user}]];
+                            data.timeZone = $(".timezone-select").val();
+
+                            var csrfName = [[${_csrf.parameterName}]];
+                            data[csrfName] = [[${_csrf.token}]];
+
+                            console.log(data);
+
+                            return data;
+                        },
+                    }
+                });
+            };
+        });
+        //]]>
+
+    </script>
+</div>
+</body>
+</html>
