@@ -2,11 +2,9 @@ package com.worksap.stm2016.domain;
 
 
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity

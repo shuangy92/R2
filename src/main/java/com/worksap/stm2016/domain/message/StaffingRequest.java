@@ -1,9 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
 import com.worksap.stm2016.domain.Job;
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.enums.RequestStatus;
-import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -22,9 +19,14 @@ public class StaffingRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @ManyToOne
+    @Column(name="request_id")
+    private Long id;
+
+    @MapsId
+    @OneToOne(mappedBy = "staffingRequest")
     @JoinColumn(name = "request_id")
     private Request request;
+
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -46,9 +48,9 @@ public class StaffingRequest implements Serializable {
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
-    private StaffingRequestType status;
+    private StaffingRequestType type;
 
-    public static enum StaffingRequestType {
-        REPLACE, NEW;
+    public enum StaffingRequestType {
+        REPLACE, NEW
     }
 }

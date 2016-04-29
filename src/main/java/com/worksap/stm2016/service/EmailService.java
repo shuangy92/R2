@@ -1,14 +1,11 @@
 package com.worksap.stm2016.service;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.message.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;

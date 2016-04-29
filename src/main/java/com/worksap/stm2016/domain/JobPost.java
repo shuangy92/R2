@@ -1,7 +1,6 @@
 package com.worksap.stm2016.domain;
 
 
-import com.worksap.stm2016.domain.message.StaffingRequest;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -21,9 +20,25 @@ public class JobPost implements Serializable {
     @Column(name = "job_post_id", nullable = false, updatable = false)
     private Long id;
 
+    /* from staffing request */
     @ManyToOne
-    @JoinColumn(name = "request_id")
-    private StaffingRequest staffingRequest;
+    @JoinColumn(name = "job_id")
+    private Job job;
+
+    @Column(name = "vacancies")
+    private Integer vacancies;
+
+    @Column(name = "startDate")
+    @Type(type="date")
+    private Date startDate;
+
+    @Column(name = "end_date")
+    @Type(type="date")
+    private Date endDate;
+
+    @Column(name = "deadline")
+    private Date deadline;
+
 
     @Column(name = "title")
     private String title;

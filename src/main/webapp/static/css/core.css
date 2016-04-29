@@ -191,3 +191,12 @@
     margin: auto;
     margin-top: 20px;
 }
+
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+}
+
+.form-horizontal .control-label{
+    text-align:left;
+}

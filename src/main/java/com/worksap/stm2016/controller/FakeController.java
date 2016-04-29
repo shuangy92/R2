@@ -1,31 +1,47 @@
-/*package com.worksap.stm2016.controller;
+package com.worksap.stm2016.controller;
 
+
+import com.worksap.stm2016.domain.Job;
+import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
-import com.worksap.stm2016.model.User;
-import com.worksap.stm2016.service.user.UserService;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.worksap.stm2016.repository.JobRepository;
+import com.worksap.stm2016.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Locale;
-import java.util.Random;
-
 @RestController
 public class FakeController {
 
-    @RequestMapping(value = "/fake", method = RequestMethod.GET)
+    @Autowired
+    JobRepository jobRepository;
+    @Autowired
+    UserRepository userRepository;
+
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
+    public void data() {
+        for (Integer i = 1; i < 101; i++) {
+            Job job = new Job();
+            job.setDescription("Description for job " + i.toString());
+            job.setHours(40);
+            job.setRequirement("Requirement for job " + i.toString());
+            job.setTitle("Job Title No. " + i.toString());
+            jobRepository.save(job);
+
+            User user = new User();
+            user.setName("user name no." + i.toString());
+            user.setEmail(i.toString() + "@gmail.com");
+            user.setPasswordHash(new BCryptPasswordEncoder().encode("pass"));
+            user.setRole(Role.EMPLOYEE);
+            user.setStatus(UserStatus.NORMAL);
+            userRepository.save(user);
+        }
+    }
+
+    /*@RequestMapping(value = "/fake", method = RequestMethod.GET)
     public JSONArray fake() {
         JSONArray result = new JSONArray();
 
@@ -61,6 +77,6 @@ public class FakeController {
             e.printStackTrace();
         }
         return result;
-    }
+    }*/
 
-}*/
+}

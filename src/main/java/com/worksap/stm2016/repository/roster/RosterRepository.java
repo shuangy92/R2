@@ -1,8 +1,8 @@
 package com.worksap.stm2016.repository.roster;
 
 
-import com.worksap.stm2016.domain.roster.Roster;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.roster.Roster;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface RosterRepository extends JpaRepository<Roster, Long> {
-    public Optional<Roster> findOneByAuthorAndStartDate(User author, Integer startDate);
+    Optional<Roster> findOneByAuthorAndStartDate(User author, Integer startDate);
 
-    public Collection<Roster> findByAuthor(User author);
+    Collection<Roster> findByAuthor(User author);
 
-    public Collection<Roster> findByStartDate(Integer startDate);
+    Collection<Roster> findByStartDate(Integer startDate);
 }

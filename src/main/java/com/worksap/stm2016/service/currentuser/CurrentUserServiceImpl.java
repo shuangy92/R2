@@ -13,7 +13,7 @@ public class CurrentUserServiceImpl implements CurrentUserService {
 
     @Override
     public boolean canAccessUser(CurrentUser currentUser, Long userId) {
-        LOGGER.debug("Checking if user={} has access to user={}", currentUser, userId);
+        //LOGGER.debug("Checking if user={} has access to user={}", currentUser, userId);
         return currentUser != null
                 && (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MANAGER || currentUser.getId().equals(userId))
                 && currentUser.getUser().isActive() == true;
@@ -21,7 +21,7 @@ public class CurrentUserServiceImpl implements CurrentUserService {
 
     @Override
     public boolean canAccessUserResigned(CurrentUser currentUser, Long userId) {
-        LOGGER.debug("Checking if user={} has access to user={}", currentUser, userId);
+        //LOGGER.debug("Checking if user={} has access to user={}", currentUser, userId);
         return currentUser != null
                 && (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MANAGER || currentUser.getId().equals(userId));
     }

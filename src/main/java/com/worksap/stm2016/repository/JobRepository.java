@@ -1,7 +1,6 @@
 package com.worksap.stm2016.repository;
 
 
-import com.worksap.stm2016.domain.Contract;
 import com.worksap.stm2016.domain.Job;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

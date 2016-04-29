@@ -1,9 +1,9 @@
 package com.worksap.stm2016.controller.roster;
 
+import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.roster.Roster;
 import com.worksap.stm2016.domain.roster.Shift;
 import com.worksap.stm2016.domain.roster.TimeSlot;
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.service.RosterService;
 import com.worksap.stm2016.service.ScheduleService;
 import com.worksap.stm2016.service.ShiftService;

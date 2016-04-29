@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "request")
-public class Request implements Serializable {
+public abstract class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,4 +58,8 @@ public class Request implements Serializable {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private RequestStatus status = RequestStatus.PENDING;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private StaffingRequest staffingRequest;
 }

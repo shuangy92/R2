@@ -1,8 +1,8 @@
 package com.worksap.stm2016.controller;
 
-import com.worksap.stm2016.domain.util.CurrentUser;
-import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.message.Request;
+import com.worksap.stm2016.domain.util.CurrentUser;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
 import com.worksap.stm2016.repository.message.RequestRepository;
@@ -47,7 +47,7 @@ public class RequestController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "text/html")
     public String getUserRequestPage(@PathVariable Long id) {
-        return "request_user";
+        return "request_employee";
     }
 
     @ResponseBody
@@ -117,7 +117,7 @@ public class RequestController {
 
     @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "text/html")
     public String getRequestPage() {
-        return "request";
+        return "request_HR";
     }
 
     @ResponseBody

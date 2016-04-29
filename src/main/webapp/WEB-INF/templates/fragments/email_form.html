@@ -49,8 +49,6 @@
                 data.subject = $(".subject").val();
                 data.body = $(".body").val();
 
-                var csrfName = [[${_csrf.parameterName}]];
-                data[csrfName] = [[${_csrf.token}]];
                 $.post("/api/email", data)
                         .done(function (data) {
                             console.log(data);
