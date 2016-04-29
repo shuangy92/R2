@@ -6,67 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29635c66-2891-409a-a092-fefbb5a6078c" name="Default" comment="request body">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_user.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/EmailApi.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/EmailApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/HomeController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/HomeController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UsersController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UsersController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Department.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Department.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Job.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Job.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/JobPost.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/JobPost.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Email.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Email.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/RequestType.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/RequestType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserRepository.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/user/UserService.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/user/UserService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/EmailApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/EmailApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/HomeController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/HomeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/RosterController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/RosterController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ScheduleController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ScheduleController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ShiftController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ShiftController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UsersController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UsersController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Job.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Job.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobPost.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobPost.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Email.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Email.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/RequestType.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/RequestType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/ContractRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/ContractRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobPostRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobPostRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/EmailRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/EmailRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/RequestRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/RequestRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/StaffingRequestRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/StaffingRequestRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/RosterRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/RosterRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/ScheduleRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/ScheduleRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/ShiftRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/roster/ShiftRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/EmailService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/EmailService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/RosterService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/RosterService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/ScheduleService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/ScheduleService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/ShiftService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/ShiftService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/TimeSlotService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/TimeSlotService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/user/UserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/user/UserService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/data.sql" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/email_form.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/email_form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/static/css/core.css" afterPath="$PROJECT_DIR$/src/main/webapp/static/css/core.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/data.sql" afterPath="$PROJECT_DIR$/target/classes/data.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
     </list>
     <ignored path="yangshuang-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -150,8 +90,8 @@
       <file leaf-file-name="RequestController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="213" column="26" selection-start-line="213" selection-start-column="26" selection-end-line="213" selection-end-column="26" />
+            <state relative-caret-position="383">
+              <caret line="221" column="71" selection-start-line="221" selection-start-column="71" selection-end-line="221" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -181,8 +121,10 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="340">
-              <caret line="42" column="73" selection-start-line="42" selection-start-column="73" selection-end-line="42" selection-end-column="73" />
-              <folding />
+              <caret line="36" column="73" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
+              <folding>
+                <marker date="1461909784830" expanded="false" signature="49:635" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1523,7 +1465,7 @@
       <workItem from="1461166322689" duration="2017000" />
       <workItem from="1461553093525" duration="32332000" />
       <workItem from="1461814239551" duration="29274000" />
-      <workItem from="1461904201396" duration="4897000" />
+      <workItem from="1461904201396" duration="4931000" />
     </task>
     <task id="LOCAL-00001" summary="half schema">
       <created>1461814995576</created>
@@ -1539,11 +1481,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461815066239</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="request body">
+      <created>1461909793214</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1461909793214</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="232588000" />
+    <option name="totallyTimeSpent" value="232622000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1597,6 +1546,7 @@
     <MESSAGE value="half schema 2" />
     <MESSAGE value="request body" />
     <option name="LAST_COMMIT_MESSAGE" value="request body" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1940,8 +1890,10 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
-          <caret line="42" column="73" selection-start-line="42" selection-start-column="73" selection-end-line="42" selection-end-column="73" />
-          <folding />
+          <caret line="36" column="73" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
+          <folding>
+            <marker date="1461909784830" expanded="false" signature="49:635" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2011,8 +1963,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="213" column="26" selection-start-line="213" selection-start-column="26" selection-end-line="213" selection-end-column="26" />
+        <state relative-caret-position="383">
+          <caret line="221" column="71" selection-start-line="221" selection-start-column="71" selection-end-line="221" selection-end-column="71" />
           <folding />
         </state>
       </provider>
