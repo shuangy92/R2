@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>My Request</title>
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.steps.min.js}"></script>
+
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>My requests</h3>
+
+        <form class="form-horizontal" role="form" id="form" method="post">
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="department" class="col-sm-2 control-label">Department</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Department" type="input" id="department" name="department" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="jobId" class="col-sm-2 control-label">Job Code</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Job Code" type="input" id="jobId" name="jobId" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vacancies" class="col-sm-2 control-label"># of vacancies</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="department" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="col-sm-2 control-label">Desired Starting Date</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="department" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="col-sm-2 control-label">Desired Ending Date</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Desired Ending Date" type="input" id="endDate" name="department" required="required"/>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
+
+        </form>
+
+
+
+                    <div class="form-group">
+                        <select class="form-control request-select" id="type" name="type" required="required">
+                            <option></option>
+                            <option value="LEAVE">Leave</option>
+                            <option value="RESIGNATION">Resignation</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Your message" rows="5" id="message" name="senderMessage"></textarea>
+                    </div>
+
+
+
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+
+        jQuery(document).ready(function ($) {
+            $(".panel-footer").hide();
+
+            initTable();
+
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var data = {};
+                data.senderMessage = $('#message').val();
+                data.title = $('#title').val();
+                data.type = $('#type').val();
+                var csrfName = [[${_csrf.parameterName}]];
+                data[csrfName] = [[${_csrf.token}]];
+
+                var url = "/user/" + [[${currentUser.user.id}]] + "/request";
+                $.post(url, data)
+                        .done(function (data) {
+                            $(".panel-footer").html(data).show();
+                            $.notify({
+                                icon: 'fa fa-info-circle',
+                                message: data,
+                                url: "/request"
+                            },{
+                                element: 'body',
+                                type: 'info',
+                                delay: 0,
+                                placement: {
+                                    from: "bottom",
+                                    align: "right"
+                                },
+                            });
+                        });
+
+            });
+            $(".request-select").select2({
+                placeholder: "Request type",
+                minimumResultsForSearch: Infinity
+            });
+        });
+
+    </script>
+</div>
+</body>
+</html>
