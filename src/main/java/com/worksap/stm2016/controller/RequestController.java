@@ -50,6 +50,12 @@ public class RequestController {
         return "request_employee";
     }
 
+    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
+    @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET, produces = "text/html")
+    public String getRequestSubmitPage(@PathVariable Long id) {
+        return "request_submit";
+    }
+
     @ResponseBody
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "application/json")
@@ -185,7 +191,7 @@ public class RequestController {
     @ResponseBody
     @RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
     public Request getRequest(@PathVariable Long id) {
-        return requestRepository.findOne(id);
+        return (Request) requestRepository.findOne(id);
     }
 
     private final List<SseEmitter> emitters = new ArrayList<>();
@@ -201,7 +207,7 @@ public class RequestController {
         return emitter;
     }
 
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/user/{id}/request", method = RequestMethod.POST)
     public String sendMessage(Authentication authentication,
                               @PathVariable Long id,
@@ -233,7 +239,7 @@ public class RequestController {
             });
             return "Your request has been sent.";
         }
-    }
+    }*/
 
     @ResponseBody
     @RequestMapping(value = "/request/{id}", method = RequestMethod.POST)
@@ -243,13 +249,13 @@ public class RequestController {
                                 @RequestParam(name = "status") String status) throws ParseException {
 
         User replier = ((CurrentUser) authentication.getPrincipal()).getUser();
-        Request request = requestRepository.findOne(id);
+        Request request = (Request) requestRepository.findOne(id);
         request.setStatus(RequestStatus.valueOf(status));
         request.setReplierMessage(replierMessage);
         request.setReplier(replier);
         request.setReplyDate(new Date());
 
-        Request myRequest = requestRepository.save(request);
+        Request myRequest = (Request) requestRepository.save(request);
 
 
         return "Your reply has been sent";

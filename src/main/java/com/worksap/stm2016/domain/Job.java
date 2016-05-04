@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain;
 
 
+import com.worksap.stm2016.domain.message.Request;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,4 +30,8 @@ public class Job implements Serializable {
 
     @Column(name = "hours")
     private Integer hours;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }

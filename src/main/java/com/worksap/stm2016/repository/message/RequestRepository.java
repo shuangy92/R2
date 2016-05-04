@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-public interface RequestRepository extends PagingAndSortingRepository<Request, Long>,
+public interface RequestRepository<T extends Request> extends PagingAndSortingRepository<Request, Long>,
         JpaSpecificationExecutor {
-    Collection findBySenderAndType(User sender, RequestType type);
 }

@@ -12,8 +12,6 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment-with-locales.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/js/jquery.steps.min.js}"></script>
-
 
 </head>
 <body>
@@ -36,295 +34,99 @@
                data-id-field="sendDate"
                smartDisplay="true">
         </table>
-        <form class="form-horizontal col-sm-7" role="form" id="form" method="post">
-            <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">Title</label>
-                <div class="col-sm-8">
-                    <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="department" class="col-sm-2 control-label">Department</label>
-                <div class="col-sm-8">
-                    <input th:value="bb" class="form-control" placeholder="Department" type="input" id="department" name="department" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="jobId" class="col-sm-2 control-label">I would like to...</label>
-                <div class="col-sm-5">
-                <select class="form-control staffing-request-select" id="type" name="type" required="required">
-                    <option value="REPLACE">Replace existing positions</option>
-                    <option value="ADD">Request new positions</option>
-                </select>
-                    </div>
-            </div>
-            <div class="form-group">
-                <label for="jobId" class="col-sm-2 control-label">Job Code</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="Job Code" type="number" id="jobId" name="jobId" required="required"/>
-                </div>
-                <div class="col-sm-3">
-                    <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="vacancies" class="col-sm-2 control-label"># of vacancies</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="department" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="startDate" class="col-sm-2 control-label">Desired Starting Date</label>
-                <div class="col-sm-5">
-                    <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="startDate" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="contractLength" class="col-sm-2 control-label">Desired Contract Length</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" id="contractLength" name="contractLength" required="required"/>
-                </div>
-                <div class="col-sm-3">
-                    <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
-                    <input type="radio" name="contractLengthUnit" value="month" /> Month
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="startDate" class="col-sm-2 control-label">Deadline for Application</label>
-                <div class="col-sm-5">
-                    <input class="form-control" placeholder="Leave blank if not sure" type="input" id="deadline" name="deadline" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="senderMessage" class="col-sm-2 control-label">Reason for request</label>
-                <div class="col-sm-5">
-                    <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
-                </div>
-            </div>
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
-            </div>
-        </form>
-
-        <div class="col-sm-5">
-            <form class="form" role="form">
-                <div class="form-group">
-                    <label  class="control-label">Job Description: </label>
-                    <p id="description"></p>
-                </div>
-                <div class="form-group">
-                    <label class=" control-label">Job Requirement: </label>
-                    <p id="requirement"></p>
-                </div>
-                <div class="form-group">
-                    <label class=" control-label">Standard Hours: </label>
-                    <p id="standardHours"></p>
-                </div>
-                <div class="form-group">
-                    <label class=" control-label">Proposed Contract End Date: </label>
-                    <p id="endDate"></p>
-                </div>
-            </form>
+        <a href="#" th:href="@{request/submit}"> Create a new request</a>
         </div>
-    </div>
-    <script type="text/javascript" th:inline="javascript">
+
+        <script type="text/javascript" th:inline="javascript">
 
 
-        jQuery(document).ready(function ($) {
-            var endDate;
+            jQuery(document).ready(function ($) {
+                initTable();
+            });
 
-            initTable();
+            function initTable() {
+                var url = "/user/" + [[${currentUser.user.id}]] + "/request";
 
-            $("#startDate").datepicker();
-            $("#deadline").datepicker();
-
-            $("#jobId").change(function () {
-                var url = "/api/job/" + $("#jobId").val();
-                $.get(url)
-                        .done(function (data) {
-                            $("#description").html(data.description);
-                            $("#requirement").html(data.requirement);
-                            $("#standardHours").html(data.hours);
-                        });
-            })
-            $("#contractLength, input[name='contractLengthUnit']").change(function () {
-                var length = parseInt($("#contractLength").val());
-                if ($("input[name='contractLengthUnit']:checked").val() == "month") {
-                    endDate = Date.parse($("#startDate").val()).addMonths(length);
-                } else {
-                    endDate = Date.parse($("#startDate").val()).addWeeks(length);
-                }
-                $("#endDate").html(endDate.toString("M/dd/yyyy"));
-            })
-
-            $("form").submit(function (e) {
-                e.preventDefault();
-
-                var data = new Object();
-                var staffingRequest = new Object();
-                var request = new Object();
-                $.each($('#form').serializeArray(), function(i, field) {
-                    switch (field.name) {
-                        case "contractLength":
-                        case "contractLengthUnit":
-                            var length = parseInt($("#contractLength").val());
-                            if (field.value == "month") {
-                                endDate = Date.parse($("#startDate").val()).addMonths(length);
+                $('#table').bootstrapTable({
+                    columns: [{
+                        field: 'sendDate',
+                        title: 'Date',
+                        sortable: true,
+                        formatter: function (index, row, element) {
+                            return moment(row.sendDate).format('MM/DD/YYYY h:mm');
+                        }
+                    }, {
+                        field: 'title',
+                        title: 'Title',
+                        sortable: true,
+                        filterControl: 'input'
+                    }, {
+                        field: 'requestType',
+                        title: 'Request Type',
+                        sortable: true,
+                        filterControl: 'select'
+                    }, {
+                        field: 'status',
+                        title: 'Status',
+                        sortable: true,
+                        filterControl: 'select',
+                        formatter: function (index, row, element) {
+                            if (row.status == 'APPROVED') {
+                                return '<p class="bg-success">' + row.status + '</p>'
+                            } else if (row.status == 'DECLINED') {
+                                return '<p class="bg-danger">' + row.status + '</p>'
                             } else {
-                                endDate = Date.parse($("#startDate").val()).addWeeks(length);
+                                return '<p class="bg-warning">' + row.status + '</p>'
                             }
-                            staffingRequest["endDate"] = endDate;
-                            break;
-                        case "startDate":
-                        case "deadline":
-                            staffingRequest[field.name] = Date.parse(field.value);
-                            break;
-                        case "senderMessage":
-                        case "title":
-                            request[field.name] = field.value;
-                            break;
-                        default:
-                            staffingRequest[field.name] = field.value;
-                            break;
-                    }
-                    /*if (field.name == "contractLength" || field.name == "contractLengthUnit") {
-                        var length = parseInt($("#contractLength").val());
-                        if (field.value == "month") {
-                            endDate = Date.parse($("#startDate").val()).addMonths(length);
-                        } else {
-                            endDate = Date.parse($("#startDate").val()).addWeeks(length);
                         }
-                        staffingRequest["endDate"] = endDate;
-                    } else if (field.name == "senderMessage" || field.name == "title") {
-                        request[field.name] = field.value;
-                    } else {
-                        staffingRequest[field.name] = field.value;
-                    }*/
-                });
-
-                staffingRequest.request = request;
-                //request.type = "STAFFING";
-
-                //data.staffingRequest = staffingRequest;
-
-                //var csrfName = [[${_csrf.parameterName}]];
-                //staffingRequest[csrfName] = [[${_csrf.token}]];
-
-                var url = "/api/request";
-                $.ajax({
-                    type: "POST",
+                    }],
                     url: url,
-                    data: JSON.stringify(staffingRequest),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                })
-                /*$.post(url, data)
-                        .done(function (data) {
-                            $(".panel-footer").html(data).show();
-                            $.notify({
-                                icon: 'fa fa-info-circle',
-                                message: data,
-                                url: "/request"
-                            },{
-                                element: 'body',
-                                type: 'info',
-                                delay: 0,
-                                placement: {
-                                    from: "bottom",
-                                    align: "right"
-                                },
-                            });
-                        });*/
-
-            });
-            $(".staffing-request-select").select2({
-                minimumResultsForSearch: Infinity
-            });
-        });
-
-        function initTable() {
-            var url = "/user/" + [[${currentUser.user.id}]] + "/request";
-
-            $('#table').bootstrapTable({
-                columns: [{
-                    field: 'sendDate',
-                    title: 'Date',
-                    sortable: true,
-                    formatter: function (index, row, element) {
-                        return moment(row.sendDate).format('MM/DD/YYYY h:mm');
-                    }
-                }, {
-                    field: 'title',
-                    title: 'Title',
-                    sortable: true,
-                    filterControl: 'input'
-                }, {
-                    field: 'type',
-                    title: 'Request Type',
-                    sortable: true,
-                    filterControl: 'select'
-                }, {
-                    field: 'status',
-                    title: 'Status',
-                    sortable: true,
-                    filterControl: 'select',
-                    formatter: function (index, row, element) {
-                        if (row.status == 'APPROVED') {
-                            return '<p class="bg-success">' + row.status + '</p>'
-                        } else if (row.status == 'DECLINED') {
-                            return '<p class="bg-danger">' + row.status + '</p>'
+                    contentType: "application/x-www-form-urlencoded",
+                    queryParamsType: "limit",
+                    queryParams: function (p) {
+                        var data = {};
+                        if (p.sort) {
+                            data.sort = p.sort;
                         } else {
-                            return '<p class="bg-warning">' + row.status + '</p>'
+                            data.sort = "sendDate";
                         }
-                    }
-                }],
-                url: url,
-                contentType: "application/x-www-form-urlencoded",
-                queryParamsType: "limit",
-                queryParams: function (p) {
-                    var data = {};
-                    if (p.sort) {
-                        data.sort = p.sort;
-                    } else {
-                        data.sort = "sendDate";
-                    }
-                    data.order = p.order;
-                    data.limit = p.limit;
-                    data.offset = p.offset;
-                    data.filter = p.filter;
-                    return data;
-                },
-                detailFormatter: function (index, row, element) {
-                    var result =
-                            '<div class="row">' +
-                            '<dl class="col-md-4">' +
-                            '<dt>Request Type</dt>' + '<dd>' + row.type + '</dd>' +
-                            '<dt>Status</dt>' + '<dd>' + row.status + '</dd>' +
-                            '</dl>' +
-                            '<dl class="col-md-4">' +
-                            '<dt>Send Date</dt>' + '<dd>' + moment(row.sendDate).format('MM/DD/YYYY h:mm') + '</dd>' +
-                            '<dt>Title</dt>' + '<dd>' + row.title + '</dd>' +
-                            '<dt>Your Message</dt>' + '<dd>' + row.senderMessage + '</dd>' +
-                            '</dl>' +
-                            '<dl class="col-md-4">' +
-                            '<dt>Reply Date</dt>' + '<dd>' + (row.replyDate == null ? "N/A" : moment(row.replyDate).format('MM/DD/YYYY h:mm'))+ '</dd>' +
-                            '<dt>Replier</dt>' + '<dd>' + (row.replier == null ? "N/A" : row.replier.name) + '</dd>' +
-                            '<dt>Replier\'s Message</dt>' + '<dd>' + (row.replierMessage == null ? "N/A" : row.replierMessage) + '</dd>' +
-                            '</dl>' +
-                            '</div>';
+                        data.order = p.order;
+                        data.limit = p.limit;
+                        data.offset = p.offset;
+                        data.filter = p.filter;
+                        return data;
+                    },
+                    detailFormatter: function (index, row, element) {
+                        var result =
+                                '<div class="row">' +
+                                '<dl class="col-md-4">' +
+                                '<dt>Request Type</dt>' + '<dd>' + row.type + '</dd>' +
+                                '<dt>Status</dt>' + '<dd>' + row.status + '</dd>' +
+                                '</dl>' +
+                                '<dl class="col-md-4">' +
+                                '<dt>Send Date</dt>' + '<dd>' + moment(row.sendDate).format('MM/DD/YYYY h:mm') + '</dd>' +
+                                '<dt>Title</dt>' + '<dd>' + row.title + '</dd>' +
+                                '<dt>Your Message</dt>' + '<dd>' + row.senderMessage + '</dd>' +
+                                '</dl>' +
+                                '<dl class="col-md-4">' +
+                                '<dt>Reply Date</dt>' + '<dd>' + (row.replyDate == null ? "N/A" : moment(row.replyDate).format('MM/DD/YYYY h:mm'))+ '</dd>' +
+                                '<dt>Replier</dt>' + '<dd>' + (row.replier == null ? "N/A" : row.replier.name) + '</dd>' +
+                                '<dt>Replier\'s Message</dt>' + '<dd>' + (row.replierMessage == null ? "N/A" : row.replierMessage) + '</dd>' +
+                                '</dl>' +
+                                '</div>';
 
-                    return result;
-                },
-                onPostBody: function () {
-                    $(".filterControl input").attr('placeholder', 'Search');
-                },
-                filterControl: true,
-                sortOrder: 'desc',
-                cookie: true,
-                cookieIdTable: 'request',
-            });
-        }
-    </script>
-</div>
+                        return result;
+                    },
+                    onPostBody: function () {
+                        $(".filterControl input").attr('placeholder', 'Search');
+                    },
+                    filterControl: true,
+                    sortOrder: 'desc',
+                    cookie: true,
+                    cookieIdTable: 'request',
+                });
+            }
+        </script>
+    </div>
 </body>
 </html>

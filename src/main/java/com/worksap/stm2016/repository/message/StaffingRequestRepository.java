@@ -7,7 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StaffingRequestRepository extends PagingAndSortingRepository<StaffingRequest, Long>,
-        JpaSpecificationExecutor {
-    //public Collection findBySenderAndType(User sender, RequestType type);
+public interface StaffingRequestRepository extends RequestRepository<StaffingRequest> {
+
 }

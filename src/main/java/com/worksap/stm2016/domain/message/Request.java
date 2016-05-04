@@ -15,6 +15,8 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "request")
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="DIS_REQUEST_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,15 +53,12 @@ public abstract class Request implements Serializable {
     @Column(name = "reply_date")
     private Date replyDate;
 
-    @Column(name = "type")
+    @Column(name = "request_type")
     @Enumerated(EnumType.STRING)
-    private RequestType type;
+    private RequestType requestType;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private RequestStatus status = RequestStatus.PENDING;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private StaffingRequest staffingRequest;
 }

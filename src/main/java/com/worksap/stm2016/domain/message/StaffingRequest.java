@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain.message;
 
 import com.worksap.stm2016.domain.Job;
+import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -13,20 +14,20 @@ import java.util.Date;
  */
 @Data
 @Entity
+@DiscriminatorValue(value=RequestType.Values.STAFFING)
 @Table(name = "staffing_request")
-public class StaffingRequest implements Serializable {
+public class StaffingRequest extends Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+   /* @Id
     @Column(name="request_id")
     private Long id;
 
     @MapsId
     @OneToOne(mappedBy = "staffingRequest")
     @JoinColumn(name = "request_id")
-    private Request request;
-
+    private Request request;*/
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -46,11 +47,20 @@ public class StaffingRequest implements Serializable {
     @Column(name = "deadline")
     private Date deadline;
 
-    @Column(name = "type")
+    @Column(name = "staff_request_type")
     @Enumerated(EnumType.STRING)
-    private StaffingRequestType type;
+    private StaffingRequestType staffingRequestType;
 
     public enum StaffingRequestType {
         REPLACE, NEW
     }
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "requirement", nullable = false)
+    private String requirement;
+
+    @Column(name = "hours")
+    private Integer hours;
 }

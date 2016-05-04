@@ -20,7 +20,6 @@ public class JobPost implements Serializable {
     @Column(name = "job_post_id", nullable = false, updatable = false)
     private Long id;
 
-    /* from staffing request */
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
@@ -30,7 +29,7 @@ public class JobPost implements Serializable {
 
     @Column(name = "startDate")
     @Type(type="date")
-    private Date startDate;
+    private Date startDate; // contract start date
 
     @Column(name = "end_date")
     @Type(type="date")
@@ -38,7 +37,6 @@ public class JobPost implements Serializable {
 
     @Column(name = "deadline")
     private Date deadline;
-
 
     @Column(name = "title")
     private String title;
