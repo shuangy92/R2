@@ -4,32 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/email_form.html" line="16" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="29635c66-2891-409a-a092-fefbb5a6078c" name="Default" comment="request body 2">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/RequestApi.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/RequestApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/FakeController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/FakeController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Job.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Job.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/JobPost.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/JobPost.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/RequestType.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/RequestType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/message/RequestRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/message/RequestRepository.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/message/StaffingRequestRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/message/StaffingRequestRepository.class" />
+    <list default="true" id="29635c66-2891-409a-a092-fefbb5a6078c" name="Default" comment="request">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Job.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Job.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobPost.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobPost.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/RequestRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/RequestRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/StaffingRequestRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/message/StaffingRequestRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_employee.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_employee.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_submit.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_submit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
     </list>
     <ignored path="yangshuang-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -73,8 +49,8 @@
       <file leaf-file-name="request_submit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_submit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+            <state relative-caret-position="306">
+              <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -1570,7 +1546,7 @@
       <workItem from="1461166322689" duration="2017000" />
       <workItem from="1461553093525" duration="32332000" />
       <workItem from="1461814239551" duration="29274000" />
-      <workItem from="1461904201396" duration="16729000" />
+      <workItem from="1461904201396" duration="16746000" />
     </task>
     <task id="LOCAL-00001" summary="half schema">
       <created>1461814995576</created>
@@ -1600,11 +1576,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461909817224</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="request">
+      <created>1462332718744</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1462332718744</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244420000" />
+    <option name="totallyTimeSpent" value="244437000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1659,7 +1642,8 @@
     <MESSAGE value="half schema 2" />
     <MESSAGE value="request body" />
     <MESSAGE value="request body 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="request body 2" />
+    <MESSAGE value="request" />
+    <option name="LAST_COMMIT_MESSAGE" value="request" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2073,8 +2057,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request_submit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+        <state relative-caret-position="306">
+          <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
           <folding />
         </state>
       </provider>
