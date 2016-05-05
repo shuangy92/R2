@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
+import com.worksap.stm2016.domain.Department;
 import com.worksap.stm2016.domain.Job;
 import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
@@ -19,15 +20,6 @@ import java.util.Date;
 public class StaffingRequest extends Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-   /* @Id
-    @Column(name="request_id")
-    private Long id;
-
-    @MapsId
-    @OneToOne(mappedBy = "staffingRequest")
-    @JoinColumn(name = "request_id")
-    private Request request;*/
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -55,10 +47,13 @@ public class StaffingRequest extends Request implements Serializable {
         REPLACE, NEW
     }
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "job_title", nullable = false)
+    private String jobTitle;
+
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "requirement", nullable = false)
+    @Column(name = "requirement")
     private String requirement;
 
     @Column(name = "hours")

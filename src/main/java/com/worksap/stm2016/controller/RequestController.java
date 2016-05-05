@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -44,154 +45,29 @@ public class RequestController {
     @Autowired
     private RequestRepository requestRepository;
 
+    @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "text/html")
+    public String getRequestListPage() {
+        return "request/request_HR";
+    }
+
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "text/html")
-    public String getUserRequestPage(@PathVariable Long id) {
-        return "request_employee";
+    public String getUserRequestListPage(@PathVariable Long id) {
+        return "request/request_employee";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET, produces = "text/html")
-    public String getRequestSubmitPage(@PathVariable Long id) {
-        return "request_submit";
+    public String getRequestSubmitPage(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id).get());
+        return "request/request_submit";
     }
 
-    @ResponseBody
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "application/json")
-    public JSONObject getUserRequestList(Authentication authentication,
-                                         @PathVariable Long id,
-                                         @RequestParam(name = "sort") String sort,
-                                         @RequestParam(name = "order") String order,
-                                         @RequestParam(name = "limit") Integer limit,
-                                         @RequestParam(name = "offset") Integer offset,
-                                         @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
-        User user = ((CurrentUser) authentication.getPrincipal()).getUser();
-        Specification userSpec = isValue("sender", user);
-
-        Integer page = offset / limit;
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (order.equals("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-        Pageable pageable = new PageRequest(page, limit, direction, sort);
-
-        ArrayList<Specification> specs = new ArrayList<>();
-        List<Request> requests = new ArrayList<>();
-        Long count = Long.valueOf(0);
-
-        if (filter != null) {
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(filter);
-            JSONObject filterObj = (JSONObject) obj;
-            for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
-                String key = (String) iterator.next();
-                String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("type")) {
-                    spec = isValue(key, RequestType.valueOf(search));
-                } else if (key.equals("status")) {
-                    spec = isValue(key, RequestStatus.valueOf(search));
-                } else if (key.equals("sendDate")) {
-                    spec = isValue(key, new Date(Long.parseLong(search)));
-                } else { //key = title
-                    spec = hasValue(key, search);
-                }
-                specs.add(spec);
-            }
-            if (specs.size() == 1) {
-                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)), pageable).getContent();
-                count = requestRepository.count(where(userSpec).and(specs.get(0)));
-            } else if (specs.size() == 2) {
-                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)).and(specs.get(1)), pageable).getContent();
-                count = requestRepository.count(where(userSpec).and(specs.get(0)).and(specs.get(1)));
-            } else if (specs.size() == 3) {
-                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
-                count = requestRepository.count(where(userSpec).and(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
-            }
-        } else {
-            requests = requestRepository.findAll(userSpec, pageable).getContent();
-            count = requestRepository.count(userSpec);
-        }
-
-        JSONObject result = new JSONObject();
-        result.put("rows", requests);
-        result.put("total", count);
-
-        return result;
-    }
-
-    @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "text/html")
-    public String getRequestPage() {
-        return "request_HR";
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "application/json")
-    public JSONObject getRequestList(Authentication authentication,
-                                         @RequestParam(name = "sort") String sort,
-                                         @RequestParam(name = "order") String order,
-                                         @RequestParam(name = "limit") Integer limit,
-                                         @RequestParam(name = "offset") Integer offset,
-                                         @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
-        Integer page = offset / limit;
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (order.equals("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-        Pageable pageable = new PageRequest(page, limit, direction, sort);
-
-        ArrayList<Specification> specs = new ArrayList<>();
-        List<Request> requests = new ArrayList<>();
-        Long count = Long.valueOf(0);
-
-        if (filter != null) {
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(filter);
-            JSONObject filterObj = (JSONObject) obj;
-            for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
-                String key = (String) iterator.next();
-                String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("type")) {
-                    spec = isValue(key, RequestType.valueOf(search));
-                } else if (key.equals("status")) {
-                    spec = isValue(key, RequestStatus.valueOf(search));
-                } else if (key.equals("sendDate")) {
-                    spec = isValue(key, new Date(Long.parseLong(search)));
-                } else if (key.equals("title")) { //key = title
-                    spec = hasValue(key, search);
-                } else { // key = sender
-                    spec = hasValue(key, "name", search);
-                }
-                specs.add(spec);
-            }
-            if (specs.size() == 1) {
-                requests = requestRepository.findAll(specs.get(0), pageable).getContent();
-                count = requestRepository.count(specs.get(0));
-            } else if (specs.size() == 2) {
-                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)), pageable).getContent();
-                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)));
-            } else if (specs.size() == 3) {
-                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
-                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
-            }
-        } else {
-            requests = requestRepository.findAll(pageable).getContent();
-            count = requestRepository.count();
-        }
-
-        JSONObject result = new JSONObject();
-        result.put("rows", requests);
-        result.put("total", count);
-
-        return result;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
-    public Request getRequest(@PathVariable Long id) {
-        return (Request) requestRepository.findOne(id);
+    @PreAuthorize("@currentUserServiceImpl.canAccessRequest(principal, #id)")
+    @RequestMapping(value = "/request/{id}", method = RequestMethod.GET, produces = "text/html")
+    public String getRequestPage(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id).get());
+        return "request/request";
     }
 
     private final List<SseEmitter> emitters = new ArrayList<>();
@@ -241,23 +117,5 @@ public class RequestController {
         }
     }*/
 
-    @ResponseBody
-    @RequestMapping(value = "/request/{id}", method = RequestMethod.POST)
-    public String updateRequest(Authentication authentication,
-                                @PathVariable Long id,
-                                @RequestParam(name = "replierMessage") String replierMessage,
-                                @RequestParam(name = "status") String status) throws ParseException {
 
-        User replier = ((CurrentUser) authentication.getPrincipal()).getUser();
-        Request request = (Request) requestRepository.findOne(id);
-        request.setStatus(RequestStatus.valueOf(status));
-        request.setReplierMessage(replierMessage);
-        request.setReplier(replier);
-        request.setReplyDate(new Date());
-
-        Request myRequest = (Request) requestRepository.save(request);
-
-
-        return "Your reply has been sent";
-    }
 }

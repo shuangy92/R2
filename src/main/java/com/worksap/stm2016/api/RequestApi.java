@@ -1,10 +1,14 @@
 package com.worksap.stm2016.api;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.message.OtherRequest;
 import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.message.StaffingRequest;
 import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.enums.RequestStatus;
+import com.worksap.stm2016.enums.RequestType;
 import com.worksap.stm2016.repository.JobRepository;
 import com.worksap.stm2016.repository.UserRepository;
 import com.worksap.stm2016.repository.message.RequestRepository;
@@ -22,6 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -52,8 +57,141 @@ public class RequestApi {
         return (Request) requestRepository.findOne(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public void getRequestList(Authentication authentication, @RequestBody StaffingRequest request) throws ParseException {
+    @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json")
+    public JSONObject getUserRequestList(Authentication authentication,
+                                         @RequestParam(name = "sort") String sort,
+                                         @RequestParam(name = "order") String order,
+                                         @RequestParam(name = "limit") Integer limit,
+                                         @RequestParam(name = "offset") Integer offset,
+                                         @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
+        User user = ((CurrentUser) authentication.getPrincipal()).getUser();
+        Specification userSpec = isValue("sender", user);
+
+        Integer page = offset / limit;
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (order.equals("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = new PageRequest(page, limit, direction, sort);
+
+        ArrayList<Specification> specs = new ArrayList<>();
+        List<Request> requests = new ArrayList<>();
+        Long count = Long.valueOf(0);
+
+        if (filter != null) {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(filter);
+            JSONObject filterObj = (JSONObject) obj;
+            for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
+                String key = (String) iterator.next();
+                String search = (String) filterObj.get(key);
+                Specification spec;
+                if (key.equals("type")) {
+                    spec = isValue(key, RequestType.valueOf(search));
+                } else if (key.equals("status")) {
+                    spec = isValue(key, RequestStatus.valueOf(search));
+                } else if (key.equals("sendDate")) {
+                    spec = isValue(key, new Date(Long.parseLong(search)));
+                } else { //key = title
+                    spec = hasValue(key, search);
+                }
+                specs.add(spec);
+            }
+            if (specs.size() == 1) {
+                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)), pageable).getContent();
+                count = requestRepository.count(where(userSpec).and(specs.get(0)));
+            } else if (specs.size() == 2) {
+                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)).and(specs.get(1)), pageable).getContent();
+                count = requestRepository.count(where(userSpec).and(specs.get(0)).and(specs.get(1)));
+            } else if (specs.size() == 3) {
+                requests = requestRepository.findAll(where(userSpec).and(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
+                count = requestRepository.count(where(userSpec).and(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
+            }
+        } else {
+            requests = requestRepository.findAll(userSpec, pageable).getContent();
+            count = requestRepository.count(userSpec);
+        }
+
+        JSONObject result = new JSONObject();
+        result.put("rows", requests);
+        result.put("total", count);
+
+        return result;
+    }
+
+    @RequestMapping(value = "/hr", method = RequestMethod.GET, produces = "application/json")
+    public JSONObject getHRRequestList(Authentication authentication,
+                                       @RequestParam(name = "sort") String sort,
+                                       @RequestParam(name = "order") String order,
+                                       @RequestParam(name = "limit") Integer limit,
+                                       @RequestParam(name = "offset") Integer offset,
+                                       @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
+        Integer page = offset / limit;
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (order.equals("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = new PageRequest(page, limit, direction, sort);
+
+        ArrayList<Specification> specs = new ArrayList<>();
+        List<Request> requests = new ArrayList<>();
+        Long count = Long.valueOf(0);
+
+        if (filter != null) {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(filter);
+            JSONObject filterObj = (JSONObject) obj;
+            for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
+                String key = (String) iterator.next();
+                String search = (String) filterObj.get(key);
+                Specification spec;
+                if (key.equals("type")) {
+                    spec = isValue(key, RequestType.valueOf(search));
+                } else if (key.equals("status")) {
+                    spec = isValue(key, RequestStatus.valueOf(search));
+                } else if (key.equals("sendDate")) {
+                    spec = isValue(key, new Date(Long.parseLong(search)));
+                } else if (key.equals("title")) { //key = title
+                    spec = hasValue(key, search);
+                } else { // key = sender
+                    spec = hasValue(key, "name", search);
+                }
+                specs.add(spec);
+            }
+            if (specs.size() == 1) {
+                requests = requestRepository.findAll(specs.get(0), pageable).getContent();
+                count = requestRepository.count(specs.get(0));
+            } else if (specs.size() == 2) {
+                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)), pageable).getContent();
+                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)));
+            } else if (specs.size() == 3) {
+                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
+                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
+            }
+        } else {
+            requests = requestRepository.findAll(pageable).getContent();
+            count = requestRepository.count();
+        }
+
+        JSONObject result = new JSONObject();
+        result.put("rows", requests);
+        result.put("total", count);
+
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public void saveOtherRequest(Authentication authentication,
+                                 @RequestBody JSONObject requestJson) throws ParseException, IOException {
+        Request request;
+        ObjectMapper mapper = new ObjectMapper();
+        switch (requestJson.get("requestType").toString()) {
+            case ("STAFFING"):
+                request = mapper.readValue(requestJson.toString(), StaffingRequest.class);
+                break;
+            default:
+                request = mapper.readValue(requestJson.toString(), OtherRequest.class);
+        }
 
         User sender = ((CurrentUser) authentication.getPrincipal()).getUser();
         request.setSender(sender);
@@ -63,14 +201,24 @@ public class RequestApi {
         logger.debug("{}", requestRepository.findOne(r.getId()));
     }
 
-    @RequestMapping(value="/staffing", method = RequestMethod.POST)
-    public void saveStaffingRequest(Authentication authentication, @RequestBody StaffingRequest request) throws ParseException {
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.PUT)
+    public String updateRequest(Authentication authentication,
+                                @RequestBody JSONObject requestJson) throws org.springframework.expression.ParseException, IOException {
+        Request request;
+        ObjectMapper mapper = new ObjectMapper();
+        switch (requestJson.get("requestType").toString()) {
+            case ("STAFFING"):
+                request = mapper.readValue(requestJson.toString(), StaffingRequest.class);
+                break;
+            default:
+                request = mapper.readValue(requestJson.toString(), OtherRequest.class);
+        }
 
-        User sender = ((CurrentUser) authentication.getPrincipal()).getUser();
-        request.setSender(sender);
-        request.setSendDate(new Date());
+        User replier = ((CurrentUser) authentication.getPrincipal()).getUser();
+        request.setReplier(replier);
+        Request myRequest = (Request)  requestRepository.save(request);
 
-        Request r = (Request) requestRepository.save(request);
-        logger.debug("{}", requestRepository.findOne(r.getId()));
+        return "Your reply has been sent";
     }
 }

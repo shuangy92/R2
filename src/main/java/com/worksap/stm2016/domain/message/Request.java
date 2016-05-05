@@ -27,6 +27,10 @@ public abstract class Request implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "thread_id")
+    private Thread thread;
+
+    @ManyToOne
     @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
     private User sender;
 

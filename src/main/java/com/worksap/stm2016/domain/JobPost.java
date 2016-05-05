@@ -1,6 +1,8 @@
 package com.worksap.stm2016.domain;
 
 
+import com.worksap.stm2016.enums.PayRate;
+import com.worksap.stm2016.enums.RequestStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -24,6 +26,28 @@ public class JobPost implements Serializable {
     @JoinColumn(name = "job_id")
     private Job job;
 
+    @Column(name = "salary")
+    private String salary;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private PayRate payRate;
+
+    @Column(name = "deadline")
+    private Date deadline;
+
+    @Column(name = "postDate")
+    @Type(type="date")
+    private Date postDate;
+
+    @Column(name = "published", nullable = false)
+    private boolean published = false;
+
+    /* from staffing request */
+
+    @Column(name = "title")
+    private String title; //job title
+
     @Column(name = "vacancies")
     private Integer vacancies;
 
@@ -35,19 +59,12 @@ public class JobPost implements Serializable {
     @Type(type="date")
     private Date endDate;
 
-    @Column(name = "deadline")
-    private Date deadline;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "requirement", nullable = false)
+    private String requirement;
 
-    @Column(name = "salary")
-    private String salary;
-
-    @Column(name = "postDate")
-    @Type(type="date")
-    private Date postDate;
-
-    @Column(name = "published", nullable = false)
-    private boolean published = false;
+    @Column(name = "hours")
+    private Integer hours;
 }

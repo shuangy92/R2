@@ -41,7 +41,7 @@
     <script type="text/javascript" th:inline="javascript">
 
         function initTable() {
-            var url = "/request";
+            var url = "/api/request/hr";
             $('#table').bootstrapTable({
                 columns: [{
                     field: 'sendDate',
@@ -64,7 +64,7 @@
                     sortable: true,
                     filterControl: 'input'
                 }, {
-                    field: 'type',
+                    field: 'requestType',
                     title: 'Request Type',
                     sortable: true,
                     filterControl: 'select'
@@ -125,9 +125,16 @@
                                 '<dt>Your Reply</dt>' + '<dd>' + row.replierMessage + '</dd>' +
                                 '<dt>Reply Date</dt>' + '<dd>' + moment(row.replyDate).format('MM/DD/YYYY h:mm') + '</dd>' +
                                 '</dl>';
-                        right =
-                                '<div class="col-md-4">' +
-                                '</div>';
+                        if (row.requestType == "STAFFING") {
+                            right =
+                                    '<div class="col-md-4">' +
+                                    '<a class="btn" id="btn-post-job-form" href="#" onclick="handleStaffingRequest(' + index + ')">Post a job</a>' +
+                                    '</div>';
+                        } else {
+                            right =
+                                    '<div class="col-md-4">' +
+                                    '</div>';
+                        }
                     }
                     return left + middle + right + '</div>';
                 },
@@ -143,61 +150,33 @@
         }
         function handleRequestStatus(status, index) {
             var request = $('#table').bootstrapTable('getData', true)[index];
-            request_HR.replierMessage = $("#message-" + index).val();
-            request_HR.status = status;
-            console.log(request_HR);
+            request.replierMessage = $("#message-" + index).val();
+            request.status = status;
+            console.log(request);
 
-            var csrfName = [[${_csrf.parameterName}]];
-            request_HR[csrfName] = [[${_csrf.token}]];
-
-            var url = "/request/" + request_HR.id;
-            $.post(url, request_HR)
-                    .done(function (data) {
-                        $.notify({
-                            icon: 'fa fa-info-circle',
-                            message: data,
-                        },{
-                            element: 'body',
-                            type: 'info',
-                            delay: 3000,
-                            placement: {
-                                from: "bottom",
-                                align: "right"
-                            },
-                        });
-                        $('#table').bootstrapTable('refresh');
-
-                        if (status == 'APPROVED') {
-                            if ( request_HR.type == 'RESIGNATION')
-                            {
-                                var user = {};
-                                var sender = request_HR.sender;
-                                sender.active = false;
-                                user.sender = sender;
-                                var csrfName = [[${_csrf.parameterName}]];
-                                user[csrfName] = [[${_csrf.token}]];
-                                $.ajax({
-                                    type: "PUT",
-                                    url: "/user/" + sender.id,
-                                    data: user,
-                                    success: function (data) {
-                                        $.notify({
-                                            icon: 'fa fa-info-circle',
-                                            message: data,
-                                        },{
-                                            element: 'body',
-                                            type: 'info',
-                                            delay: 3000,
-                                            placement: {
-                                                from: "bottom",
-                                                align: "right"
-                                            },
-                                        });
-                                    }
-                                })
-                            }
-                        }
+            var url = "/api/request/";
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(request),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $.notify({
+                        icon: 'fa fa-info-circle',
+                        message: data,
+                    }, {
+                        element: 'body',
+                        type: 'info',
+                        delay: 3000,
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
                     });
+                    $('#table').bootstrapTable('updateRow', { index: index, row: request});
+                    $('#table').bootstrapTable('expandRow', index);
+                }
+            });
         }
         var timeoutId = 0;
         function handleRequestReplierMessage(msg, index) {
@@ -207,6 +186,11 @@
         var replierMessage = [];
         function handleRequestReplierMessageDelay(msg, index) {
             replierMessage[index] = $(msg).val();
+        }
+        function handleStaffingRequest(index) {
+            var request = $('#table').bootstrapTable('getData', true)[index];
+            localStorage.setItem("request", JSON.stringify(request));
+            window.location.href = "/users";
         }
         jQuery(document).ready(function ($) {
             $(".panel-footer").hide();
@@ -218,6 +202,7 @@
                 minimumResultsForSearch: Infinity
             });
         });
+
 
     </script>
 </div>

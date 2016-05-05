@@ -17,7 +17,6 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("@currentUserServiceImpl.permitAll(principal)")
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
         return "home";

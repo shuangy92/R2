@@ -1,10 +1,12 @@
 package com.worksap.stm2016.controller;
 
 
+import com.worksap.stm2016.domain.Department;
 import com.worksap.stm2016.domain.Job;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
+import com.worksap.stm2016.repository.DepartmentRepository;
 import com.worksap.stm2016.repository.JobRepository;
 import com.worksap.stm2016.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,26 @@ public class FakeController {
     JobRepository jobRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public void data() {
-        for (Integer i = 1; i < 101; i++) {
+        Department department = new Department();
+        department.setLocation("downtown" );
+        department.setName("HR");
+        departmentRepository.save(department);
+
+        department = departmentRepository.findOne(Long.valueOf(1));
+
+        User admin = userRepository.findOne(Long.valueOf(1));
+        admin.setDepartment(department);
+        userRepository.save(admin);
+
+       // department.setManager(admin);
+        //departmentRepository.save(department);
+
+        for (Integer i = 1; i < 20; i++) {
             Job job = new Job();
             job.setDescription("Description for job " + i.toString());
             job.setHours(40);
@@ -37,6 +55,7 @@ public class FakeController {
             user.setPasswordHash(new BCryptPasswordEncoder().encode("pass"));
             user.setRole(Role.EMPLOYEE);
             user.setStatus(UserStatus.NORMAL);
+            user.setDepartment(department);
             userRepository.save(user);
         }
     }

@@ -8,5 +8,5 @@ public interface CurrentUserService {
 
     boolean canAccessUserResigned(CurrentUser currentUser, Long userId);
 
-    boolean permitAll(CurrentUser currentUser);
+    boolean canAccessRequest(CurrentUser currentUser, Long requestId);
 }

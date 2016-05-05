@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>User information</title>
+    <script type="text/javascript" th:src="@{/static/js/weekpicker.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.autosave.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1>User Information</h1>
+    <!-- staffing -->
+    <form class="form-horizontal" role="form" id="staffing-request-form" style="padding: 50px 100px;">
+        <div class="col-sm-7">
+            <div class="form-group">
+                <label for="title" class="col-sm-3 control-label">Title</label>
+                <div class="col-sm-5">
+                    <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="department" class="col-sm-3 control-label">Department</label>
+                <div class="col-sm-5">
+                    <input th:value="${user.department.name}" class="form-control" type="input" id="department" name="department" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="staffingRequestType" class="col-sm-3 control-label">I would like to...</label>
+                <div class="col-sm-5">
+                    <select class="form-control staffing-request-select" id="staffingRequestType" name="staffingRequestType" required="required">
+                        <option value="REPLACE">Replace existing positions</option>
+                        <option value="ADD">Request new positions</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="jobId" class="col-sm-3 control-label">Job Code</label>
+                <div class="col-sm-5">
+                    <input th:value="2" class="form-control" placeholder="Job Code" type="number" id="jobId" name="jobId" required="required"/>
+                </div>
+                <div class="col-sm-3">
+                    <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vacancies" class="col-sm-3 control-label"># of vacancies</label>
+                <div class="col-sm-5">
+                    <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="vacancies" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="col-sm-3 control-label">Desired Starting Date</label>
+                <div class="col-sm-5">
+                    <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="startDate" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="contractLength" class="col-sm-3 control-label">Desired Contract Length</label>
+                <div class="col-sm-5">
+                    <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" id="contractLength" name="contractLength" required="required"/>
+                </div>
+                <div class="col-sm-3">
+                    <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
+                    <input type="radio" name="contractLengthUnit" value="month" /> Month
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="col-sm-3 control-label">Deadline for Application</label>
+                <div class="col-sm-5">
+                    <input class="form-control" placeholder="Leave blank if not sure" type="input" id="deadline" name="deadline"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="senderMessage" class="col-sm-3 control-label">Reason for request</label>
+                <div class="col-sm-5">
+                    <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="description" class="control-label">Job Description: </label>
+                <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
+            </div>
+            <div class="form-group">
+                <label for="requirement" class=" control-label">Job Requirement: </label>
+                <textarea class="form-control" type="input" id="requirement" name="requirement" rows="5"> </textarea>
+            </div>
+            <div class="form-group">
+                <label for="standardHours" class=" control-label">Standard Hours: </label>
+                <input class="form-control" type="number" id="standardHours" name="hours" />
+            </div>
+            <div class="form-group">
+                <label class=" control-label">Proposed Contract End Date: </label>
+                <p id="endDate"></p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
+        </div>
+    </form>
+
+    <!-- other -->
+    <form class="form-horizontal" role="form" id="other-request-form" style="padding: 50px 100px;">
+        <div class="col-sm-7">
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-8">
+                    <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="senderMessage" class="col-sm-2 control-label">Message</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
+                </div>
+            </div>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
+            </div>
+        </div>
+    </form>
+
+
+    <script type="text/javascript" th:inline="javascript">
+        jQuery(document).ready(function ($) {
+            $.ajax({
+                type: "GET",
+                url: "/api/" + window.location.pathname,
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+
+        });
+    </script>
+</div>
+</body>
+</html>
