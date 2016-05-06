@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 
 /**
  * Created by Shuang on 4/27/2016.
@@ -21,5 +22,6 @@ public class EmailApi {
     @RequestMapping
     public void send(Email email) throws UnsupportedEncodingException, MessagingException {
         emailService.send(email);
+
     }
 }

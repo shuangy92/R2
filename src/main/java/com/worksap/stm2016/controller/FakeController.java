@@ -28,16 +28,11 @@ public class FakeController {
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public void data() {
         Department department = new Department();
-        department.setLocation("downtown" );
-        department.setName("HR");
+        department.setLocation("shanghai" );
+        department.setName("sales");
         departmentRepository.save(department);
 
-        department = departmentRepository.findOne(Long.valueOf(1));
-
-        User admin = userRepository.findOne(Long.valueOf(1));
-        admin.setDepartment(department);
-        userRepository.save(admin);
-
+        department = departmentRepository.findOne(Long.valueOf(2));
        // department.setManager(admin);
         //departmentRepository.save(department);
 

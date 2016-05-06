@@ -6,119 +6,41 @@
 <body>
 <div th:fragment="header">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Roster Management System</a>
+            <a class="navbar-brand" href="#">Recruiting Software</a>
         </div>
-        <!-- /.navbar-header -->
 
-
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse">
-                <ul class="nav" id="side-menu">
-
-                    <li><a href="#" th:href="@{/}" class="home"> Home</a></li>
-                    <li class="user">
-                        <a href="#"> User Panel<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="#" th:href="@{/user/__${currentUser.id}__/profile}"> My info</a></li>
-                            <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/request}"> My Requests</a></li>
-                            <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/shifts}"> My Shifts</a></li>
-                            <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/schedule}"> My Schedules</a></li>
-                        </ul>
-                    </li>
-                    <li class="admin">
-                        <a href="#"> Admin Panel<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="#" th:href="@{/users}"> Employee List</a></li>
-                            <li><a href="#" th:href="@{/request}"> Employee Requests</a></li>
-                            <li><a href="#" th:href="@{/user/create}"> Create New Employee</a></li>
-                            <li><a href="#" th:href="@{/user/__${currentUser.id}__/roster}"> My Rosters</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" id="logout"> Logout</a>
-                    </li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Career</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
     </nav>
-
-
-    <script type="text/javascript" th:inline="javascript">
-        var sse;
-        var connect = function () {
-            var sse = new EventSource('/stream');
-
-            sse.addEventListener('open', function (e) {
-                console.log('connected');
-            });
-            sse.addEventListener('message', function (e) {
-                var message = JSON.parse(e.data);
-                console.log(message);
-                var msg = "You get a new message from " + message.sender.name + ". Click to see more.";
-                $.notify({
-                    icon: 'fa fa-info-circle',
-                    message: msg,
-                    url: "/request"
-                },{
-                    element: 'body',
-                    type: 'info',
-                    delay: 0,
-                    placement: {
-                        from: "bottom",
-                        align: "right"
-                    },
-                });
-            }, false);
-
-            sse.addEventListener('error', function (e) {
-                if (e.readyState == EventSource.CLOSED) {
-                    connected = false;
-                    connect();
-                }
-            }, false);
-
-            sse.addEventListener('close', function (e) {
-                console.log('closed');
-            });
-        };
-        window.onbeforeunload  = function() {
-            sse.close();
+    <script>
+    /*    var url = window.location.pathname;
+        if (!url.match(/\/$/)) {
+            url += '/';
         }
-        function logout() {
-            var url = '/logout';
-            var data = {[[${_csrf.parameterName}]]: [[${_csrf.token}]]};
-            $.post(url, data)
-                    .done(function () {
-                        $("#logout").hide();
-                        window.location.href = "/login";
-                    });
-        }
-        jQuery(document).ready(function ($) {
-            $("#logout").click(function () {
-                logout();
-            });
-            if (window.location.pathname != '/') {
-                $(".home").removeClass('active');
-            }
-            var currentUser = [[${currentUser}]];
-            if (currentUser.user.active == false) {
-                $(".user .employee").hide();
-            }
-            if(currentUser.authorities[0].authority == 'ADMIN') {
-                connect();
-            } else {
-                $(".admin").hide();
-            }
-        });
-
-
+        window.history.pushState("", "", url);
+*/
     </script>
 </div>
 </body>

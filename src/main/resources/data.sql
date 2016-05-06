@@ -4,9 +4,9 @@
 -- Dependencies: 411
 -- Data for Name: person; Type: TABLE DATA; Schema: ss1604c200_rd2; Owner: ss1604c200
 --
-
-INSERT INTO person (active,email,name,password_hash,role,status) VALUES (true, 'admin@gmail.com', 'admin', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'ADMIN', 'NORMAL');
-INSERT INTO person (active,email,name,password_hash,role,status) VALUES (true, 'a@gmail.com', 'a', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'EMPLOYEE', 'NORMAL');
+INSERT INTO department (location, name) VALUES ('downtowm', 'HR');
+INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'admin@gmail.com', 'admin', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'ADMIN', 'NORMAL', 1);
+INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'a@gmail.com', 'a', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'EMPLOYEE', 'NORMAL', 1);
 
 /*INSERT INTO person (active,email,name,password_hash,role,status) VALUES (true, 'est.congue@ante.ca', 'Gail Dixon', '$2a$04$JgdrdJIpz7Q3snhHT68HKuVQ.T06bmV3y3tLqZehyKPXnr1Nq3MMq', 'CASHER', 'TRAINEE');
 INSERT INTO person (active,email,name,password_hash,role,status) VALUES (true, 'dictum@scelerisquesedsapien.co.uk', 'Dieter Jackson', '$2a$04$JgdrdJIpz7Q3snhHT68HKuVQ.T06bmV3y3tLqZehyKPXnr1Nq3MMq', 'CASHER', 'TRAINER');

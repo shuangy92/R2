@@ -16,6 +16,6 @@ public class JobController {
 
     @RequestMapping(value = "/jobs", method = RequestMethod.GET)
     public String getJobListPage() {
-        return "jobs";
+        return "job/jobs";
     }
 }

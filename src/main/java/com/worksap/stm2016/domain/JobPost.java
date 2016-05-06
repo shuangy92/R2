@@ -23,6 +23,10 @@ public class JobPost implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
 
@@ -34,14 +38,14 @@ public class JobPost implements Serializable {
     private PayRate payRate;
 
     @Column(name = "deadline")
+    @Type(type="date")
     private Date deadline;
 
     @Column(name = "postDate")
-    @Type(type="date")
     private Date postDate;
 
     @Column(name = "published", nullable = false)
-    private boolean published = false;
+    private Boolean published = false;
 
     /* from staffing request */
 

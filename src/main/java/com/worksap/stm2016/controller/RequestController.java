@@ -47,20 +47,20 @@ public class RequestController {
 
     @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "text/html")
     public String getRequestListPage() {
-        return "request/request_HR";
+        return "request/requests_HR";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "text/html")
     public String getUserRequestListPage(@PathVariable Long id) {
-        return "request/request_employee";
+        return "request/requests_employee";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET, produces = "text/html")
     public String getRequestSubmitPage(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id).get());
-        return "request/request_submit";
+        return "request/request_form";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessRequest(principal, #id)")

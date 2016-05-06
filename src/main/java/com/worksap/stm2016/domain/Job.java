@@ -19,13 +19,13 @@ public class Job implements Serializable {
     @Column(name = "job_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "requirement", nullable = false)
+    @Column(name = "requirement")
     private String requirement;
 
     @Column(name = "hours")

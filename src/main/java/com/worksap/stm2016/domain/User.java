@@ -43,7 +43,7 @@ public class User implements Serializable {
     private boolean active = true;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @ManyToOne

@@ -64,7 +64,6 @@ public class UserApi {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseBody
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getUserList(@RequestParam(name = "sort") String sort,
                                    @RequestParam(name = "order") String order,

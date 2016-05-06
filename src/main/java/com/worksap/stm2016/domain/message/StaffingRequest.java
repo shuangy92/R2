@@ -36,8 +36,8 @@ public class StaffingRequest extends Request implements Serializable {
     @Type(type="date")
     private Date endDate;
 
-    @Column(name = "deadline")
-    private Date deadline;
+    @Column(name = "contract_length")
+    private String contractLength;
 
     @Column(name = "staff_request_type")
     @Enumerated(EnumType.STRING)
