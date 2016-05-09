@@ -1,7 +1,7 @@
-package com.worksap.stm2016.domain;
+package com.worksap.stm2016.domain.job;
 
 
-import com.worksap.stm2016.domain.message.Request;
+import com.worksap.stm2016.domain.Department;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -34,4 +34,8 @@ public class Job implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "job_category_id")
+    private JobCategory jobCategory;
 }

@@ -1,28 +1,24 @@
-package com.worksap.stm2016.api;
+package com.worksap.stm2016.api.job;
 
 import com.worksap.stm2016.domain.JobPost;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.util.CurrentUser;
-import com.worksap.stm2016.repository.JobPostRepository;
+import com.worksap.stm2016.repository.job.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -48,16 +44,8 @@ public class JobPostApi {
                                      @RequestParam(name = "offset") Integer offset,
                                      @RequestParam(name = "filter", required = false) String filter
     ) throws org.json.simple.parser.ParseException {
-        Integer page = offset / limit;
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (order.equals("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-        Pageable pageable = new PageRequest(page, limit, direction, sort);
 
         ArrayList<Specification> specs = new ArrayList<>();
-        List<JobPost> jobPosts = new ArrayList<>();
-        Long count = Long.valueOf(0);
 
         if (filter != null) {
             JSONParser parser = new JSONParser();
@@ -67,8 +55,12 @@ public class JobPostApi {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
                 Specification spec;
-                if (key.equals("job")) {
-                    spec = isValue(key, "id", Long.parseLong(search));
+                if (key.equals("department")) {
+                    spec = hasValue(key, "name", search);
+                } else if (key.equals("location")) {
+                    spec = isValue("location", search);
+                } else if (key.equals("author")) {
+                    spec = hasValue(key, "name", search);
                 } else if (key.equals("published")) {
                     Boolean s = search.equals("true");
                     spec = isValue(key, s);
@@ -77,34 +69,39 @@ public class JobPostApi {
                 }
                 specs.add(spec);
             }
-            if (specs.size() == 1) {
-                jobPosts = jobPostRepository.findAll(specs.get(0), pageable).getContent();
-                count = jobPostRepository.count(specs.get(0));
-            } else if (specs.size() == 2) {
-                jobPosts = jobPostRepository.findAll(where(specs.get(0)).and(specs.get(1)), pageable).getContent();
-                count = jobPostRepository.count(where(specs.get(0)).and(specs.get(1)));
-            } else if (specs.size() == 3) {
-                jobPosts = jobPostRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
-                count = jobPostRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
-            }
-        } else {
-            jobPosts = jobPostRepository.findAll(pageable).getContent();
-            count = jobPostRepository.count();
         }
 
-        JSONObject result = new JSONObject();
-        result.put("rows", jobPosts);
-        result.put("total", count);
-
+        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobPostRepository);
         return result;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public JobPost save(Authentication authentication,
                         @RequestBody JobPost post){
         User author = ((CurrentUser) authentication.getPrincipal()).getUser();
-
         post.setAuthor(author);
+        post.setLastEditor(author);
+        post.setPostDate(new Date());
+        post.setLastEditDate(new Date());
         return jobPostRepository.save(post);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.PUT)
+    public JobPost update(Authentication authentication,
+                          @RequestBody JobPost post){
+        User editor = ((CurrentUser) authentication.getPrincipal()).getUser();
+        post.setLastEditor(editor);
+        post.setLastEditDate(new Date());
+        return jobPostRepository.save(post);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void delete(@RequestBody ArrayList<Long> ids){
+        for (Long id: ids) {
+            jobPostRepository.delete(id);
+        }
     }
 }

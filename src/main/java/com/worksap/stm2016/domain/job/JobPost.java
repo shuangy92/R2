@@ -1,8 +1,9 @@
-package com.worksap.stm2016.domain;
+package com.worksap.stm2016.domain.job;
 
 
+import com.worksap.stm2016.domain.Department;
+import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.PayRate;
-import com.worksap.stm2016.enums.RequestStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -23,8 +24,18 @@ public class JobPost implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "author_id")
     private User author;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "user_id", name = "last_editor_id")
+    private User lastEditor;
+
+    @Column(name = "postDate")
+    private Date postDate;
+
+    @Column(name = "lastEditDate")
+    private Date lastEditDate;
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -40,9 +51,6 @@ public class JobPost implements Serializable {
     @Column(name = "deadline")
     @Type(type="date")
     private Date deadline;
-
-    @Column(name = "postDate")
-    private Date postDate;
 
     @Column(name = "published", nullable = false)
     private Boolean published = false;
@@ -63,6 +71,9 @@ public class JobPost implements Serializable {
     @Type(type="date")
     private Date endDate;
 
+    @Column(name = "contract_length")
+    private String contractLength;
+
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -71,4 +82,11 @@ public class JobPost implements Serializable {
 
     @Column(name = "hours")
     private Integer hours;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @Column(name = "location")
+    private String location;
 }

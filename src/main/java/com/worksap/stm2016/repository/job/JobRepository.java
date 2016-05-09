@@ -1,4 +1,4 @@
-package com.worksap.stm2016.repository;
+package com.worksap.stm2016.repository.job;
 
 
 import com.worksap.stm2016.domain.Job;
@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JobRepository extends PagingAndSortingRepository<Job, Long>,
         JpaSpecificationExecutor {
+
 }
