@@ -1,5 +1,6 @@
-package com.worksap.stm2016.domain.util;
+package com.worksap.stm2016.audit;
 
+import com.worksap.stm2016.domain.Department;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.Role;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -24,6 +25,10 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
 
     public Role getRole() {
         return user.getRole();
+    }
+
+    public Department getDepartment() {
+        return user.getDepartment();
     }
 
     @Override
