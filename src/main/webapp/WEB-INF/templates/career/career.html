@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>My Request</title>
+    <title>Career</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
@@ -14,15 +14,7 @@
 
 <div layout:fragment="content">
     <div class="row">
-        <h3>Job Post List</h3>
-        <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row">
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>
-            <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-        </div>
+        <h3>Career</h3>
         <table id="table"
                data-toolbar="#toolbar"
                data-sortable="true"
@@ -35,7 +27,7 @@
                data-page-list="[10, 25, 50, 100, ALL]"
                data-detail-view="true"
                data-minimum-count-columns="1"
-               data-id-field="lastEditDate"
+               data-id-field="deadline"
                smartDisplay="true">
         </table>
     </div>
@@ -49,63 +41,35 @@
         function initTable() {
             var url = "/api/job_post";
             var $table = $('#table');
-            var $remove = $("#btn-delete-row");
 
             var columns =[{
-                        field: 'satate',
-                        checkbox: true
-                    },{
-                        field: 'lastEditDate',
-                        title: 'Last Edit',
-                        sortable: true,
-                        formatter: function (index, row, element) {
-                            return (new Date(index)).toString("yyyy/M/dd hh:mm:ss");
-                        }
-                    }, {
-                        field: 'deadline',
-                        title: 'Deadline',
-                        sortable: true,
-                        formatter: function (index, row, element) {
-                            if (index) {
-                                return (new Date(index)).toString("yyyy/M/dd");
-                            } else {
-                                return "-";
-                            }
-                        }
-                    },{
-                        field: 'title',
-                        title: 'Title',
-                        sortable: true,
-                        filterControl: 'input',
-                        formatter: function (index, row, element) {
-                            return '<a href="/job_post/' + row.id + '">' + row.title + '</a>';
-                        }
-
-                    }, {
-                        field: 'job',
-                        title: 'Job Code',
-                        sortable: true,
-                        filterControl: 'input',
-                        formatter: function (index, row, element) {
-                            return index.id;
-                        }
-                    },{
-                        field: 'author',
-                        title: 'Author',
-                        sortable: true,
-                        filterControl: 'input',
-                        formatter: function (index, row, element) {
-                            return index.name;
-                        }
-                    }, {
-                        field: 'published',
-                        title: 'Published / Draft',
-                        sortable: true,
-                        filterControl: 'select',
-                        formatter: function (index, row, element) {
-                            return (index==true? "Published" : "Draft");
-                        }
-                    }];
+                field: 'deadline',
+                title: 'Deadline',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    if (index) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    } else {
+                        return "-";
+                    }
+                }
+            }, {
+                field: 'title',
+                title: 'Title',
+                sortable: true,
+                filterControl: 'input',
+                formatter: function (index, row, element) {
+                    return '<a href="/career/job/' + row.id + '">' + row.title + '</a>';
+                }
+            }, {
+                field: 'author',
+                title: 'Location',
+                sortable: true,
+                filterControl: 'select',
+                formatter: function (index, row, element) {
+                    return index.department.location;
+                }
+            }];
 
             $('#table').bootstrapTable({
                 columns: columns,
@@ -117,12 +81,21 @@
                     if (p.sort) {
                         data.sort = p.sort;
                     } else {
-                        data.sort = "postDate";
+                        data.sort = "deadline";
                     }
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var filter = {};
+                    $.each( p.filter, function( k, v ) {
+                        if (k == "department") {
+                            filter.location = v;
+                        } else {
+                            filter[k] = v;
+                        }
+                    });
+                    filter.published = true;
+                    data.filter = filter;
                     return data;
                 },
                 detailFormatter: function (index, row, element) {
@@ -130,47 +103,11 @@
                 onPostBody: function () {
                     $(".filterControl input").attr('placeholder', 'Search');
                 },
-                onCheck: function () {
-                    $("#btn-delete-row").prop('disabled', false);
-                },
-                onUncheckSome: function () {
-                    $("#btn-delete-row").prop('disabled', true);
-                },
                 filterControl: true,
                 sortOrder: 'desc',
                 cookie: true,
                 cookieIdTable: 'job_post',
             });
-
-            $table.on('check.bs.table uncheck.bs.table ' +
-                    'check-all.bs.table uncheck-all.bs.table', function () {
-                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-            });
-            $remove.click(function () {
-                var ids = getIdSelections();
-                if (confirm("Are you sure to delete these job posts?")) {
-                    $table.bootstrapTable('remove', {
-                        field: 'id',
-                        values: ids
-                    });
-                    $remove.prop('disabled', true);
-
-                    $.ajax({
-                        type: "delete",
-                        data: JSON.stringify(ids),
-                        contentType: "application/json; charset=utf-8",
-                        url: '/api/job_post',
-                        success: function () {
-                            console.log("1");
-                        }
-                    });
-                }
-            });
-            function getIdSelections() {
-                return $.map($table.bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
-            }
         }
     </script>
 </div>

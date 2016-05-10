@@ -1,7 +1,7 @@
 package com.worksap.stm2016.service.currentuser;
 
 import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,8 +11,8 @@ public class CareerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CareerController.class);
 
-    @RequestMapping(value = "/jobs", method = RequestMethod.GET)
-    public String getJobListPage() {
-        return "job/jobs";
+    @RequestMapping(value = "/career", method = RequestMethod.GET)
+    public String getCareerPage() {
+        return "career/career";
     }
 }

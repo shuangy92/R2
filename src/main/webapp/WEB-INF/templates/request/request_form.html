@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>My Request</title>
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Submit a Request</h3>
+        <a href="#" th:href="@{.}"> Requests</a>
+        <select class="form-control request-select" id="requestType" name="requestType" required="required">
+            <option></option>
+            <option value="STAFFING">Staffing</option>
+            <option value="OTHER">Other</option>
+        </select>
+
+        <!-- staffing -->
+        <form class="form-horizontal" role="form" id="staffing-request-form">
+            <div class="col-sm-7">
+                <div class="form-group required">
+                    <label for="title" class="col-sm-3 control-label">Title</label>
+                    <div class="col-sm-5">
+                        <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="department" class="col-sm-3 control-label">Department</label>
+                    <div class="col-sm-5">
+                        <input th:value="${currentUser.department.name}" class="form-control" type="input" id="department" name="department" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="staffingRequestType" class="col-sm-3 control-label">I would like to...</label>
+                    <div class="col-sm-5">
+                        <select class="form-control staffing-request-select" id="staffingRequestType" name="staffingRequestType" required="required">
+                            <option value="REPLACE">Replace existing positions</option>
+                            <option value="NEW">Request new positions</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="jobId" class="col-sm-3 control-label">Job Code</label>
+                    <div class="col-sm-5">
+                        <input th:value="2" class="form-control" placeholder="Job Code" type="number" min="0" id="jobId" name="jobId" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="vacancies" class="col-sm-3 control-label"># of vacancies</label>
+                    <div class="col-sm-5">
+                        <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" min="0" id="vacancies" name="vacancies" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="startDate" class="col-sm-3 control-label">Desired Starting Date</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="startDate" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="contractLength" class="col-sm-3 control-label">Desired Contract Length</label>
+                    <div class="col-sm-5">
+                        <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" min="0" id="contractLength" name="contractLength" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
+                        <input type="radio" name="contractLengthUnit" value="month" /> Month
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Proposed Contract Ending Date: </label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="endDate" id="endDate" name="endDate" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="senderMessage" class="col-sm-3 control-label">Reason for Request</label>
+                    <div class="col-sm-5">
+                        <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group required">
+                    <label for="jobTitle" class=" control-label">Job Title</label>
+                    <input class="form-control" type="input" id="jobTitle" name="jobTitle" required="required"/>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="control-label">Job Description</label>
+                    <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="requirement" class=" control-label">Job Requirement</label>
+                    <textarea class="form-control" type="input" id="requirement" name="requirement" rows="5"> </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="hours" class=" control-label">Standard Hours</label>
+                    <input class="form-control" type="number" min="0" id="hours" name="hours" />
+                </div>
+                <button type="submit" class="btn btn-success" style="float: right;">Submit</button>
+            </div>
+        </form>
+
+        <!-- other -->
+        <form class="form-horizontal" role="form" id="other-request-form">
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <label for="title" class="col-sm-2 control-label required">Title</label>
+                    <div class="col-sm-8">
+                        <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="senderMessage" class="col-sm-2 control-label">Message</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="float: right;">Submit</button>
+                </div>
+            </div>
+            </form>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        var job;
+
+        jQuery(document).ready(function ($) {
+
+            $("form").hide();
+            $(".request-select").change(function () {
+                console.log($(this).val());
+                switch ($(this).val()) {
+                    case "STAFFING":
+                        $("form").hide();
+                        $("#staffing-request-form").show();
+                        staffingRequest();
+                        break;
+                    case "OTHER":
+                        $("form").hide();
+                        $("#other-request-form").show();
+                        otherRequest();
+                        break;
+                }
+            });
+
+            $(".request-select").select2({
+                minimumResultsForSearch: Infinity,
+                placeholder: "Select a request type"
+            });
+        });
+
+        function staffingRequest() {
+            var endDate;
+
+            $("#startDate").datepicker();
+
+            handleJobCode();
+            handleContractDate();
+
+            $("#staffing-request-form").submit(function (e) {
+                e.preventDefault();
+
+                var request = {};
+                $.each($('#staffing-request-form').serializeArray(), function(i, field) {
+                    switch (field.name) {
+                        case "contractLength":
+                        case "contractLengthUnit":
+                            var length = parseInt($("#contractLength").val());
+                            if (field.value == "month") {
+                                endDate = Date.parse($("#startDate").val()).addMonths(length);
+                                request["contractLength"] = length + " month";
+                            } else {
+                                endDate = Date.parse($("#startDate").val()).addWeeks(length);
+                                request["contractLength"] = length + " week";
+                            }
+                            break;
+                        case "startDate":
+                        case "endDate":
+                            request[field.name] = Date.parse(field.value);
+                            break;
+                        case "jobId":
+                            request.job = job;
+                            break;
+                        case "department":
+                            break;
+                        default:
+                            request[field.name] = field.value;
+                            break;
+                    }
+                });
+
+                request.requestType = "STAFFING";
+                sendRequest(request);
+            });
+            $(".staffing-request-select").select2({
+                minimumResultsForSearch: Infinity
+            });
+        }
+        function handleContractDate() {
+            $("#startDate, #contractLength, input[name='contractLengthUnit']").change(function () {
+                var length = parseInt($("#contractLength").val());
+                if ($("input[name='contractLengthUnit']:checked").val() == "month") {
+                    endDate = Date.parse($("#startDate").val()).addMonths(length);
+                } else {
+                    endDate = Date.parse($("#startDate").val()).addWeeks(length);
+                }
+                $("#endDate").val(endDate.toString("yyyy-M-dd"));
+            });
+        }
+        function handleJobCode() {
+            $("#jobId").change(function () {
+                var url = "/api/job/" + $("#jobId").val();
+                $.get(url)
+                        .done(function (data) {
+                            if (data == "") {
+                                $("#jobId").val("");
+                                $.notify({
+                                    icon: 'fa fa-info-circle',
+                                    message: "Please input a valid job code.",
+                                }, {
+                                    delay: 500,
+                                })
+                            } else if (data.department.id != [[${currentUser.department.id}]]) {
+                                $("#jobId").val("");
+                                $.notify({
+                                    icon: 'fa fa-info-circle',
+                                    message: "Please select a job belongs to your department.",
+                                }, {
+                                    delay: 500,
+                                })
+                            } else {
+                                job = data;
+                                $("#jobTitle").val(data.title);
+                                $("#description").val(data.description);
+                                $("#requirement").val(data.requirement);
+                                $("#hours").val(data.hours);
+                            }
+                        });
+            });
+        }
+        function otherRequest() {
+            $("#other-request-form").submit(function (e) {
+                e.preventDefault();
+
+                var request = {};
+                $.each($('#other-request-form').serializeArray(), function(i, field) {
+                    request[field.name] = field.value;
+                });
+
+                request.requestType = "OTHER";
+                sendRequest(request);
+            });
+        }
+        function  sendRequest (request) {
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Sending...",
+            });
+            var url = "/api/request";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify(request),
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    notify.update('message', 'Your request has been sent.');
+                    setTimeout(function() {
+                        notify.close();
+                    }, 2000);
+                    window.location.href = ".";
+                }
+            })
+        }
+
+    </script>
+</div>
+</body>
+</html>

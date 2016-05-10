@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
+import com.worksap.stm2016.domain.Department;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
@@ -34,6 +35,11 @@ public abstract class Request implements Serializable {
     @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
     private User sender;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @OrderBy("name ASC")
     @ManyToOne
     @JoinColumn(name = "replier_id", referencedColumnName = "user_id")
     private User replier;

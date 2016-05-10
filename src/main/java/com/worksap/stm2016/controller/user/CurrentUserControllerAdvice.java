@@ -1,6 +1,6 @@
 package com.worksap.stm2016.controller.user;
 
-import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.audit.CurrentUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;

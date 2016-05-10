@@ -31,10 +31,12 @@ public class Job implements Serializable {
     @Column(name = "hours")
     private Integer hours;
 
+    @OrderBy("name ASC")
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @OrderBy("name ASC")
     @ManyToOne
     @JoinColumn(name = "job_category_id")
     private JobCategory jobCategory;

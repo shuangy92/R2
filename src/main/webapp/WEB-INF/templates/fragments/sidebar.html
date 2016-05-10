@@ -18,13 +18,26 @@
                         <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/schedule}"> My Schedules</a></li>
                     </ul>
                 </li>
-                <li class="admin">
-                    <a href="#"> Admin Panel<span class="fa arrow"></span></a>
+                <li class="admin" style="display: none;">
+                    <a href="#"> HR Panel<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="#" th:href="@{/users}"> Employee List</a></li>
                         <li><a href="#" th:href="@{/request}"> Employee Requests</a></li>
                         <li><a href="#" th:href="@{/user/create}"> Create New Employee</a></li>
-                        <li><a href="#" th:href="@{/user/__${currentUser.id}__/roster}"> My Rosters</a></li>
+                        <li><a href="#" th:href="@{/jobs}"> Job List</a></li>
+                        <li><a href="#" th:href="@{/job_categories}"> Job Category List</a></li>
+                        <li><a href="#" th:href="@{/job_posts}"> Job Post List</a></li>
+
+                    </ul>
+                </li>
+                <li class="manager" style="display: none;">
+                    <a href="#"> Manager Panel<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="#" th:href="@{/users}"> Employee List</a></li>
+                        <li><a href="#" th:href="@{/jobs}"> Job List</a></li>
+                        <li><a href="#" th:href="@{/job_categories}"> Job Category List</a></li>
+                        <li><a href="#" th:href="@{/job_posts}"> Job Post List</a></li>
+
                     </ul>
                 </li>
                 <li>
@@ -35,7 +48,47 @@
     </nav>
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var sse;
+
+        jQuery(document).ready(function ($) {
+            //$('form').formcache();
+            $("#logout").click(function () {
+                logout();
+            });
+            if (window.location.pathname != '/') {
+                $(".home").removeClass('active');
+            }
+            var currentUser = [[${currentUser}]];
+            if (currentUser.user.active == false) {
+                $(".user .employee").hide();
+            }
+            switch (currentUser.authorities[0].authority) {
+                case 'ADMIN':
+                    connect();
+                    $(".admin").show();
+                    break;
+                case 'MANAGER':
+                    $(".manager").show();
+                    break;
+            }
+
+
+            $.notifyDefaults({
+                element: 'body',
+                type: 'info',
+                delay: 0,
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: "animated fadeInRight",
+                    exit: "animated fadeOutRight"
+                }
+            });
+        });
+
         var connect = function () {
             var sse = new EventSource('/stream');
 
@@ -84,26 +137,7 @@
                         window.location.href = "/login";
                     });
         }
-        jQuery(document).ready(function ($) {
-            $('form').formcache();
-            $("#logout").click(function () {
-                logout();
-            });
-            if (window.location.pathname != '/') {
-                $(".home").removeClass('active');
-            }
-            var currentUser = [[${currentUser}]];
-            if (currentUser.user.active == false) {
-                $(".user .employee").hide();
-            }
-            if(currentUser.authorities[0].authority == 'ADMIN') {
-                connect();
-            } else {
-                $(".admin").hide();
-            }
-        });
-
-
+       //]]>
     </script>
 </div>
 </body>

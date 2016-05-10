@@ -1,8 +1,8 @@
 package com.worksap.stm2016.api.job;
 
-import com.worksap.stm2016.domain.JobPost;
+import com.worksap.stm2016.domain.job.JobPost;
 import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.repository.job.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -56,9 +56,9 @@ public class JobPostApi {
                 String search = (String) filterObj.get(key);
                 Specification spec;
                 if (key.equals("department")) {
-                    spec = hasValue(key, "name", search);
+                    spec = isValue(key, "name", search);
                 } else if (key.equals("location")) {
-                    spec = isValue("location", search);
+                    spec = isValue("department", "location", search);
                 } else if (key.equals("author")) {
                     spec = hasValue(key, "name", search);
                 } else if (key.equals("published")) {
@@ -77,23 +77,13 @@ public class JobPostApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
-    public JobPost save(Authentication authentication,
-                        @RequestBody JobPost post){
-        User author = ((CurrentUser) authentication.getPrincipal()).getUser();
-        post.setAuthor(author);
-        post.setLastEditor(author);
-        post.setPostDate(new Date());
-        post.setLastEditDate(new Date());
+    public JobPost save(@RequestBody JobPost post){
         return jobPostRepository.save(post);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
-    public JobPost update(Authentication authentication,
-                          @RequestBody JobPost post){
-        User editor = ((CurrentUser) authentication.getPrincipal()).getUser();
-        post.setLastEditor(editor);
-        post.setLastEditDate(new Date());
+    public JobPost update(@RequestBody JobPost post){
         return jobPostRepository.save(post);
     }
 

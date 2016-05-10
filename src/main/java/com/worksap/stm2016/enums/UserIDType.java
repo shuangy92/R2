@@ -1,5 +1,7 @@
 package com.worksap.stm2016.enums;
 
-public enum UserIDType {
-    TRAINEE, TRAINER, NORMAL;
+public enum UserIdType {
+    NIN, // national identification number
+    PPN, // passport number
+    DLN, // driver's license number
 }

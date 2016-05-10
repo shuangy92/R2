@@ -2,18 +2,22 @@ package com.worksap.stm2016.controller;
 
 
 import com.worksap.stm2016.domain.Department;
-import com.worksap.stm2016.domain.Job;
+import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
 import com.worksap.stm2016.repository.DepartmentRepository;
-import com.worksap.stm2016.repository.JobRepository;
+import com.worksap.stm2016.repository.job.JobCategoryRepository;
+import com.worksap.stm2016.repository.job.JobRepository;
 import com.worksap.stm2016.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Random;
 
 @RestController
 public class FakeController {
@@ -24,6 +28,8 @@ public class FakeController {
     UserRepository userRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    JobCategoryRepository jobCategoryRepository;
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public void data() {
@@ -42,6 +48,16 @@ public class FakeController {
             job.setHours(40);
             job.setRequirement("Requirement for job " + i.toString());
             job.setTitle("Job Title No. " + i.toString());
+            if (i < 10) {
+                job.setDepartment(department);
+            } else {
+                department = departmentRepository.findOne(Long.valueOf(1));
+                job.setDepartment(department);
+            }
+            Random rand = new Random();
+            int  n = rand.nextInt(4) + 1;
+            JobCategory jobCategory = jobCategoryRepository.findOne((long) n);
+            job.setJobCategory(jobCategory);
             jobRepository.save(job);
 
             User user = new User();

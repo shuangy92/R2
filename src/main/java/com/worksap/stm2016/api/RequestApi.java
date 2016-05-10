@@ -6,10 +6,10 @@ import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.message.OtherRequest;
 import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.message.StaffingRequest;
-import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
-import com.worksap.stm2016.repository.JobRepository;
+import com.worksap.stm2016.repository.job.JobRepository;
 import com.worksap.stm2016.repository.UserRepository;
 import com.worksap.stm2016.repository.message.RequestRepository;
 import org.json.simple.JSONObject;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +31,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -126,16 +126,8 @@ public class RequestApi {
                                        @RequestParam(name = "limit") Integer limit,
                                        @RequestParam(name = "offset") Integer offset,
                                        @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
-        Integer page = offset / limit;
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (order.equals("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-        Pageable pageable = new PageRequest(page, limit, direction, sort);
 
         ArrayList<Specification> specs = new ArrayList<>();
-        List<Request> requests = new ArrayList<>();
-        Long count = Long.valueOf(0);
 
         if (filter != null) {
             JSONParser parser = new JSONParser();
@@ -145,38 +137,22 @@ public class RequestApi {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
                 Specification spec;
-                if (key.equals("type")) {
+                if (key.equals("requestType")) {
                     spec = isValue(key, RequestType.valueOf(search));
                 } else if (key.equals("status")) {
                     spec = isValue(key, RequestStatus.valueOf(search));
                 } else if (key.equals("sendDate")) {
                     spec = isValue(key, new Date(Long.parseLong(search)));
-                } else if (key.equals("title")) { //key = title
-                    spec = hasValue(key, search);
-                } else { // key = sender
+                } else if (key.equals("sender")) {
                     spec = hasValue(key, "name", search);
+                } else { // key = title
+                    spec = hasValue(key, search);
                 }
                 specs.add(spec);
             }
-            if (specs.size() == 1) {
-                requests = requestRepository.findAll(specs.get(0), pageable).getContent();
-                count = requestRepository.count(specs.get(0));
-            } else if (specs.size() == 2) {
-                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)), pageable).getContent();
-                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)));
-            } else if (specs.size() == 3) {
-                requests = requestRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
-                count = requestRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
-            }
-        } else {
-            requests = requestRepository.findAll(pageable).getContent();
-            count = requestRepository.count();
         }
 
-        JSONObject result = new JSONObject();
-        result.put("rows", requests);
-        result.put("total", count);
-
+        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, requestRepository);
         return result;
     }
 
@@ -196,9 +172,9 @@ public class RequestApi {
         User sender = ((CurrentUser) authentication.getPrincipal()).getUser();
         request.setSender(sender);
         request.setSendDate(new Date());
+        request.setDepartment(sender.getDepartment());
 
-        Request r = (Request) requestRepository.save(request);
-        logger.debug("{}", requestRepository.findOne(r.getId()));
+        requestRepository.save(request);
     }
 
     @ResponseBody
@@ -217,8 +193,8 @@ public class RequestApi {
 
         User replier = ((CurrentUser) authentication.getPrincipal()).getUser();
         request.setReplier(replier);
-        Request myRequest = (Request)  requestRepository.save(request);
-
+        request.setReplyDate(new Date());
+        requestRepository.save(request);
         return "Your reply has been sent";
     }
 }

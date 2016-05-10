@@ -1,7 +1,7 @@
 package com.worksap.stm2016.api.job;
 
-import com.worksap.stm2016.domain.Job;
-import com.worksap.stm2016.repository.job.JobRepository;
+import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -23,27 +23,31 @@ import static com.worksap.stm2016.specification.BasicSpecs.isValue;
  * Created by Shuang on 4/25/2016.
  */
 @RestController
-@RequestMapping("/api/job")
+@RequestMapping("/api/job_category")
 @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
 public class JobCategoryApi {
 
     private static final Logger logger = LoggerFactory.getLogger(JobCategoryApi.class);
     @Autowired
-    JobRepository jobRepository;
+    JobCategoryRepository jobCategoryRepository;
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public Job get(@PathVariable("id") Long id){
-        return jobRepository.findOne(id);
+    public JobCategory get(@PathVariable("id") Long id){
+        return jobCategoryRepository.findOne(id);
+    }
+
+    @RequestMapping(value="/all", method = RequestMethod.GET)
+    public Iterable<JobCategory> getJobCategoryListAll() throws ParseException {
+        return jobCategoryRepository.findAllByOrderByNameAsc();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getJobList(@RequestParam(name = "sort") String sort,
-                                  @RequestParam(name = "order") String order,
-                                  @RequestParam(name = "limit") Integer limit,
-                                  @RequestParam(name = "offset") Integer offset,
-                                  @RequestParam(name = "filter", required = false) String filter) throws ParseException {
-
-       ArrayList<Specification> specs = new ArrayList<>();
+    public JSONObject getJobCategoryList(@RequestParam(name = "sort") String sort,
+                                         @RequestParam(name = "order") String order,
+                                         @RequestParam(name = "limit") Integer limit,
+                                         @RequestParam(name = "offset") Integer offset,
+                                         @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+        ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
             JSONParser parser = new JSONParser();
@@ -52,21 +56,28 @@ public class JobCategoryApi {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("id")) {
-                    spec = isValue(key, Long.parseLong(search));
-                } else if (key.equals("department")) {
-                    spec = hasValue(key, "name", search);
-                } else if (key.equals("location")) {
-                    spec = hasValue("department", "location", search);
-                } else { //key = title
-                    spec = hasValue(key, search);
-                }
+                Specification spec = hasValue(key, search);
                 specs.add(spec);
             }
         }
-
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
+        JSONObject result = SortAndFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
         return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public void save(@RequestBody JobCategory jobCategory) throws ParseException {
+        jobCategoryRepository.save(jobCategory);
+    }
+    @RequestMapping(method = RequestMethod.PUT)
+    public void update(@RequestBody JobCategory jobCategory) throws ParseException {
+        jobCategoryRepository.save(jobCategory);
+    }
+
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void delete(@RequestBody ArrayList<Long> ids){
+        for (Long id: ids) {
+            jobCategoryRepository.delete(id);
+        }
     }
 }

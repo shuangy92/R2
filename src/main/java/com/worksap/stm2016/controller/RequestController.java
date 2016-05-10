@@ -1,23 +1,9 @@
 package com.worksap.stm2016.controller;
 
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.domain.message.Request;
-import com.worksap.stm2016.domain.util.CurrentUser;
-import com.worksap.stm2016.enums.RequestStatus;
-import com.worksap.stm2016.enums.RequestType;
 import com.worksap.stm2016.repository.message.RequestRepository;
 import com.worksap.stm2016.service.user.UserService;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.expression.ParseException;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +11,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Shuang on 4/18/2016.
@@ -59,7 +42,6 @@ public class RequestController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET, produces = "text/html")
     public String getRequestSubmitPage(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id).get());
         return "request/request_form";
     }
 

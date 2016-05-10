@@ -1,11 +1,6 @@
 package com.worksap.stm2016.domain.review;
 
-import com.worksap.stm2016.domain.Department;
-import com.worksap.stm2016.domain.Job;
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;

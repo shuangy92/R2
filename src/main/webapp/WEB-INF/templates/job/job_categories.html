@@ -9,7 +9,8 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/editable/bootstrap-table-editable.js}"></script>
+    <script type="text/javascript" src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
 </head>
 <body>
 
@@ -41,10 +42,19 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
 
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
         function initTable() {
             var url = "/api/job_category";
-            $('#table').bootstrapTable({
+            var $table = $('#table');
+
+            $table.bootstrapTable({
                 columns: [{
+                    field: 'state',
+                    checkbox: true
+                },{
                     field: 'id',
                     title: 'Id',
                     sortable: true,
@@ -52,7 +62,14 @@
                     field: 'name',
                     title: 'Name',
                     sortable: true,
-                    filterControl: 'input'
+                    filterControl: 'input',
+                    editable: {
+                        clear: true,
+                        showbuttons: 'bottom',
+                        type: 'text',
+                        inputclass: 'form-control',
+                        title: 'Edit'
+                    }
                 }],
                 url: url,
                 contentType: "application/x-www-form-urlencoded",
@@ -73,16 +90,88 @@
                 onPostBody: function () {
                     $(".filterControl input").attr('placeholder', 'Search');
                 },
-                filterControl: true,
-                sortOrder: 'desc',
-                cookie: true,
-                cookieIdTable: 'job',
-            });
-        }
+                onEditableSave: function (field, row, oldValue, $el) {
+                    $.ajax({
+                        type: "put",
+                        url: '/api/job_category',
+                        data: JSON.stringify(row),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
 
-        jQuery(document).ready(function ($) {
-            initTable();
-        });
+                        }
+                    });
+                },
+                filterControl: true,
+                cookie: true,
+                cookieIdTable: 'job_category',
+                editable: true
+            });
+
+            var $remove = $("#btn-delete-row");
+            var $insert = $("#btn-add-row");
+
+            $insert.click(function () {
+                var name = prompt("Please enter a category name");
+                while (name == '') {
+                    name = prompt("Please enter a category name");
+                    if (name == null) return;
+                }
+                var data = {};
+                data.name = name;
+                $.ajax({
+                    type: "post",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    url: '/api/job_category',
+                    success: function () {
+                        $table.bootstrapTable('refresh');
+                        var options = $table.bootstrapTable('getOptions');
+                        $table.bootstrapTable('selectPage', options.totalPages);
+                    }
+                });
+            });
+
+            $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            });
+            $remove.click(function () {
+                var ids = getIdSelections();
+                if (confirm("Are you sure to delete?")) {
+
+
+                    $.ajax({
+                        type: "delete",
+                        data: JSON.stringify(ids),
+                        contentType: "application/json; charset=utf-8",
+                        url: '/api/job_category',
+                        success: function () {
+                            $table.bootstrapTable('remove', {
+                                field: 'id',
+                                values: ids
+                            });
+                            $remove.prop('disabled', true);
+                            $table.bootstrapTable('refresh');
+                        },
+                        error: function (e) {
+                            if (e.status == 500) {
+                                $.notify({
+                                    icon: 'fa fa-exclamation-triangle',
+                                    message: "The item is referenced. You can't delete it.",
+                                },{
+                                    type: 'danger'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id
+                });
+            }
+        }
 
     </script>
 </div>

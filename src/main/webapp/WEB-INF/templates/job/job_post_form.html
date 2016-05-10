@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Job Post</title>
+</head>
+<body>
+
+<!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
+<div layout:fragment="content">
+    <h3>Job Post</h3>
+    <p id="created" style="display: none;"></p>
+    <p id="last-edited" style="display: none;"></p>
+    <form role="form">
+        <div class="col-sm-5">
+            <div class="form-group required">
+                <label for="jobTitle" class="control-label">Title</label>
+                <input class="form-control" placeholder="Title" type="input" id="jobTitle" name="title" required="required"/>
+            </div>
+            <div class="form-group">
+                <label for="vacancies" class="control-label">Job Code</label>
+                <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
+                <input class="form-control" type="input" id="jobId" name="jobId" required="required" readonly="readonly"/>
+            </div>
+            <div class="form-group">
+                <label for="departmentName" class="control-label">Department</label>
+                <input class="form-control" type="input" id="departmentName" name="department" required="required" readonly="readonly"/>
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label">Job Description</label>
+                <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
+            </div>
+            <div class="form-group">
+                <label for="requirement" class="control-label">Job Requirement</label>
+                <textarea class="form-control" type="input" id="requirement" name="requirement" rows="5"> </textarea>
+            </div>
+            <div class="form-group">
+                <label for="hours" class="control-label">Standard Hours</label>
+                <input class="form-control" type="number" id="hours" name="hours" />
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group required">
+                <label for="startDate" class="control-label">Contract Starting Date</label>
+                <input class="form-control" placeholder="Contract Starting Date" type="input" id="startDate" name="startDate" required="required"/>
+            </div>
+            <div class="form-group required">
+                <label for="contractLength" class="control-label">Contract Length</label>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input th:value="2" class="form-control" placeholder="Contract Length" type="number" min="0" id="contractLength" name="contractLength" required="required"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
+                        <input type="radio" name="contractLengthUnit" value="month" /> Month
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="control-label">Contract Ending Date </label>
+                <input class="form-control" placeholder="Contract Ending Date" type="input" id="endDate" name="endDate" required="required" readonly="readonly"/>
+            </div>
+            <div class="form-group required">
+                <label for="vacancies" class="control-label">Open Positions</label>
+                <input class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="vacancies" required="required"/>
+            </div>
+            <fieldset>
+                <legend>For HR to Fill Only:</legend>
+                <div class="form-group">
+                    <label for="startDate" class="control-label">Deadline for Application</label>
+                    <input class="form-control" placeholder="Leave blank = Post will close until all opening filled" type="input" id="deadline" name="deadline"/>
+                </div>
+                <div class="form-group required">
+                    <label for="payRate" class="control-label">Pay By</label>
+                    <select class="form-control pay-rate-select" id="payRate" name="payRate" required="required">
+                        <option value="HOURLY">Hour</option>
+                        <option value="DAILY">Day</option>
+                        <option value="WEEKLY">Week</option>
+                        <option value="MONTHLY">Month</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="salary" class="control-label">Salary</label>
+                    <input class="form-control" placeholder="Salary / Salary Range / Negotiable" type="input" id="salary" name="salary"/>
+                </div>
+                <button type="submit" class="btn btn-default" id="save">Save</button>
+                <button type="submit" class="btn btn-success" id="publish" style="display: none;">Publish</button>
+                <button type="submit" class="btn btn-warning" id="unpublish" style="display: none;">Unpublish</button>
+            </fieldset>
+        </div>
+    </form>
+
+
+    <script type="text/javascript" th:inline="javascript">
+        var request;
+
+        function handleContractDate() {
+            $("#startDate, #contractLength, input[name='contractLengthUnit']").change(function () {
+                var length = parseInt($("#contractLength").val());
+                if ($("input[name='contractLengthUnit']:checked").val() == "month") {
+                    endDate = Date.parse($("#startDate").val()).addMonths(length);
+                } else {
+                    endDate = Date.parse($("#startDate").val()).addWeeks(length);
+                }
+                $("#endDate").val(endDate.toString("yyyy-M-dd"));
+            });
+        }
+        function handleRequestData() {
+            $.each(request, function (k, v) {
+                var sel = $("#" + k);
+                if (sel.length) {
+                    sel.val(v);
+                }
+            });
+            var cl = request.contractLength.split(" ");
+            $("#contractLength").val(cl[0]);
+            $('input:radio[name="contractLengthUnit"]').filter('[value="' + cl[1] +'"]').attr('checked', true);
+
+            $("#jobId").val(request.job.id);
+            $("#departmentName").val(request.department.name);
+        }
+        function handleFormSubmission(method) {
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+
+                var data = {};
+                $.each($('form').serializeArray(), function(i, field) {
+                    switch (field.name) {
+                        case "startDate":
+                        case "deadline":
+                            data[field.name] = Date.parse(field.value);
+                            break;
+                        default:
+                            data[field.name] = field.value;
+                    }
+                });
+                data.job = request.job;
+                data.department = request.department;
+                data.endDate = request.endDate;
+
+                if (method == "put") {
+                    data.author = request.author;
+                    data.createdDate = request.createdDate;
+                    data.id = request.id;
+                }
+
+                var btn = $(document.activeElement)[0].id;
+                if (btn == "unpublish") {
+                    data.published = false;
+                } else if (btn == "publish") {
+                    data.published = true;
+                } else { // save
+                    data.published = request.published;
+                }
+
+                var notify = $.notify({
+                    icon: 'fa fa-info-circle',
+                    message: "Waiting...",
+                });
+                $.ajax({
+                    type: method,
+                    url: '/api/job_post',
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (post) {
+                        notify.update('message', "Done");
+                        setTimeout(function() {
+                            notify.close();
+                        }, 1000);
+                        localStorage.removeItem("request");
+                        window.history.replaceState({}, '/job_post/create', '/job_post/' + post.id);
+                        window.location.href = "/job_posts";
+                    }
+                });
+            });
+        }
+        jQuery(document).ready(function ($) {
+            $("#startDate").datepicker();
+            $("#deadline").datepicker();
+
+            handleContractDate();
+
+            if (window.location.pathname == "/job_post/create") {
+                request = JSON.parse(localStorage.getItem("request"));
+                handleRequestData();
+                handleFormSubmission("post");
+                $("#publish").show();
+            } else {
+                $.ajax({
+                    type: 'get',
+                    url: '/api' + window.location.pathname,
+                    success: function (data) {
+                        request = data;
+                        handleRequestData();
+                        if (request.published == false) {
+                            $("#publish").show();
+                        } else {
+                            $("#unpublish").show();
+                        }
+                        $("#jobTitle").val(request.title);
+                        $("#last-edited").html("Last edited by " + request.lastEditor.name + ", " + (new Date(request.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss"));
+                        $("#last-edited").show();
+                        $("#created").html("Created by " + request.author.name + ", " + (new Date(request.createdDate)).toString("yyyy/M/dd hh:mm:ss"));
+                        $("#created").show();
+                        handleFormSubmission("put");
+                    }
+                });
+            }
+
+
+        });
+    </script>
+</div>
+</body>
+</html>
+
+
+

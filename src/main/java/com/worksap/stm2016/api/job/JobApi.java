@@ -1,6 +1,6 @@
 package com.worksap.stm2016.api.job;
 
-import com.worksap.stm2016.domain.Job;
+import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.repository.job.JobRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -56,11 +56,13 @@ public class JobApi {
                 if (key.equals("id")) {
                     spec = isValue(key, Long.parseLong(search));
                 } else if (key.equals("department")) {
-                    spec = hasValue(key, "name", search);
+                    spec = isValue(key, "name", search);
                 } else if (key.equals("location")) {
-                    spec = hasValue("department", "location", search);
-                } else { //key = title
+                    spec = isValue("department", "location", search);
+                } else if (key.equals("title")){
                     spec = hasValue(key, search);
+                } else { // key = jobCategory
+                    spec = isValue(key, search);
                 }
                 specs.add(spec);
             }
@@ -68,5 +70,22 @@ public class JobApi {
 
         JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
         return result;
+    }
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @RequestMapping(method = RequestMethod.POST)
+    public void save(@RequestBody Job job){
+        jobRepository.save(job);
+    }
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @RequestMapping(method = RequestMethod.PUT)
+    public void update(@RequestBody Job job){
+        jobRepository.save(job);
+    }
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void delete(@RequestBody ArrayList<Long> ids){
+        for (Long id: ids) {
+            jobRepository.delete(id);
+        }
     }
 }

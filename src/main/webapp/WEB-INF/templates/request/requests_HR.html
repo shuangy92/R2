@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>My Request</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Employee requests</h3>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               data-detail-view="true"
+               data-minimum-count-columns="1"
+               data-id-field="sendDate"
+               smartDisplay="true">
+        </table>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+
+        function initTable() {
+            var url = "/api/request/hr";
+            $('#table').bootstrapTable({
+                columns: [{
+                    field: 'sendDate',
+                    title: 'Date',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd hh:mm:ss");
+                    }
+                }, {
+                    field: 'sender',
+                    title: 'Sender',
+                    sortable: true,
+                    filterControl: 'input',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.sender.id + '/profile">' + row.sender.name + '</a>';
+                    }
+                },{
+                    field: 'title',
+                    title: 'Title',
+                    sortable: true,
+                    filterControl: 'input'
+                }, {
+                    field: 'requestType',
+                    title: 'Request Type',
+                    sortable: true,
+                    filterControl: 'select'
+                }, {
+                    field: 'status',
+                    title: 'Status',
+                    sortable: true,
+                    filterControl: 'select',
+                    formatter: function (index, row, element) {
+                        if (row.status == 'APPROVED') {
+                            return '<p class="bg-success">' + row.status + '</p>'
+                        } else if (row.status == 'DECLINED') {
+                            return '<p class="bg-danger">' + row.status + '</p>'
+                        } else {
+                            return '<p class="bg-warning">' + row.status + '</p>'
+                        }
+                    }
+                }],
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "sendDate";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                detailFormatter: function (index, row, element) {
+                    var left =
+                            '<div class="row">' +
+                            '<dl class="col-md-4 dl-horizontal" >' +
+                            '<dt>From</dt>' + '<dd>' + row.sender.name + '</dd>' +
+                            '<dt>Title</dt>' + '<dd>' + row.title + '</dd>' +
+                            '<dt>Message</dt>' + '<dd>' + row.senderMessage + '</dd>' +
+                            '</dl>';
+                    var middle, right;
+                    if (row.status == 'PENDING') {
+                        middle =
+                                '<dl class="col-md-4" >' +
+                                '<dt>Reply</dt>' +
+                                '<form><textarea class="form-control" placeholder="Your message" rows="5" id="message-' + index + '" name="replierMessage" onkeyup="handleRequestReplierMessage(this, ' + index + ')">' + (replierMessage[index] != null ? replierMessage[index] : "") + '</textarea></form>' +
+                                '</dl>';
+                        right =
+                                '<div class="col-md-4">' +
+                                '<button type="button" class="btn btn-success btn-request approve" onclick="handleRequestStatus(\'APPROVED\',' + index + ')">Approve</button>' +
+                                '<button type="button" class="btn btn-danger btn-request decline" onclick="handleRequestStatus(\'DECLINED\',' + index + ')">Decline</button>' +
+                                '</div>';
+                    } else {
+                        middle =
+                                '<dl class="col-md-4 dl-horizontal" >' +
+                                '<dt>Your Reply</dt>' + '<dd>' + row.replierMessage + '</dd>' +
+                                '<dt>Reply Date</dt>' + '<dd>' + (new Date(row.replyDate)).toString("yyyy/M/dd hh:mm:ss") + '</dd>' +
+                                '</dl>';
+                        if (row.requestType == "STAFFING") {
+                            right =
+                                    '<div class="col-md-4">' +
+                                    '<a id="btn-post-job-form" href="#" onclick="handleStaffingRequest(' + index + ')">Post a job</a>' +
+                                    '</div>';
+                        } else {
+                            right =
+                                    '<div class="col-md-4">' +
+                                    '</div>';
+                        }
+                    }
+                    return left + middle + right + '</div>';
+                },
+                onPostBody: function () {
+                    $(".filterControl input").attr('placeholder', 'Search');
+                },
+                onPageChange: function () {
+                    replierMessage = [];
+                },
+                filterControl: true,
+                sortOrder: 'desc',
+                cookie: true,
+                cookieIdTable: 'request_hr',
+            });
+        }
+        function handleRequestStatus(status, index) {
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Sending...",
+            });
+            var request = $('#table').bootstrapTable('getData', true)[index];
+            request.replierMessage = $("#message-" + index).val();
+            request.status = status;
+            console.log(request);
+
+            var url = "/api/request/";
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(request),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    notify.update('message', data);
+                    setTimeout(function() {
+                        notify.close();
+                    }, 1000);
+                    $('#table').bootstrapTable('updateRow', { index: index, row: request});
+                    $('#table').bootstrapTable('expandRow', index);
+                }
+            });
+        }
+        var timeoutId = 0;
+        function handleRequestReplierMessage(msg, index) {
+            clearTimeout(timeoutId); // doesn't matter if it's 0
+            timeoutId = setTimeout(function() { handleRequestReplierMessageDelay(msg, index) }, 1000);
+        }
+        var replierMessage = [];
+        function handleRequestReplierMessageDelay(msg, index) {
+            replierMessage[index] = $(msg).val();
+        }
+        function handleStaffingRequest(index) {
+            var request = $('#table').bootstrapTable('getData', true)[index];
+            localStorage.setItem("request", JSON.stringify(request));
+            window.location.href = "/job_post/create";
+        }
+        jQuery(document).ready(function ($) {
+            $(".panel-footer").hide();
+
+            initTable();
+
+            $(".request-select").select2({
+                placeholder: "Request type",
+                minimumResultsForSearch: Infinity
+            });
+        });
+
+
+    </script>
+</div>
+</body>
+</html>

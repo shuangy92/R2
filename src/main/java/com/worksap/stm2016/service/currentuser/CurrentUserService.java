@@ -1,6 +1,6 @@
 package com.worksap.stm2016.service.currentuser;
 
-import com.worksap.stm2016.domain.util.CurrentUser;
+import com.worksap.stm2016.audit.CurrentUser;
 
 public interface CurrentUserService {
 

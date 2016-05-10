@@ -2,6 +2,7 @@ package com.worksap.stm2016.domain;
 
 
 import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.enums.UserIdType;
 import com.worksap.stm2016.enums.UserStatus;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -35,7 +36,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
@@ -43,7 +44,7 @@ public class User implements Serializable {
     private boolean active = true;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @ManyToOne

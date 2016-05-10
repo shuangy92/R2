@@ -3,6 +3,7 @@ package com.worksap.stm2016.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -11,8 +12,13 @@ public class JobPostController {
 
     private static final Logger logger = LoggerFactory.getLogger(JobPostController.class);
 
-    @RequestMapping(value = "/post_a_job", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_post/create", method = RequestMethod.GET)
     public String getJobPostFormPage() {
+        return "job/job_post_form";
+    }
+
+    @RequestMapping(value = "/job_post/{id}", method = RequestMethod.GET)
+    public String getJobPostFormPage(@PathVariable Long id) {
         return "job/job_post_form";
     }
 

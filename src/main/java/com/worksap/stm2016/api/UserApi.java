@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -71,16 +72,7 @@ public class UserApi {
                                    @RequestParam(name = "offset") Integer offset,
                                    @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
-        Integer page = offset / limit;
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (order.equals("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-        Pageable pageable = new PageRequest(page, limit, direction, sort);
-
         ArrayList<Specification> specs = new ArrayList<>();
-        List<User> users;
-        Long count = Long.valueOf(0);
 
         if (filter != null) {
             JSONParser parser = new JSONParser();
@@ -101,28 +93,9 @@ public class UserApi {
                 }
                 specs.add(spec);
             }
-            if (specs.size() == 1) {
-                users = userRepository.findAll(specs.get(0), pageable).getContent();
-                count = userRepository.count(specs.get(0));
-            } else if (specs.size() == 2) {
-                users = userRepository.findAll(where(specs.get(0)).and(specs.get(1)), pageable).getContent();
-                count = userRepository.count(where(specs.get(0)).and(specs.get(1)));
-            } else if (specs.size() == 3) {
-                users = userRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)), pageable).getContent();
-                count = userRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)));
-            } else { // size = 4
-                users = userRepository.findAll(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)).and(specs.get(3)), pageable).getContent();
-                count = userRepository.count(where(specs.get(0)).and(specs.get(1)).and(specs.get(2)).and(specs.get(3)));
-            }
-        } else {
-            users = userRepository.findAll(pageable).getContent();
-            count = userRepository.count();
         }
 
-        JSONObject result = new JSONObject();
-        result.put("rows", users);
-        result.put("total", count);
-
+        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
         return result;
     }
 }

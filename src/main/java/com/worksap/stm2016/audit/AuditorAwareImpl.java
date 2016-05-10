@@ -1,16 +1,18 @@
 package com.worksap.stm2016.audit;
 
-import li.barlog.domain.User;
-import li.barlog.service.CurrentUserService;
+import com.worksap.stm2016.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuditorAwareImpl implements AuditorAware<User> {
-	@Autowired
-	private CurrentUserService currentUserService;
+	//@Autowired
+	//private Authentication authentication;
 
 	@Override
 	public User getCurrentAuditor() {
-		return currentUserService.getCurrentUser();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ((CurrentUser) authentication.getPrincipal()).getUser();
 	}
 }

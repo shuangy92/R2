@@ -1,9 +1,9 @@
 package com.worksap.stm2016.domain.message;
 
-import com.worksap.stm2016.domain.Department;
-import com.worksap.stm2016.domain.Job;
+import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -13,6 +13,7 @@ import java.util.Date;
 /**
  * Created by Shuang on 4/18/2016.
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @DiscriminatorValue(value=RequestType.Values.STAFFING)
@@ -21,8 +22,9 @@ public class StaffingRequest extends Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @OrderBy("title ASC")
     @ManyToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
     private Job job;
 
     @Column(name = "vacancies")
