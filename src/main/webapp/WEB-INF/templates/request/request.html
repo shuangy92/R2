@@ -13,22 +13,22 @@
 <div layout:fragment="content">
     <h1>User Information</h1>
     <!-- staffing -->
-    <form class="form-horizontal" role="form" id="staffing-request-form" style="padding: 50px 100px;">
-        <div class="col-sm-7">
+    <form class="form-horizontal" role="form" id="staffing-request-form">
+        <div class="col-sm-6">
             <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">Title</label>
+                <label for="title" class="col-sm-4 control-label">Title</label>
                 <div class="col-sm-5">
                     <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="department" class="col-sm-3 control-label">Department</label>
+                <label for="department" class="col-sm-4 control-label">Department</label>
                 <div class="col-sm-5">
                     <input th:value="${user.department.name}" class="form-control" type="input" id="department" name="department" disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="staffingRequestType" class="col-sm-3 control-label">I would like to...</label>
+                <label for="staffingRequestType" class="col-sm-4 control-label">I would like to...</label>
                 <div class="col-sm-5">
                     <select class="form-control staffing-request-select" id="staffingRequestType" name="staffingRequestType" required="required">
                         <option value="REPLACE">Replace existing positions</option>
@@ -46,19 +46,19 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="vacancies" class="col-sm-3 control-label"># of vacancies</label>
+                <label for="vacancies" class="col-sm-4 control-label"># of vacancies</label>
                 <div class="col-sm-5">
                     <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="vacancies" required="required"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="startDate" class="col-sm-3 control-label">Desired Starting Date</label>
+                <label for="startDate" class="col-sm-4 control-label">Desired Starting Date</label>
                 <div class="col-sm-5">
                     <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="startDate" required="required"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="contractLength" class="col-sm-3 control-label">Desired Contract Length</label>
+                <label for="contractLength" class="col-sm-4 control-label">Desired Contract Length</label>
                 <div class="col-sm-5">
                     <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" id="contractLength" name="contractLength" required="required"/>
                 </div>
@@ -68,13 +68,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="startDate" class="col-sm-3 control-label">Deadline for Application</label>
+                <label for="startDate" class="col-sm-4 control-label">Deadline for Application</label>
                 <div class="col-sm-5">
                     <input class="form-control" placeholder="Leave blank if not sure" type="input" id="deadline" name="deadline"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="senderMessage" class="col-sm-3 control-label">Reason for request</label>
+                <label for="senderMessage" class="col-sm-4 control-label">Reason for request</label>
                 <div class="col-sm-5">
                     <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
                 </div>
@@ -98,13 +98,11 @@
                 <p id="endDate"></p>
             </div>
         </div>
-        <div class="col-sm-6 col-sm-offset-3">
-            <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
-        </div>
+        <button type="submit" class="btn btn-lg btn-success">Submit</button>
     </form>
 
     <!-- other -->
-    <form class="form-horizontal" role="form" id="other-request-form" style="padding: 50px 100px;">
+    <form class="form-horizontal" role="form" id="other-request-form">
         <div class="col-sm-7">
             <div class="form-group">
                 <label for="title" class="col-sm-2 control-label">Title</label>
@@ -118,9 +116,7 @@
                     <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
                 </div>
             </div>
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
-            </div>
+            <button type="submit" class="btn btn-lg btn-success">Submit</button>
         </div>
     </form>
 

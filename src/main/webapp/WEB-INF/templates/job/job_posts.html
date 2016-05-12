@@ -9,7 +9,6 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/flat-json/bootstrap-table-flat-json.js}"></script>
 </head>
 <body>
 
@@ -59,7 +58,7 @@
                 title: 'Last Edited',
                 sortable: true,
                 formatter: function (index, row, element) {
-                    return (new Date(index)).toString("yyyy/M/dd hh:mm:ss");
+                    return (new Date(index)).toString("yyyy/M/dd");
                 }
             }, {
                 field: 'deadline',
@@ -72,6 +71,10 @@
                         return "-";
                     }
                 }
+            }, {
+                field: 'vacancies',
+                title: 'Vacancies',
+                sortable: true
             }, {
                 field: 'title',
                 title: 'Title',

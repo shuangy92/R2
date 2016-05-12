@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>User Profile</title>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1>User Profile</h1>
+    <div class="col-sm-6">
+        <div class="basic-info">
+            <form class="form-horizontal" role="basic-form">
+                <div class="form-group">
+                    <label for="name" class="col-sm-4 control-label">Name</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="name" name="name" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="email" name="email" required="required"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr/>
+        <div class="detail-info">
+            <form class="form-horizontal" role="form" id="contact-form">
+                <div class="form-group">
+                    <label for="phone" class="col-sm-4 control-label">Phone</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" id="phone" name="phone" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="country" class="col-sm-4 control-label">Country</label>
+                    <div class="col-sm-8" id="country-select">
+                        <input class="form-control" type="input" id="country" name="country" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="col-sm-4 control-label">Address</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="address" id="address" name="address" maxlength="60" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="idNumber" class="control-label col-sm-4">National identification number <span><a href="//en.wikipedia.org/wiki/National_identification_number" target="_blank">?</a></span></label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="idNumber" name="idNumber" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthday" class="col-sm-4 control-label">Date of Birth</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="birthday" name="birthday" required="required"/>
+                    </div>
+                </div>
+            </form>
+            <a href="/career/application_submit" target="_blank">Edit</a>
+        </div>
+        <hr/>
+        <div class="file-info">
+            <div th:replace="fragments/user_file_list :: user_file_list"></div>
+            <a href="/career/application_submit" target="_blank">Edit</a>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        var editable = false;
+        jQuery(document).ready(function ($) {
+            $("form :input").attr("readonly", true);
+            $.ajax({
+                type: "GET",
+                url: "/api/user/" + [[${currentUser.id}]],
+                success: function (data) {
+                    if (data != null) {
+                        $.each(data, function (k, v) {
+                            var sel = $("#" + k);
+                            if (sel.length) {
+                                sel.val(v);
+                            }
+                        });
+                    }
+                }
+            })
+            $.ajax({
+                url: "/api/user/profile/" + [[${currentUser.id}]],
+                type: "GET",
+                success: function (data) {
+                    if (data != "") {
+                        $.each(data, function (k, v) {
+                            var sel = $("#contact-form #" + k);
+                            if (sel.length) {
+                                sel.val(v);
+                            }
+                        });
+                        $("#contact-form #country").val(data.country.name);
+                    }
+                }
+            });
+            loadContactFormData()
+        });
+    </script>
+</div>
+</body>
+</html>

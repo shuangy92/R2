@@ -1,8 +1,10 @@
 package com.worksap.stm2016.api.job;
 
+import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.domain.job.JobPost;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.audit.CurrentUser;
+import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.repository.job.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -30,6 +32,8 @@ public class JobPostApi {
     private static final Logger logger = LoggerFactory.getLogger(JobPostApi.class);
     @Autowired
     JobPostRepository jobPostRepository;
+    @Autowired
+    JobCategoryRepository jobCategoryRepository;
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public JobPost get(@PathVariable("id") Long id){
@@ -37,8 +41,7 @@ public class JobPostApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getJobPostList(Authentication authentication,
-                                     @RequestParam(name = "sort") String sort,
+    public JSONObject getJobPostList(@RequestParam(name = "sort") String sort,
                                      @RequestParam(name = "order") String order,
                                      @RequestParam(name = "limit") Integer limit,
                                      @RequestParam(name = "offset") Integer offset,
@@ -64,6 +67,9 @@ public class JobPostApi {
                 } else if (key.equals("published")) {
                     Boolean s = search.equals("true");
                     spec = isValue(key, s);
+                } else if (key.equals("jobCategory")) {
+                    JobCategory jobCategory = jobCategoryRepository.findOneByName(search);
+                    spec = isValue("job", "jobCategory", jobCategory);
                 } else { // key = title
                     spec = hasValue(key, search);
                 }

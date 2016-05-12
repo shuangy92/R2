@@ -39,4 +39,9 @@ public class CurrentUserServiceImpl implements CurrentUserService {
                 && (currentUser.getRole() == Role.ADMIN || request.getSender() == currentUser.getUser() || request.getReplier() == currentUser.getUser());
     }
 
+    @Override
+    public boolean hasLoggedIn(CurrentUser currentUser) {
+        return currentUser != null;
+    }
+
 }

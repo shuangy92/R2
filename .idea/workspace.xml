@@ -2,84 +2,103 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/email_form.html" line="16" />
-    <bookmark url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html" line="230" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html" line="239" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html" line="102" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29635c66-2891-409a-a092-fefbb5a6078c" name="Default" comment="job post list">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/AuditorAwareImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/AuditingConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/UserIDType.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/JobApi.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/JobPostApi.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Job.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/JobPost.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/util/CurrentUser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/JobPostRepository.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/JobRepository.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/util/CurrentUser.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/CurrentUser.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_0.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/FileApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicJobPostApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicUserApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FileController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/career/CareerController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/FileProfile.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/form/UserRegisterForm.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/FileProfileRepository.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/application_submit.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/dashboard.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/layout_career.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/CareerController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/AppConfig.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/CareerController.class" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_create.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/users.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/users.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/RequestApi.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/RequestApi.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/UserApi.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/UserApi.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/job/JobPostApi.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/api/job/JobPostApi.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig$ApiWebSecurityConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig$ApiWebSecurityConfig.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig$FormWebSecurityConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig$FormWebSecurityConfig.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/config/SecurityConfig.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/FakeController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/FakeController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/JobController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/JobController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/HomeController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/HomeController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/RequestController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/CurrentUserControllerAdvice.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/CurrentUserControllerAdvice.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Contract.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Contract.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/RosterController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/RosterController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/ScheduleController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/ScheduleController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/ShiftController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/roster/ShiftController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UserController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UserController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UsersController.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/controller/user/UsersController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Department.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/Department.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/User.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/User.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/Request.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest$StaffingRequestType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/message/StaffingRequest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/review/ReviewFlow.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/review/ReviewFlow.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/review/ReviewRun.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/review/ReviewRun.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/Role.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/enums/Role.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/UserProfile.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/UserProfile.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/job/JobPost.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/domain/job/JobPost.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/form/validator/UserCreateFormValidator.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/form/validator/UserCreateFormValidator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserProfileRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserProfileRepository.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/UserRepository.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/job/JobCategoryRepository.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/repository/job/JobCategoryRepository.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserService.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$1.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$2.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$3.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/specification/BasicSpecs.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/user/UserService.class" afterPath="$PROJECT_DIR$/target/classes/com/worksap/stm2016/service/user/UserService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/CareerController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/CareerController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobPostController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobPostController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/HomeController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/HomeController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/CurrentUserControllerAdvice.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/CurrentUserControllerAdvice.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Contract.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Contract.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/RosterController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/RosterController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ScheduleController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ScheduleController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ShiftController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/ShiftController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UserController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UserController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UsersController.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UsersController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/UserProfile.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/UserProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/Job.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/Job.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobPost.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobPost.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/OtherRequest.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/OtherRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/review/ReviewFlow.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/review/ReviewFlow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/review/ReviewRun.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/review/ReviewRun.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/Role.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/Role.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/form/validator/UserCreateFormValidator.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/form/validator/UserCreateFormValidator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserProfileRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserProfileRepository.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserRepository.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobCategoryRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobCategoryRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobPostRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobPostRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobRepository.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/specification/BasicSpecs.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/specification/BasicSpecs.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/user/UserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/user/UserService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/data.sql" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/career.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/career.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/head.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/head.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/header.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/header.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_categories.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_categories.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_profile_form.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_profile_form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/home.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/home.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/jobs.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/jobs.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/layout.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/layout.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/login.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/login.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/static/css/core.css" afterPath="$PROJECT_DIR$/src/main/webapp/static/css/core.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/data.sql" afterPath="$PROJECT_DIR$/target/classes/data.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yangshuang-project.iml" afterPath="$PROJECT_DIR$/yangshuang-project.iml" />
     </list>
     <ignored path="yangshuang-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -110,91 +129,96 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java">
+      <file leaf-file-name="file_upload_form.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="65" column="35" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserProfile.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="user_file_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_file_list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="51" column="83" selection-start-line="51" selection-start-column="83" selection-end-line="51" selection-end-column="83" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="application_submit.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/application_submit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="68" column="28" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserApi.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="130" column="0" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user_profile.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_profile.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.02209131">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user_profile_form.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_profile_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="107" column="22" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="22" />
+              <folding>
+                <element signature="n#style#0;n#select#0;n#div#0;n#div#2;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FakeController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserProfile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/UserProfile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="514">
-              <caret line="44" column="21" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JobPost.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobPost.java">
+      <file leaf-file-name="header.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/header.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="102" column="34" selection-start-line="83" selection-start-column="2" selection-end-line="102" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserIdType.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/UserIdType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="user_create.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="50" column="47" selection-start-line="50" selection-start-column="47" selection-end-line="50" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="core.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/webapp/static/css/core.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="193" column="21" selection-start-line="193" selection-start-column="21" selection-end-line="193" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Role.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/Role.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JobCategoryApi.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JobApi.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="60" column="43" selection-start-line="60" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="100" column="7" selection-start-line="100" selection-start-column="7" selection-end-line="100" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -220,57 +244,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/job_posts.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/CareerController.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/career.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/users.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/specification/BasicSpecs.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/JobApi.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobPost.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Job.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/JobPostApi.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobPostController.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/JobCategoryRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_category.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobCategory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/OtherRequest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/util/CurrentUser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobCategoryRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/data.sql" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/Job.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_profile_form.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/jobs.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/CurrentUser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/AppConfig.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/AuditorAwareImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/AuditingConfig.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobPost.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_categories.html" />
-        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/UserIDType.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/static/css/core.css" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/login.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/career/CareerController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/File.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_post_form.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FileUploadController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/FileProfileRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/FileProfile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicUserApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicJobPostApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_register_form.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/home.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicFileApi.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/career.html" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FileController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/static/css/jquery.steps.css" />
+        <option value="$PROJECT_DIR$/src/main/webapp/static/css/core.css" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request.html" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/country-select.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Country.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/data.sql" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/CountryApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/PublicCountryApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/CountryRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicCountryApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/FileApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserProfileRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/head.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UserController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/users.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/header.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/application_submit.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_file_list.html" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_profile_form.html" />
         <option value="$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/UserProfile.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_profile.html" />
       </list>
     </option>
   </component>
@@ -327,10 +351,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -357,9 +380,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -478,7 +498,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="request" />
+              <option name="myItemId" value="user" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -512,7 +532,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="job" />
+              <option name="myItemId" value="career" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -612,70 +632,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="service" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="currentuser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="repository" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -706,36 +662,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="enums" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="domain" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -766,105 +692,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="domain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="message" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="domain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="job" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yangshuang-project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="R2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stm2016" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="audit" />
+              <option name="myItemId" value="controller" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -895,6 +723,40 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yangshuang-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="R2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stm2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="publicApi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -953,6 +815,9 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="Scratches" />
     </panes>
   </component>
@@ -960,7 +825,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="304" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="304" />
@@ -977,7 +842,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="979" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
-    <property name="SearchEverywhereHistoryKey" value="jobpost&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/job/JobPost.java&#10;userid&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/enums/UserIDType.java&#10;role&#9;PSI&#9;JAVA://com.worksap.stm2016.enums.Role&#10;user&#9;PSI&#9;JAVA://com.worksap.stm2016.domain.User&#10;jobcate&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java&#10;categor&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_categories.html&#10;side&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/sidebar.html&#10;jobpostapi&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java&#10;job_post_form&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;lastedit&#9;PSI&#9;JAVA://com.worksap.stm2016.domain.job.JobPost#lastEditDate&#10;jobs&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/jobs.html&#10;sidebar&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/sidebar.html&#10;job_post&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;jobcategor&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java&#10;job&#9;PSI&#9;JAVA://com.worksap.stm2016.domain.job.Job&#10;jobpos&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_posts.html&#10;fake&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FakeController.java&#10;jobapi&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/job/JobApi.java&#10;jobposts&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_posts.html&#10;data&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/data.sql&#10;sideb&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/sidebar.html&#10;fakecontr&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FakeController.java&#10;user.ht&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/user.html&#10;jobca&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/repository/job/JobCategoryRepository.java&#10;curr&#9;PSI&#9;JAVA://com.worksap.stm2016.controller.user.CurrentUserControllerAdvice&#10;currentuser&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java&#10;jobcontro&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/JobController.java&#10;request&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/request_form.html&#10;da&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/data.sql&#10;jobap&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/job/JobApi.java&#10;job_&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;jobpostco&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/JobPostController.java&#10;jobpo&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/JobPost.java&#10;appl&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/application.properties&#10;reques&#9;FILE&#9;file:///Users/peps/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/request_form.html&#10;repos&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/repository/UserRepository.java&#10;requestapi&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/RequestApi.java&#10;users&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/users.html&#10;head&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/head.html&#10;requestap&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/RequestApi.java&#10;jobpostcontr&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/JobPostController.java&#10;job_pos&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_posts.html&#10;job_post_f&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;spec&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/specification/BasicSpecs.java&#10;header&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/header.html&#10;requestcont&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/RequestController.java&#10;jobposta&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/JobPostApi.java&#10;jobpostcon&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/JobPostController.java&#10;datasql&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/data.sql&#10;email&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/EmailApi.java" />
+    <property name="SearchEverywhereHistoryKey" value="userapi&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/UserApi.java&#10;user_&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/user_file_list.html&#10;appl&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/career/application_submit.html&#10;user_profile&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/user_profile_form.html&#10;header&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/header.html&#10;userprofil&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/UserProfile.java&#10;fake&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FakeController.java&#10;side&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/sidebar.html&#10;users&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/user/users.html&#10;usercont&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/user/UserController.java&#10;userpro&#9;PSI&#9;JAVA://com.worksap.stm2016.domain.UserProfile&#10;user&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/user/user.html&#10;userpr&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/repository/UserProfileRepository.java&#10;job&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_profile_form.html&#10;head&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/head.html&#10;requestform&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/request_form.html&#10;sidebar&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/sidebar.html&#10;job_pos&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;userap&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/UserApi.java&#10;jobpo&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;uplo&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html&#10;country&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/repository/CountryRepository.java&#10;api&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/api/FileApi.java&#10;data.sql&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/data.sql&#10;job_post_form&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/job/job_post_form.html&#10;reques hr&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/requests_HR.html&#10;form&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html&#10;controller&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FileController.java&#10;filecont&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FileController.java&#10;career&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/career/career.html&#10;core.css&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/static/css/core.css&#10;appli&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/career/application_submit.html&#10;reque&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/requests_employee.html&#10;request&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/request/requests_HR.html&#10;register&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/user/user_register_form.html&#10;security&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/config/SecurityConfig.java&#10;filepro&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/FileProfile.java&#10;fileprofile&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/repository/FileProfileRepository.java&#10;filecon&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/FileUploadController.java&#10;fil&#9;PSI&#9;JAVA://com.worksap.stm2016.domain.FileProfile&#10;file&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/File.java&#10;app&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/resources/application.properties&#10;cont&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/user/UserController.java&#10;secu&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/config/SecurityConfig.java&#10;ca&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/webapp/WEB-INF/templates/career/career.html&#10;usersco&#9;PSI&#9;JAVA://com.worksap.stm2016.controller.user.UsersController&#10;usercon&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/controller/user/UserController.java&#10;curr&#9;PSI&#9;JAVA://com.worksap.stm2016.service.currentuser.CurrentUserService&#10;current&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java&#10;jobpost&#9;FILE&#9;file://C:/Users/Shuang/Dropbox/R2/src/main/java/com/worksap/stm2016/domain/job/JobPost.java" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -985,26 +850,27 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\fragments" />
+      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates" />
+      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\career" />
       <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\job" />
       <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\request" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.worksap.stm2016.enums" />
-      <recent name="com.worksap.stm2016.config" />
-      <recent name="com.worksap.stm2016.audit" />
-      <recent name="com.worksap.stm2016.api.job" />
       <recent name="com.worksap.stm2016.repository" />
+      <recent name="com.worksap.stm2016.api" />
+      <recent name="com.worksap.stm2016.domain" />
+      <recent name="com.worksap.stm2016.api.publicApi" />
+      <recent name="com.worksap.stm2016.controller" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\user" />
       <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\job" />
-      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\career" />
       <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\request" />
-      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates\fragments" />
-      <recent name="C:\Users\Shuang\Dropbox\R2\src\main\webapp\WEB-INF\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Maven.maven">
+  <component name="RunManager" selected="Spring Boot.Application">
     <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
       <deployment />
       <server-settings />
@@ -1020,43 +886,6 @@
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
-      <method />
-    </configuration>
-    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="" />
-      <option name="DEPLOY" value="true" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -1226,12 +1055,13 @@
       <method />
     </configuration>
     <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="" />
       <setting name="vmparams" value="" />
       <setting name="cmdLine" value="run-app" />
-      <setting name="passParentEnv" value="true" />
-      <setting name="launchBrowser" value="true" />
       <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -1310,18 +1140,6 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="yangshuang-project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
       <envs />
       <method />
     </configuration>
@@ -1418,7 +1236,6 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
       <node-options />
       <gulpfile />
       <tasks />
@@ -1429,7 +1246,6 @@
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
       <command value="run-script" />
       <scripts />
-      <node-interpreter value="project" />
       <envs />
       <method />
     </configuration>
@@ -1549,9 +1365,7 @@
       <item index="2" class="java.lang.String" itemvalue="Tomcat Server.tomcat" />
     </list>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
-  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -1560,7 +1374,6 @@
       <changelist id="29635c66-2891-409a-a092-fefbb5a6078c" name="Default" comment="" />
       <created>1460695801160</created>
       <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
       <updated>1460695801160</updated>
       <workItem from="1460695806634" duration="12534000" />
       <workItem from="1460943648454" duration="415000" />
@@ -1574,60 +1387,57 @@
       <workItem from="1462412774212" duration="19382000" />
       <workItem from="1462435394779" duration="8971000" />
       <workItem from="1462600611643" duration="3646000" />
+      <workItem from="1462852176221" duration="51512000" />
+      <workItem from="1462960901679" duration="4546000" />
+      <workItem from="1463017370443" duration="19835000" />
+      <workItem from="1463040936993" duration="10960000" />
+      <workItem from="1463055377159" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="half schema">
       <created>1461814995576</created>
       <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
       <updated>1461814995576</updated>
     </task>
     <task id="LOCAL-00002" summary="half schema 2">
       <created>1461815066239</created>
       <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
       <updated>1461815066239</updated>
     </task>
     <task id="LOCAL-00003" summary="request body">
       <created>1461909793214</created>
       <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
       <updated>1461909793214</updated>
     </task>
     <task id="LOCAL-00004" summary="request body 2">
       <created>1461909817224</created>
       <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1461909817224</updated>
     </task>
     <task id="LOCAL-00005" summary="request">
       <created>1462332718744</created>
       <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
       <updated>1462332718744</updated>
     </task>
     <task id="LOCAL-00006" summary="request 2">
       <created>1462332728992</created>
       <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
       <updated>1462332728992</updated>
     </task>
     <task id="LOCAL-00007" summary="job post">
       <created>1462415510546</created>
       <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
       <updated>1462415510547</updated>
     </task>
     <task id="LOCAL-00008" summary="job post list">
       <created>1462498784780</created>
       <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
       <updated>1462498784780</updated>
     </task>
@@ -1635,40 +1445,40 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="366760000" />
+    <option name="totallyTimeSpent" value="453641000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="800" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.496875" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42065218" sideWeight="0.50885415" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27934784" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1640625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40763888" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3173913" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31847826" sideWeight="0.49114582" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.903125" sideWeight="0.49114582" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.496875" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3054348" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3173913" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1728,7 +1538,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="254" />
+      <option name="time" value="288" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1737,438 +1547,389 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/application.properties">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_file_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobPostController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="14" column="45" selection-start-line="14" selection-start-column="45" selection-end-line="14" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobPostRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Department.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/JobHistory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobCategory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="51" column="83" selection-start-line="51" selection-start-column="83" selection-end-line="51" selection-end-column="83" />
           <folding>
-            <element signature="imports" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/OtherRequest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/application_submit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="68" column="28" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/roster/RosterController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/FileProfile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="59" selection-start-line="27" selection-start-column="59" selection-end-line="27" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/SecurityConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicJobPostApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="39" column="25" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="82" selection-start-line="14" selection-start-column="82" selection-end-line="14" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicUserApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="36" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/jobs.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/HomeController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/roster.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/JobController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UserController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="103" column="37" selection-start-line="103" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserDetailsService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/user/UserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="35">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/RequestController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <element signature="e#1699#1700#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/CurrentUserControllerAdvice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="16" column="68" selection-start-line="16" selection-start-column="68" selection-end-line="16" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2024">
-          <caret line="186" column="52" selection-start-line="186" selection-start-column="52" selection-end-line="186" selection-end-column="52" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="88" column="47" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_employee.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-680">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/job/JobCategoryRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="12" column="56" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/data.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="65" selection-start-line="7" selection-start-column="65" selection-end-line="7" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.2.5.RELEASE/spring-core-4.2.5.RELEASE.jar!/org/springframework/cglib/proxy/MethodProxy.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="107" column="0" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/Job.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="42" column="1" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="63" column="0" selection-start-line="24" selection-start-column="19" selection-end-line="63" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="42" selection-start-line="98" selection-start-column="42" selection-end-line="98" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/specification/BasicSpecs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="73" column="25" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_profile_form.html">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="76" column="80" selection-start-line="76" selection-start-column="80" selection-end-line="76" selection-end-column="80" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#div#3;n#div#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/jobs.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="161" column="59" selection-start-line="161" selection-start-column="59" selection-end-line="161" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="86" column="21" selection-start-line="86" selection-start-column="21" selection-end-line="86" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/service/currentuser/CurrentUserService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/RequestApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/CurrentUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/WebConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/config/AuditingConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#669#670#0" expanded="true" />
-            <element signature="e#705#706#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/audit/AuditorAwareImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="72" column="26" selection-start-line="72" selection-start-column="26" selection-end-line="72" selection-end-column="26" />
-          <folding>
-            <element signature="n#style#0;n#li#2;n#ul#0;n#div#0;n#nav#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#li#3;n#ul#0;n#div#0;n#nav#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="54" column="25" selection-start-line="54" selection-start-column="25" selection-end-line="54" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="60" column="43" selection-start-line="60" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="62" column="39" selection-start-line="62" selection-start-column="39" selection-end-line="62" selection-end-column="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobPostApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3342#3343#0" expanded="true" />
-            <element signature="e#3393#3394#0" expanded="true" />
-            <element signature="e#3539#3540#0" expanded="true" />
-            <element signature="e#3590#3591#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="28" selection-start-line="98" selection-start-column="28" selection-end-line="98" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobCategoryApi.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_posts.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="176" column="50" selection-start-line="176" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/Role.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/career.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="106" column="18" selection-start-line="106" selection-start-column="18" selection-end-line="106" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/4.2.5.RELEASE/spring-web-4.2.5.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/requests_HR.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="169" column="50" selection-start-line="169" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FileController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="59" column="21" selection-start-line="59" selection-start-column="21" selection-end-line="59" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/js/jquery.steps.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="4215" selection-start-line="5" selection-start-column="4215" selection-end-line="5" selection-end-column="4215" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/css/jquery.steps.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="165" column="23" selection-start-line="165" selection-start-column="23" selection-end-line="165" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/static/css/core.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="193" column="21" selection-start-line="193" selection-start-column="21" selection-end-line="193" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="201" column="0" selection-start-line="201" selection-start-column="0" selection-end-line="201" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="100" column="8" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/roster/Roster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/message/StaffingRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="22" selection-start-line="37" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/data.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="460" column="59" selection-start-line="460" selection-start-column="59" selection-end-line="460" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/Country.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user_create.html">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/publicApi/PublicCountryApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="50" column="47" selection-start-line="50" selection-start-column="47" selection-end-line="50" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="34" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/request/request_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="115" column="77" selection-start-line="115" selection-start-column="77" selection-end-line="115" selection-end-column="77" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="50" selection-start-line="84" selection-start-column="50" selection-end-line="84" selection-end-column="50" />
+          <folding>
+            <element signature="n#style#0;n#button#0;n#div#1;n#div#0;n#form#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/head.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="84" selection-start-line="32" selection-start-column="84" selection-end-line="32" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/repository/UserProfileRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="82" selection-start-line="10" selection-start-column="82" selection-end-line="10" selection-end-column="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_post_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="83" column="38" selection-start-line="83" selection-start-column="38" selection-end-line="83" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="81" column="28" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_register_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_profile_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="101" column="47" selection-start-line="101" selection-start-column="47" selection-end-line="101" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/users.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="52" column="21" selection-start-line="52" selection-start-column="21" selection-end-line="52" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/sidebar.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/user/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/FileApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="138" column="10" selection-start-line="138" selection-start-column="10" selection-end-line="138" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/job/JobApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/file_upload_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="35" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_file_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="51" column="83" selection-start-line="51" selection-start-column="83" selection-end-line="51" selection-end-column="83" />
           <folding>
-            <element signature="n#style#0;n#p#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#1;n#fieldset#0;n#div#1;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#2;n#fieldset#0;n#div#1;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/job/job_categories.html">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/career/application_submit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="70" column="36" selection-start-line="70" selection-start-column="36" selection-end-line="70" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="68" column="28" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/enums/UserIdType.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/api/UserApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="130" column="0" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/User.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/user/user_profile.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.02209131">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/job/JobPost.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/user_profile_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="102" column="34" selection-start-line="83" selection-start-column="2" selection-end-line="102" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="107" column="22" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="22" />
+          <folding>
+            <element signature="n#style#0;n#select#0;n#div#0;n#div#2;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/controller/FakeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/worksap/stm2016/domain/UserProfile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="514">
-          <caret line="44" column="21" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/fragments/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="100" column="7" selection-start-line="100" selection-start-column="7" selection-end-line="100" selection-end-column="7" />
           <folding />
         </state>
       </provider>

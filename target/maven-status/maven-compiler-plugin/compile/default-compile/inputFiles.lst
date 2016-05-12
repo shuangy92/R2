@@ -26,6 +26,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\RequestApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\RegexUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\roster\RosterPK.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\audit\CurrentUser.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\AuditingConfig.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\VerifyUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\Role.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\ScheduleService.java
@@ -36,6 +37,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\roster\TimeS
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\ContractRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\User.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\job\JobCategoryApi.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\career\CareerController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\UserRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\roster\RosterController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\form\UserCreateForm.java
@@ -51,13 +53,13 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\LoginCon
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\FakeController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\JobHistoryRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserServiceImpl.java
-C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\CareerController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\OtherRequest.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\message\EmailRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\MapUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\roster\ScheduleController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\Request.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\DepartmentRepository.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\form\UserRegisterForm.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\SecurityConfig.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\MathUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserService.java
@@ -66,8 +68,8 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\Exceptio
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\JobHistory.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\RequestType.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\job\JobCategoryRepository.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\UserIdType.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\job\JobRepository.java
-C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\AppConfig.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\roster\ScheduleRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\roster\Shift.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserDetailsService.java

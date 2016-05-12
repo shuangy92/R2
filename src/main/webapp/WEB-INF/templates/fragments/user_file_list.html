@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout_career">
+<body>
+
+<div th:fragment="user_file_list">
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <table id="table"
+           data-toolbar="#toolbar"
+           data-sortable="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-pagination="true"
+           data-side-pagination="server"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-minimum-count-columns="1"
+           data-id-field="id"
+           smartDisplay="true">
+    </table>
+    <div id="file-upload-form" style="display: none">
+        <div th:replace="fragments/file_upload_form :: file_upload_form"></div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        jQuery(document).ready(function ($) {
+            initTable();
+            if (editable) {
+                $("#file-upload-form").show();
+            }
+        });
+        function initTable() {
+            var url = "/api/file";
+            var $table = $('#table');
+
+            $table.bootstrapTable({
+                columns: [{
+                    field: 'name',
+                    title: 'Document Name',
+                }, {
+                    field: 'info',
+                    title: 'Additional details on attachment(s)',
+                }, {
+                    title: 'Action',
+                    formatter: function (index, row, element) {
+                        if (editable) {
+                            return '<a href="/files/' + row.id + '" target="_blank">View</a> / <a href="#" onclick="deleteFile(' + row.id + ')">Delete</a>';
+                        } else {
+                            return '<a href="/files/' + row.id + '" target="_blank">View</a>';
+                        }
+                    }
+                }],
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    data.sort = "id";
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    return data;
+                },
+                sortOrder: 'asc',
+            });
+        }
+        function deleteFile(fileId) {
+            $.ajax({
+                type: "delete",
+                contentType: "application/json; charset=utf-8",
+                url: '/api/file/' + field,
+                success: function (data) {
+                    if (data.response == "OK") {
+                        $('#table').bootstrapTable('refresh');
+                    } else {
+                        alert(data.detail);
+                    }
+                },
+            });
+        }
+
+    </script>
+</div>
+</body>
+</html>

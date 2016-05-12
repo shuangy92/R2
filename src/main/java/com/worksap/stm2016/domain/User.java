@@ -29,7 +29,7 @@ public class User implements Serializable {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "role", nullable = false)
@@ -46,8 +46,4 @@ public class User implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    @ManyToOne
-    @JoinColumn(name = "contract_id")
-    private Contract contract;
 }

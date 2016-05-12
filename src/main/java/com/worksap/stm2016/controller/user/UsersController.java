@@ -23,7 +23,7 @@ public class UsersController {
 
     @RequestMapping(value = "/users")
     public String getUsersPage() {
-        return "users";
+        return "user/users";
     }
 
 }

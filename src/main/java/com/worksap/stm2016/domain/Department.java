@@ -19,7 +19,7 @@ public class Department implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "manager")
+    @JoinColumn(name = "user_id")
     private User manager;
 
     @Column(name = "name")

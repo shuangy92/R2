@@ -1,1 +1,3 @@
 com\worksap\stm2016\config\AuditingConfig.class
+com\worksap\stm2016\controller\career\CareerController.class
+com\worksap\stm2016\enums\UserIdType.class

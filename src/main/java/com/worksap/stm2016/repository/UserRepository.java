@@ -12,18 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository<User, Long>,
         JpaSpecificationExecutor {
 
-    /*@Override
-    User save(User user);
-
-    @Override
-    void delete(Long id);*/
-
-    @Override
-    User findOne(Long id);
-
-    @Override
-    Page<User> findAll();
-
-    Optional<User> findOneByEmail(String email);
+    User findOneByEmail(String email);
 
 }

@@ -37,9 +37,8 @@ public class ScheduleController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/schedule", method = RequestMethod.GET)
     public String schedule(@PathVariable Long id, Locale locale, Model model) {
-        model.addAttribute("viewer", userService.getUserById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
-        model.addAttribute("user", userService.getUserById(id).get());
+        model.addAttribute("viewer", userService.getUserById(id));
+        model.addAttribute("user", userService.getUserById(id));
         return "schedule";
     }
 

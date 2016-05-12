@@ -2,13 +2,14 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout_career">
 <head>
     <title>Career</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/flat-json/bootstrap-table-flat-json.js}"></script>
 </head>
 <body>
 
@@ -27,7 +28,7 @@
                data-page-list="[10, 25, 50, 100, ALL]"
                data-detail-view="true"
                data-minimum-count-columns="1"
-               data-id-field="deadline"
+               data-id-field="id"
                smartDisplay="true">
         </table>
     </div>
@@ -39,10 +40,28 @@
         });
 
         function initTable() {
-            var url = "/api/job_post";
+            var url = "/api/public/job_post";
             var $table = $('#table');
 
             var columns =[{
+                field: 'title',
+                title: 'Title',
+                sortable: true,
+                filterControl: 'input',
+                formatter: function (index, row, element) {
+                    return '<a href="/career/job_post/' + row.id + '">' + index + '</a>';
+                }
+            }, {
+                field: 'jobCategory',
+                title: 'Job Category',
+                //sortable: true,
+                filterControl: 'select'
+            }, {
+                field: 'location',
+                title: 'Location',
+                //sortable: true,
+                filterControl: 'select'
+            }, {
                 field: 'deadline',
                 title: 'Deadline',
                 sortable: true,
@@ -54,24 +73,15 @@
                     }
                 }
             }, {
-                field: 'title',
-                title: 'Title',
+                field: 'lastModifiedDate',
+                title: 'Update',
                 sortable: true,
-                filterControl: 'input',
                 formatter: function (index, row, element) {
-                    return '<a href="/career/job/' + row.id + '">' + row.title + '</a>';
-                }
-            }, {
-                field: 'author',
-                title: 'Location',
-                sortable: true,
-                filterControl: 'select',
-                formatter: function (index, row, element) {
-                    return index.department.location;
+                    return (new Date(index)).toString("yyyy/M/dd");
                 }
             }];
 
-            $('#table').bootstrapTable({
+            $table.bootstrapTable({
                 columns: columns,
                 url: url,
                 contentType: "application/x-www-form-urlencoded",
@@ -81,24 +91,39 @@
                     if (p.sort) {
                         data.sort = p.sort;
                     } else {
-                        data.sort = "deadline";
+                        data.sort = "lastModifiedDate";
                     }
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    var filter = {};
-                    $.each( p.filter, function( k, v ) {
-                        if (k == "department") {
-                            filter.location = v;
-                        } else {
-                            filter[k] = v;
-                        }
-                    });
-                    filter.published = true;
-                    data.filter = filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter={};
+                    for(var key in tmp) {
+                        filter[key]=tmp[key];
+                    }
+                    filter.published = "true";
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
                 detailFormatter: function (index, row, element) {
+                    var result =
+                            '<div class="row">' +
+                            '<div class="col-md-10 col-md-offset-1">' +
+                            '<dl>' +
+                            '<dt>Job Description</dt>' + '<dd>' + row.description + '</dd>' +
+                            '</dl>' +
+                            '<dt>Job Requirement</dt>' + '<dd>' + row.requirement + '</dd>' +
+                            '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')">Apply</button>' +
+                            '</div>' +
+                            '</div>';
+                    return result;
+                },
+                responseHandler: function(res) {
+                    $.each(res.rows, function( i, v ) {
+                        res.rows[i].location = res.rows[i].department.location;
+                        res.rows[i].jobCategory = res.rows[i].job.jobCategory.name;
+                    });
+                    return res;
                 },
                 onPostBody: function () {
                     $(".filterControl input").attr('placeholder', 'Search');
@@ -109,6 +134,25 @@
                 cookieIdTable: 'job_post',
             });
         }
+        function applyJob(index) {
+            if ([[${currentUser}]] == null) {
+                if (confirm("Please log in first. Do you want to log in now ?")) {
+                    window.location.href = "/login";
+                }
+            } else {
+                var role = [[${currentUser}]].role;
+                if (role["$name"] != "APPLICANT") {
+                    alert("You are already an employee");
+                } else {
+                    var job_post = $('#table').bootstrapTable('getData', true)[index];
+                    localStorage.setItem("job_post", JSON.stringify(job_post));
+                    window.location.href = "/career/application_submit"
+                }
+            }
+        }
+
+
+
     </script>
 </div>
 </body>

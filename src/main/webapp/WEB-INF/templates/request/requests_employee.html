@@ -29,7 +29,7 @@
                data-page-list="[10, 25, 50, 100, ALL]"
                data-detail-view="true"
                data-minimum-count-columns="1"
-               data-id-field="sendDate"
+               data-id-field="id"
                smartDisplay="true">
         </table>
         <a href="#" th:href="@{/user/__${currentUser.id}__/request/submit}"> Create a new request</a>
@@ -43,7 +43,7 @@
             });
 
             function initTable() {
-                var url = "/api/request/employee";
+                var url = "/api/request";
 
                 $('#table').bootstrapTable({
                     columns: [{
@@ -91,7 +91,13 @@
                         data.order = p.order;
                         data.limit = p.limit;
                         data.offset = p.offset;
-                        data.filter = p.filter;
+                        var tmp = $.parseJSON(p.filter);
+                        var filter={};
+                        for(var key in tmp) {
+                            filter[key]=tmp[key];
+                        }
+                        filter.uid = '' + [[${currentUser.id}]];
+                        data.filter = JSON.stringify(filter);
                         return data;
                     },
                     detailFormatter: function (index, row, element) {

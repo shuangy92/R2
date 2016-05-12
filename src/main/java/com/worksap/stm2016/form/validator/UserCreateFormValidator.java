@@ -1,6 +1,7 @@
 package com.worksap.stm2016.form.validator;
 
 import com.worksap.stm2016.form.UserCreateForm;
+import com.worksap.stm2016.form.UserRegisterForm;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class UserCreateFormValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(UserCreateForm.class);
+        return clazz.equals(UserCreateForm.class) || clazz.equals(UserRegisterForm.class);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class UserCreateFormValidator implements Validator {
     }
 
     private void validateEmail(Errors errors, UserCreateForm form) {
-        if (userService.getUserByEmail(form.getEmail()).isPresent()) {
+        if (userService.getUserByEmail(form.getEmail()) != null) {
             errors.reject("email.exists", "User with this email already exists");
         }
     }

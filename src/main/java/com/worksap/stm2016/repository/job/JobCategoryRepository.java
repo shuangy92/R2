@@ -11,4 +11,5 @@ public interface JobCategoryRepository extends PagingAndSortingRepository<JobCat
         JpaSpecificationExecutor {
 
     public Iterable<JobCategory> findAllByOrderByNameAsc();
+    public JobCategory findOneByName(String name);
 }

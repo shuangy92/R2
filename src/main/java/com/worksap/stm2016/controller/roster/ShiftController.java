@@ -38,7 +38,7 @@ ShiftController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/shifts", method = RequestMethod.GET)
     public String schedule(@PathVariable Long id, Locale locale, Model model) {
-        model.addAttribute("user", userService.getUserById(id).get());
+        model.addAttribute("user", userService.getUserById(id));
         return "shifts";
     }
 

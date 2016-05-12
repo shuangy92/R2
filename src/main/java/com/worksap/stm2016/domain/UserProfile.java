@@ -2,6 +2,7 @@ package com.worksap.stm2016.domain;
 
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,29 +17,35 @@ import java.util.Date;
 public class UserProfile implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profile_id", nullable = false, updatable = false)
+    @Column(name = "user_profile_id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Transient
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "id_number")
     private String idNumber;
 
-    @Column(name = "passport_number")
-    private String passportNumber;
-
-    @Column(name = "driver_license_number")
-    private String driverLicenseNumber;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @Column(name = "address")
     private String address;
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "birthday")
+    @Type(type="date")
+    private Date birthday;
+
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 
     /* auditing */
     @Column(name = "last_modified_date")

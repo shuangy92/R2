@@ -3,6 +3,7 @@ package com.worksap.stm2016.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,11 @@ public class SecurityConfig {
     @Order(1)
     public static class ApiWebSecurityConfig  extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/api/public/**")
+                    .permitAll();
             http
                     .csrf().disable()
                     .antMatcher("/api/**")
@@ -53,7 +59,7 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                    .antMatchers("/static/**", "/public/**").permitAll()
+                    .antMatchers("/static/**", "/public/**", "/career/**", "/register", "/").permitAll()
                     .antMatchers("/users/**", "/request/**").hasAuthority("ADMIN")
                     .anyRequest().fullyAuthenticated()
                     .and()

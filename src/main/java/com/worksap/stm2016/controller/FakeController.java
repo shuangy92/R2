@@ -5,10 +5,12 @@ import com.worksap.stm2016.domain.Department;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.domain.job.JobPost;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
 import com.worksap.stm2016.repository.DepartmentRepository;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
+import com.worksap.stm2016.repository.job.JobPostRepository;
 import com.worksap.stm2016.repository.job.JobRepository;
 import com.worksap.stm2016.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class FakeController {
     DepartmentRepository departmentRepository;
     @Autowired
     JobCategoryRepository jobCategoryRepository;
+    @Autowired
+    JobPostRepository jobPostRepository;
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public void data() {
@@ -41,9 +45,10 @@ public class FakeController {
         department = departmentRepository.findOne(Long.valueOf(2));
        // department.setManager(admin);
         //departmentRepository.save(department);
-
+        Job job = new Job();;
+        JobCategory jobCategory;
         for (Integer i = 1; i < 20; i++) {
-            Job job = new Job();
+            job = new Job();
             job.setDescription("Description for job " + i.toString());
             job.setHours(40);
             job.setRequirement("Requirement for job " + i.toString());
@@ -56,7 +61,7 @@ public class FakeController {
             }
             Random rand = new Random();
             int  n = rand.nextInt(4) + 1;
-            JobCategory jobCategory = jobCategoryRepository.findOne((long) n);
+            jobCategory = jobCategoryRepository.findOne((long) n);
             job.setJobCategory(jobCategory);
             jobRepository.save(job);
 
@@ -69,7 +74,14 @@ public class FakeController {
             user.setDepartment(department);
             userRepository.save(user);
         }
+        JobPost jobPost = new JobPost();
+        jobPost.setPublished(true);
+        jobPost.setDepartment(department);
+        jobPost.setTitle("aaa");
+        jobPost.setJob(job);
+        jobPostRepository.save(jobPost);
     }
+
 
     /*@RequestMapping(value = "/fake", method = RequestMethod.GET)
     public JSONArray fake() {

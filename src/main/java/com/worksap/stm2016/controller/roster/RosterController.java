@@ -43,8 +43,7 @@ public class RosterController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/roster", method = RequestMethod.GET)
     public String schedule(@PathVariable Long id, Locale locale, Model model) {
-        model.addAttribute("viewer", userService.getUserById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+        model.addAttribute("viewer", userService.getUserById(id));
         return "roster";
     }
 

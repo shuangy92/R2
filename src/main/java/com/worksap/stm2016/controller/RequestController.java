@@ -48,7 +48,7 @@ public class RequestController {
     @PreAuthorize("@currentUserServiceImpl.canAccessRequest(principal, #id)")
     @RequestMapping(value = "/request/{id}", method = RequestMethod.GET, produces = "text/html")
     public String getRequestPage(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id).get());
+        model.addAttribute("user", userService.getUserById(id));
         return "request/request";
     }
 
