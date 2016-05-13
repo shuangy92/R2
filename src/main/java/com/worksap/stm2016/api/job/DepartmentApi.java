@@ -1,8 +1,8 @@
-package com.worksap.stm2016.api;
+package com.worksap.stm2016.api.job;
 
 
-import com.worksap.stm2016.domain.Department;
-import com.worksap.stm2016.repository.DepartmentRepository;
+import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.repository.job.DepartmentRepository;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

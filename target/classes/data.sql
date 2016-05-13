@@ -1,4 +1,4 @@
-
+/*
 --
 -- TOC entry 2771 (class 0 OID 68291)
 -- Dependencies: 411
@@ -263,3 +263,4 @@ INSERT INTO country (code, name) VALUES ('YU', 'Yugoslavia');
 INSERT INTO country (code, name) VALUES ('ZR', 'Zaire');
 INSERT INTO country (code, name) VALUES ('ZM', 'Zambia');
 INSERT INTO country (code, name) VALUES ('ZW', 'Zimbabwe');
+*/

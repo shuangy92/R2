@@ -33,7 +33,7 @@
     </div>
 
     <script type="text/javascript" th:inline="javascript">
-
+        //<![CDATA[
         jQuery(document).ready(function ($) {
             initTable();
         });
@@ -60,6 +60,10 @@
                 title: 'Location',
                 //sortable: true,
                 filterControl: 'select'
+            }, {
+                field: 'vacancies',
+                title: 'Vacancies',
+                sortable: true
             }, {
                 field: 'deadline',
                 title: 'Deadline',
@@ -106,7 +110,8 @@
                 },
                 detailFormatter: function (index, row, element) {
                     var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')">Apply</button>';
-                    if (checkJobApplicationExistence(row.id)) {
+                    console.log(checkJobApplicationExistence(row.id))
+                    if (checkJobApplicationExistence(row.id) && [[${currentUser}]] != null) {
                         var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')" disabled="disabled">Apply</button>';
                     }
                     var result =
@@ -147,8 +152,6 @@
                 if (role["$name"] != "APPLICANT") {
                     alert("You are already an employee");
                 } else {
-                    console.log($('#table').bootstrapTable('getData', true))
-
                     var job_post = $('#table').bootstrapTable('getData', true)[index];
                     localStorage.setItem("job_post", JSON.stringify(job_post));
                     window.location.href = "/career/applicant_profile_submit"
@@ -156,16 +159,18 @@
             }
         }
         function checkJobApplicationExistence(job_post_id) {
-            return $.ajax({
+            var result;
+            $.ajax({
                 url: "/api/job_application/check/" + job_post_id,
                 type: "GET",
+                async: false,
                 success: function (data) {
-                    return (data != "");
+                    result = (data != "");
                 }
             });
+            return result;
         }
-
-
+        //]]>
     </script>
 </div>
 </body>

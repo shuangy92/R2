@@ -38,19 +38,19 @@ public class JobApi {
 
        return jobService.getList(sort, order, limit, offset, filter);
     }
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public void save(@RequestBody Job job){
         jobService.save(job);
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
     public void update(@RequestBody Job job){
         jobService.update(job);
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.DELETE)
     public void deleteList(@RequestBody ArrayList<Long> ids){
         jobService.deleteList(ids);

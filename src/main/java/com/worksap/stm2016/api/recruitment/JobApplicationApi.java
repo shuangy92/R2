@@ -85,8 +85,8 @@ public class JobApplicationApi {
         jobApplicationService.delete(jobApplication);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    /*@RequestMapping(method = RequestMethod.DELETE)
     public void deleteList(@RequestBody ArrayList<Long> ids){
         jobApplicationService.deleteList(ids);
-    }
+    }*/
 }

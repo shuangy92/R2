@@ -164,10 +164,6 @@
                         contentType: "application/json; charset=utf-8",
                         url: '/api/job_post',
                         success: function () {
-                            $table.bootstrapTable('remove', {
-                                field: 'id',
-                                values: ids
-                            });
                             $remove.prop('disabled', true);
                             $table.bootstrapTable('refresh');
                         },

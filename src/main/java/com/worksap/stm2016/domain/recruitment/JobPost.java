@@ -1,7 +1,7 @@
 package com.worksap.stm2016.domain.recruitment;
 
 
-import com.worksap.stm2016.domain.Department;
+import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.enums.PayRate;

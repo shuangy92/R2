@@ -1,6 +1,7 @@
-package com.worksap.stm2016.domain;
+package com.worksap.stm2016.domain.job;
 
 
+import com.worksap.stm2016.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;

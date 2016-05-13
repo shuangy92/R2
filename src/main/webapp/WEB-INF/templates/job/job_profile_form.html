@@ -125,16 +125,18 @@
                     });
 
                     var role = [[${currentUser.role}]];
-                    if (role["$name"] != 'MANAGER' || (window.location.pathname != "/job/create" && job.department.id != [[${currentUser.department.id}]])) {
+                    if (role["$name"] == 'ADMIN' ||
+                            (role["$name"] == 'MANAGER' && job.department.id == [[${currentUser.department.id}]]) ||
+                            (role["$name"] == 'MANAGER' && window.location.pathname == "/job/create")) {
+                        $(".job-categoty-select").data('select2').trigger('select', {
+                            data: {"id":job.jobCategory.id,"text":job.jobCategory.name}
+                        });
+                    } else {
                         $("form :input").attr("readonly", true);
                         $(".job-categoty-select, .select2").hide();
                         $("#job-categoty-input").show();
                         $("#job-categoty-input").val(job.jobCategory.name);
                         $("#save").hide();
-                    } else if (window.location.pathname != "/job/create"){
-                        $(".job-categoty-select").data('select2').trigger('select', {
-                            data: {"id":job.jobCategory.id,"text":job.jobCategory.name}
-                        });
                     }
                 }
             });

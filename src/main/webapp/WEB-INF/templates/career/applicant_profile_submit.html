@@ -181,19 +181,21 @@
                 job_application.status = status;
             } else if (status == "SUBMITTED") {
                 job_application.status = status;
+                $.notify({
+                    icon: 'fa fa-info-circle',
+                    message: "Submitting...",
+                });
             }
 
-            $.notify({
-                icon: 'fa fa-info-circle',
-                message: "Submitting...",
-            });
             $.ajax({
                 url: "/api/job_application",
                 type: "POST",
                 data: JSON.stringify(job_application),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    window.location.href = "/career/dashboard";
+                    if (status == "SUBMITTED") {
+                        window.location.href = "/career/dashboard";
+                    }
                 }
             });
         }

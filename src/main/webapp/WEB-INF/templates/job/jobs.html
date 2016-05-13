@@ -128,10 +128,10 @@
                 cookiesEnabled: ['bs.table.sortOrder', 'bs.table.sortName', 'bs.table.pageNumber', 'bs.table.pageList', 'bs.table.searchText', 'bs.table.filterControl']
             });
             var role = [[${currentUser.role}]];
-            if (role["$name"] != 'MANAGER') {
+            /*if (role["$name"] != 'MANAGER') {
                 $("#toolbar").hide();
                 $table.bootstrapTable('hideColumn','state')
-            }
+            }*/
 
             var $remove = $("#btn-delete-row");
             var $insert = $("#btn-add-row");
@@ -153,10 +153,6 @@
                         contentType: "application/json; charset=utf-8",
                         url: '/api/job',
                         success: function () {
-                            $table.bootstrapTable('remove', {
-                                field: 'id',
-                                values: ids
-                            });
                             $remove.prop('disabled', true);
                             $table.bootstrapTable('refresh');
                         },

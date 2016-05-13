@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain;
 
 
+import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
 import lombok.Data;

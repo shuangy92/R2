@@ -49,7 +49,7 @@
             }, {
                 title: 'Job Title',
                 formatter: function (index, row, element) {
-                    return row.jobPost.job.title;
+                    return '<a href="/career/job_post/' + row.jobPost.id + '">' + row.jobPost.job.title + '</a>';
                 }
             }, {
                 title: 'Location',
@@ -59,8 +59,11 @@
             }, {
                 field: 'applyDate',
                 title: 'Apply Date',
-                sortable: true
-            }, {
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return (new Date(index)).toString("yyyy/M/dd");
+                }
+        }, {
                 field: 'status',
                 title: 'Status',
                 sortable: true

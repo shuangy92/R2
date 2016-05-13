@@ -18,7 +18,7 @@ public class JobController {
         return "job/jobs";
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/job/create", method = RequestMethod.GET)
     public String getJobProfilePage() {
         return "job/job_profile_form";
