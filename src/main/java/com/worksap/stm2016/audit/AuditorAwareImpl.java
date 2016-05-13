@@ -1,7 +1,6 @@
 package com.worksap.stm2016.audit;
 
 import com.worksap.stm2016.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

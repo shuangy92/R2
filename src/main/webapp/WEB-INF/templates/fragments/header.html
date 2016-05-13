@@ -37,7 +37,16 @@
                         <li><a href="/user/profile">My Profile</a></li>
                         <li><a href="/dashboard">Dashboard</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/logout" id="logout">Log out</a></li>
+                        <li><a href="/logout" class="logout">Log out</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" id="logged-in-applicant"  style="display:none;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/career/user/profile">My Profile</a></li>
+                        <li><a href="/career/dashboard">Dashboard</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/logout" class="logout">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -54,7 +63,7 @@
 
 
     jQuery(document).ready(function ($) {
-        //$('form').formcache();
+        $('form').formcache();
 
         if (window.location.pathname == '/dashboard') {
             $(".dropdown").removeClass('active');
@@ -63,12 +72,16 @@
         if (currentUser == null) {
             $("#not-logged-in").show();
         } else {
-            $("#logged-in").show();
+            if (currentUser.role["$name"] == "APPLICANT") {
+                $("#logged-in-applicant").show();
+            } else {
+                $("#logged-in").show();
+            }
             logout();
         }
 
         function logout() {
-            $("#logout").click(function () {
+            $(".logout").click(function () {
                 var url = '/logout';
                 var data = {[[${_csrf.parameterName}]]: [[${_csrf.token}]]};
                 $.post(url, data)

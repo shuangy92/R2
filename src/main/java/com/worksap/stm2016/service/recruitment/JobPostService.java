@@ -1,51 +1,37 @@
-package com.worksap.stm2016.api.job;
+package com.worksap.stm2016.service.recruitment;
 
 import com.worksap.stm2016.domain.job.JobCategory;
-import com.worksap.stm2016.domain.job.JobPost;
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.audit.CurrentUser;
+import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
-import com.worksap.stm2016.repository.job.JobPostRepository;
+import com.worksap.stm2016.repository.recruitment.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.*;
 
-/**
- * Created by Shuang on 4/25/2016.
- */
-@RestController
-@RequestMapping("/api/job_post")
-public class JobPostApi {
+@Service
+public class JobPostService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JobPostApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobPostService.class);
     @Autowired
     JobPostRepository jobPostRepository;
     @Autowired
     JobCategoryRepository jobCategoryRepository;
 
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public JobPost get(@PathVariable("id") Long id){
+    public JobPost get(Long id){
         return jobPostRepository.findOne(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getJobPostList(@RequestParam(name = "sort") String sort,
-                                     @RequestParam(name = "order") String order,
-                                     @RequestParam(name = "limit") Integer limit,
-                                     @RequestParam(name = "offset") Integer offset,
-                                     @RequestParam(name = "filter", required = false) String filter
+    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter
     ) throws org.json.simple.parser.ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
@@ -81,21 +67,19 @@ public class JobPostApi {
         return result;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.POST)
-    public JobPost save(@RequestBody JobPost post){
+    public JobPost save(JobPost post){
         return jobPostRepository.save(post);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.PUT)
-    public JobPost update(@RequestBody JobPost post){
+    public JobPost update(JobPost post){
         return jobPostRepository.save(post);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void delete(@RequestBody ArrayList<Long> ids){
+    public void delete(Long id){
+        jobPostRepository.delete(id);
+    }
+
+    public void deleteList(@RequestBody ArrayList<Long> ids){
         for (Long id: ids) {
             jobPostRepository.delete(id);
         }

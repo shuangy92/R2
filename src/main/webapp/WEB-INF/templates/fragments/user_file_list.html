@@ -22,14 +22,14 @@
            data-id-field="id"
            smartDisplay="true">
     </table>
-    <div id="file-upload-form" style="display: none">
+    <div class="file-upload-form" style="display: none">
         <div th:replace="fragments/file_upload_form :: file_upload_form"></div>
     </div>
     <script type="text/javascript" th:inline="javascript">
         jQuery(document).ready(function ($) {
             initTable();
             if (editable) {
-                $("#file-upload-form").show();
+                $(".file-upload-form").show();
             }
         });
         function initTable() {
@@ -47,7 +47,7 @@
                     title: 'Action',
                     formatter: function (index, row, element) {
                         if (editable) {
-                            return '<a href="/files/' + row.id + '" target="_blank">View</a> / <a href="#" onclick="deleteFile(' + row.id + ')">Delete</a>';
+                            return '<a href="/files/' + row.id + '" target="_blank">View</a> / <a onclick="deleteFile(' + row.id + ')" style="cursor: pointer;">Delete</a>';
                         } else {
                             return '<a href="/files/' + row.id + '" target="_blank">View</a>';
                         }
@@ -71,7 +71,7 @@
             $.ajax({
                 type: "delete",
                 contentType: "application/json; charset=utf-8",
-                url: '/api/file/' + field,
+                url: '/api/file/' + fileId,
                 success: function (data) {
                     if (data.response == "OK") {
                         $('#table').bootstrapTable('refresh');

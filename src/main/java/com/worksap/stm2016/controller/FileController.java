@@ -1,26 +1,20 @@
 package com.worksap.stm2016.controller;
 
-import com.worksap.stm2016.audit.CurrentUser;
-import com.worksap.stm2016.domain.FileProfile;
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.repository.FileProfileRepository;
-import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 
 import static org.springframework.util.StringUtils.getFilenameExtension;
 
@@ -80,6 +74,8 @@ public class FileController {
         }
 
         bufferedOutputStream.flush();
+        bufferedOutputStream.close();
+        bufferedInputStream.close();
     }
 
 }

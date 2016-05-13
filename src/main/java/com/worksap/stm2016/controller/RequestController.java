@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
  * Created by Shuang on 4/18/2016.
@@ -48,7 +47,7 @@ public class RequestController {
     @PreAuthorize("@currentUserServiceImpl.canAccessRequest(principal, #id)")
     @RequestMapping(value = "/request/{id}", method = RequestMethod.GET, produces = "text/html")
     public String getRequestPage(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("user", userService.get(id));
         return "request/request";
     }
 

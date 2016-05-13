@@ -1,6 +1,5 @@
 package com.worksap.stm2016.controller.user;
 
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.form.UserCreateForm;
 import com.worksap.stm2016.form.validator.UserCreateFormValidator;
 import com.worksap.stm2016.service.user.UserService;
@@ -41,6 +40,17 @@ public class UserController {
     @RequestMapping(value = "/user/profile", method = RequestMethod.GET)
     public String getUserProfilePage() {
         return "user/user_profile";
+    }
+
+    @PreAuthorize("@currentUserServiceImpl.canAccessUserResigned(principal, #id)")
+    @RequestMapping(value = "/career/user/{id}", method = RequestMethod.GET)
+    public String getApplicantProfilePage(@PathVariable Long id) {
+        return "career/applicant_profile";
+    }
+
+    @RequestMapping(value = "/career/user/profile", method = RequestMethod.GET)
+    public String getApplicantProfilePage() {
+        return "career/applicant_profile";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

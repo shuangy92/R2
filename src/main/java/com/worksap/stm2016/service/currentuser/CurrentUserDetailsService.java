@@ -1,7 +1,7 @@
 package com.worksap.stm2016.service.currentuser;
 
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.audit.CurrentUser;
+import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class CurrentUserDetailsService implements UserDetailsService {
     @Override
     public CurrentUser loadUserByUsername(String email) throws UsernameNotFoundException {
         LOGGER.debug("Authenticating user with email={}", email.replaceFirst("@.*", "@***"));
-        User user = userService.getUserByEmail(email);
+        User user = userService.getByEmail(email);
         return new CurrentUser(user);
     }
 

@@ -1,13 +1,9 @@
 package com.worksap.stm2016.domain.message;
 
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.enums.RequestStatus;
-import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Shuang on 4/18/2016.

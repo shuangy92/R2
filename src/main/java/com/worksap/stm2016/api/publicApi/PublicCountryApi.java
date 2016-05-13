@@ -3,13 +3,10 @@ package com.worksap.stm2016.api.publicApi;
 import com.worksap.stm2016.domain.Country;
 import com.worksap.stm2016.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 /**
  * Created by Shuang on 4/27/2016.

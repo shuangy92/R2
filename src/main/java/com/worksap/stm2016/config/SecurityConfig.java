@@ -3,7 +3,6 @@ package com.worksap.stm2016.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,6 +35,7 @@ public class SecurityConfig {
                     .loginPage("/login")
                     .failureUrl("/login?error")
                     .usernameParameter("email")
+                    .defaultSuccessUrl("/logged_in")
                     .permitAll()
                     .and()
                     .logout()
@@ -67,6 +67,7 @@ public class SecurityConfig {
                     .loginPage("/login")
                     .failureUrl("/login?error")
                     .usernameParameter("email")
+                    .defaultSuccessUrl("/logged_in")
                     .permitAll()
                     .and()
                     .logout()

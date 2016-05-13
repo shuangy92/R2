@@ -31,7 +31,7 @@ public class Contract implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "department_id")
-    private Department department;
+    private Department department; //===
 
     @Column(name = "startDate")
     @Type(type="date")

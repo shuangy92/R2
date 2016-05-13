@@ -9,7 +9,6 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/flat-json/bootstrap-table-flat-json.js}"></script>
 </head>
 <body>
 
@@ -106,6 +105,10 @@
                     return data;
                 },
                 detailFormatter: function (index, row, element) {
+                    var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')">Apply</button>';
+                    if (checkJobApplicationExistence(row.id)) {
+                        var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')" disabled="disabled">Apply</button>';
+                    }
                     var result =
                             '<div class="row">' +
                             '<div class="col-md-10 col-md-offset-1">' +
@@ -113,7 +116,7 @@
                             '<dt>Job Description</dt>' + '<dd>' + row.description + '</dd>' +
                             '</dl>' +
                             '<dt>Job Requirement</dt>' + '<dd>' + row.requirement + '</dd>' +
-                            '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')">Apply</button>' +
+                            apply_btn +
                             '</div>' +
                             '</div>';
                     return result;
@@ -131,7 +134,7 @@
                 filterControl: true,
                 sortOrder: 'desc',
                 cookie: true,
-                cookieIdTable: 'job_post',
+                cookieIdTable: 'career_job_post',
             });
         }
         function applyJob(index) {
@@ -144,13 +147,23 @@
                 if (role["$name"] != "APPLICANT") {
                     alert("You are already an employee");
                 } else {
+                    console.log($('#table').bootstrapTable('getData', true))
+
                     var job_post = $('#table').bootstrapTable('getData', true)[index];
                     localStorage.setItem("job_post", JSON.stringify(job_post));
-                    window.location.href = "/career/application_submit"
+                    window.location.href = "/career/applicant_profile_submit"
                 }
             }
         }
-
+        function checkJobApplicationExistence(job_post_id) {
+            return $.ajax({
+                url: "/api/job_application/check/" + job_post_id,
+                type: "GET",
+                success: function (data) {
+                    return (data != "");
+                }
+            });
+        }
 
 
     </script>

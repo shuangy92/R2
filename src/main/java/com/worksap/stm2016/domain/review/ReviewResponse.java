@@ -1,12 +1,10 @@
 package com.worksap.stm2016.domain.review;
 
-import com.sun.mail.imap.protocol.UIDSet;
 import com.worksap.stm2016.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity

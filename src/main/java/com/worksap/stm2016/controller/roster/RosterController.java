@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -43,7 +42,7 @@ public class RosterController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}/roster", method = RequestMethod.GET)
     public String schedule(@PathVariable Long id, Locale locale, Model model) {
-        model.addAttribute("viewer", userService.getUserById(id));
+        model.addAttribute("viewer", userService.get(id));
         return "roster";
     }
 

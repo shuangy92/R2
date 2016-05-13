@@ -38,3 +38,74 @@ $(function () {
         element.addClass('active');
     }
 });
+
+
+function initCountryList() {
+    var countries;
+    $.ajax({
+        type: 'get',
+        url: "/api/public/country",
+        success: function (data) {
+            countries = $.map(data, function(obj) {
+                return { id: obj.id, text: obj.name };
+            })
+            $(".country-select").select2({
+                data: countries
+            });
+        }
+    });
+}
+
+function loadContactFormData(url) {
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (data) {
+            if (data != "") {
+                $.each(data, function (k, v) {
+                    var sel = $("#contact-form #" + k);
+                    if (sel.length) {
+                        sel.val(v);
+                    }
+                });
+                if (editable) {
+                    $("#contact-form #country").data('select2').trigger('select', {
+                        data: {"id": data.country.id, "text": data.country.name}
+                    });
+                } else {
+                    $("#contact-form #country").val(data.country.name);
+                }
+            }
+        }
+    });
+}
+function submitContactForm(uid) {
+    var data = {};
+    $.each($('#contact-form').serializeArray(), function(i, field) {
+        switch (field.name) {
+            case "country":
+                var country = {};
+                country.id = field.value;
+                data.country = country;
+                break;
+            case "birthday":
+                data[field.name] = Date.parse(field.value);
+                break;
+            default:
+                data[field.name] = field.value;
+        }
+    });
+    data.id = uid;
+    $.ajax({
+        url: "/api/user/profile",
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            notify.update('message', "Saved");
+            setTimeout(function() {
+                notify.close();
+            }, 500);
+        }
+    });
+}

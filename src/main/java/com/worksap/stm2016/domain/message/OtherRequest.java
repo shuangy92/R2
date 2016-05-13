@@ -4,7 +4,9 @@ import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

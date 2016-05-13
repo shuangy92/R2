@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout_career">
+<head>
+    <title>Career</title>
+    <link th:href="@{/static/css/jquery.steps.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/js/jquery.steps.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.cookie.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <script type="text/javascript" th:inline="javascript">
+        var job_post;
+        var job_application;
+        jQuery(document).ready(function ($) {
+            job_post = JSON.parse(localStorage.getItem("job_post"));
+            var finishBtnTitle = "Save and complete";
+            if (job_post) {
+                $("#job-info").show();
+                $("#job-post-id").html(job_post.id);
+                $("#job-post-title").html(job_post.title);
+                $("#job-post-title").attr("href", "/career/job_post/" + job_post.id);
+                $("#job-post-location").html(job_post.location);
+                finishBtnTitle = "Save and submit";
+                checkJobApplicationExistence(job_post.id);
+            }
+            $("#steps").steps({
+                headerTag: "h3",
+                bodyTag: "section",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                //saveState: true,
+                labels: {
+                    cancel: "Cancel",
+                    current: "current step:",
+                    pagination: "Pagination",
+                    finish: finishBtnTitle,
+                    next: "Continue",
+                    previous: "Previous",
+                },
+                /*onStepChanging: function (event, currentIndex, newIndex) {
+                 if (currentIndex > 0) {
+                 $("#contact-form").validate().settings.ignore = ":disabled,:hidden";
+                 return $("#contact-form").valid();
+                 }
+                 return true;
+                 },*/
+                onStepChanged: function (event, currentIndex, priorIndex) {
+                    if (currentIndex === 1) {
+                        loadContactFormData("/api/user/profile/" + [[${currentUser.id}]]);
+                    }
+                },
+                onFinishing: function (event, currentIndex) {
+                    $("#contact-form").validate().settings.ignore = ":disabled,:hidden";
+                    if ($("#contact-form").valid()) {
+                        submitContactForm([[${currentUser.id}]]);
+                        if (job_post) {
+                            submitJobApplication("SUBMITTED");
+                        }
+                        return true;
+                    }
+                    return false;
+                },
+                onFinished: function (event, currentIndex) {
+                    if (job_post) {
+                        localStorage.removeItem("job_post")
+                    }
+                }
+            });
+            /* all other jquery libs need to be after jquery-steps*/
+        });
+
+    </script>
+    <div id="job-info" style="display: none;">
+        <h1>Job Application</h1>
+        <p><a id="job-post-title"></a></p>
+        <p id="job-post-location"></p>
+        <p>Job Post ID: <strong id="job-post-id"></strong></p>
+    </div>
+    <div id="steps">
+        <h3>Document</h3>
+        <section>
+            <p>You may submit any relevant documents to be saved on your profile.  Example documents are resumes, cover letters, work experience and education documentation.  You may review your attachments at any time under the My Profile tab.</p>
+            <p>This step is optional. To skip this step, click Next Without Document. Skipping this step will not impact your eligibility for employment.</p>
+            <div th:replace="fragments/user_file_list :: user_file_list"></div>
+        </section>
+        <h3>Contact</h3>
+        <section>
+            <form class="form-horizontal" role="form" id="contact-form">
+                <div class="form-group required">
+                    <label for="name" class="col-sm-4 control-label">Full name</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="name" name="name" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="phone" class="col-sm-4 control-label">Phone</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" id="phone" name="phone" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="country" class="col-sm-4 control-label">Country</label>
+                    <div class="col-sm-8" id="country-select">
+                        <select class="form-control country-select" id="country" name="country" required="required" style="width:100%;">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="address" class="col-sm-4 control-label">Address</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="address" id="address" name="address" maxlength="60" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="idNumber" class="control-label col-sm-4">National identification number <span><a href="//en.wikipedia.org/wiki/National_identification_number" target="_blank">?</a></span></label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="idNumber" name="idNumber" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="birthday" class="col-sm-4 control-label">Date of Birth</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="input" id="birthday" name="birthday" required="required"/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="save" style="float: right">save</button>
+            </form>
+        </section>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var editable = true;
+        jQuery(document).ready(function ($) {
+            $("#birthday").datepicker({ dateFormat: 'yy-mm-dd' });
+
+            initCountryList();
+
+            $('#file-upload-form').on('submit', function (e) {
+                e.preventDefault();
+                uploadFile();
+            })
+            $('#contact-form').on('submit', function (e) {
+                e.preventDefault();
+                notify = $.notify({
+                    icon: 'fa fa-info-circle',
+                    message: "Saving...",
+                });
+                submitContactForm([[${currentUser.id}]]);
+            })
+        });
+
+        function checkJobApplicationExistence(job_post_id) {
+            $.ajax({
+                url: "/api/job_application/check/" + job_post_id,
+                type: "GET",
+                success: function (data) {
+                    if (data == "" && job_post) {
+                        submitJobApplication("SAVED");
+                    } else {
+                        job_application = data;
+                    }
+                }
+            });
+        }
+        function submitJobApplication(status, data) {
+            if (job_application != null && status == "SAVED") {
+                return;
+            }
+            if (job_application == null) {
+                job_application = {};
+                job_application.jobPost = job_post;
+                job_application.status = status;
+            } else if (status == "SUBMITTED") {
+                job_application.status = status;
+            }
+
+            $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Submitting...",
+            });
+            $.ajax({
+                url: "/api/job_application",
+                type: "POST",
+                data: JSON.stringify(job_application),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    window.location.href = "/career/dashboard";
+                }
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>
