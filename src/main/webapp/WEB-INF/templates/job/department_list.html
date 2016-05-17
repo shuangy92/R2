@@ -4,17 +4,19 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Job Post List</title>
+    <title>Department</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/editable/bootstrap-table-editable.js}"></script>
+    <script type="text/javascript" src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
 </head>
 <body>
 
 <div layout:fragment="content">
     <div class="row">
-        <h3>Job Post List</h3>
+        <h3>Department</h3>
         <div id="toolbar" class="btn-group">
             <button type="button" class="btn btn-default" id="btn-add-row">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -32,14 +34,12 @@
                data-show-export="true"
                data-pagination="true"
                data-side-pagination="server"
-               data-page-list="[10, 25, 50, 100, ALL]"
-               data-detail-view="true"
+               data-page-list="[10, 25, 50, 100]"
                data-minimum-count-columns="1"
                data-id-field="id"
                smartDisplay="true">
         </table>
     </div>
-
     <script type="text/javascript" th:inline="javascript">
 
         jQuery(document).ready(function ($) {
@@ -47,73 +47,32 @@
         });
 
         function initTable() {
-            var url = "/api/job_post";
+            var url = "/api/department";
             var $table = $('#table');
 
-            var columns =[{
-                field: 'state',
-                checkbox: true
-            }, {
-                field: 'lastModifiedDate',
-                title: 'Last Edited',
-                sortable: true,
-                formatter: function (index, row, element) {
-                    return (new Date(index)).toString("yyyy/M/dd");
-                }
-            }, {
-                field: 'deadline',
-                title: 'Deadline',
-                sortable: true,
-                formatter: function (index, row, element) {
-                    if (index) {
-                        return (new Date(index)).toString("yyyy/M/dd");
-                    } else {
-                        return "-";
-                    }
-                }
-            }, {
-                field: 'vacancies',
-                title: 'Vacancies',
-                sortable: true
-            }, {
-                field: 'title',
-                title: 'Title',
-                sortable: true,
-                filterControl: 'input',
-                formatter: function (index, row, element) {
-                    return '<a href="/job_post/' + row.id + '">' + index + '</a>';
-                }
-
-            }, {
-                field: 'department',
-                title: 'Department',
-                sortable: true,
-                filterControl: 'select'
-            }, {
-                field: 'location',
-                title: 'Location',
-                //sortable: true,
-                filterControl: 'select'
-            }, {
-                field: 'author',
-                title: 'Author',
-                sortable: true,
-                filterControl: 'input',
-                formatter: function (index, row, element) {
-                    return index.name;
-                }
-            }, {
-                field: 'published',
-                title: 'Published / Draft',
-                sortable: true,
-                filterControl: 'select',
-                formatter: function (index, row, element) {
-                    return (index==true? "Published" : "Draft");
-                }
-            }];
-
             $table.bootstrapTable({
-                columns: columns,
+                columns: [{
+                    field: 'state',
+                    checkbox: true
+                },{
+                    field: 'id',
+                    title: 'ID',
+                    sortable: true,
+                    filterControl: 'input',
+                }, {
+                    field: 'name',
+                    title: 'Name',
+                    sortable: true,
+                    filterControl: 'input',
+                    formatter: function (index, row, element) {
+                        return '<a href="/department/' + row.id + '">' + index + '</a>';
+                    }
+                }, {
+                    field: 'location',
+                    title: 'Location',
+                    sortable: true,
+                    filterControl: 'select',
+                }],
                 url: url,
                 contentType: "application/x-www-form-urlencoded",
                 queryParamsType: "limit",
@@ -122,7 +81,7 @@
                     if (p.sort) {
                         data.sort = p.sort;
                     } else {
-                        data.sort = "lastModifiedDate";
+                        data.sort = "id";
                     }
                     data.order = p.order;
                     data.limit = p.limit;
@@ -130,26 +89,20 @@
                     data.filter = p.filter;
                     return data;
                 },
-                detailFormatter: function (index, row, element) {
-                },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
-                        res.rows[i].location = res.rows[i].department.location;
-                        res.rows[i].department = res.rows[i].department.name;
-                    });
-                    return res;
-                },
                 onPostBody: function () {
                     $(".filterControl input").attr('placeholder', 'Search');
                 },
                 filterControl: true,
-                sortOrder: 'desc',
                 cookie: true,
-                cookieIdTable: 'job_post',
+                cookieIdTable: 'department',
             });
 
             var $remove = $("#btn-delete-row");
             var $insert = $("#btn-add-row");
+
+            $insert.click(function () {
+                window.location.href = "/department/create";
+            });
 
             $table.on('check.bs.table uncheck.bs.table ' +
                     'check-all.bs.table uncheck-all.bs.table', function () {
@@ -162,8 +115,12 @@
                         type: "delete",
                         data: JSON.stringify(ids),
                         contentType: "application/json; charset=utf-8",
-                        url: '/api/job_post',
+                        url: '/api/department',
                         success: function () {
+                            $table.bootstrapTable('remove', {
+                                field: 'id',
+                                values: ids
+                            });
                             $remove.prop('disabled', true);
                             $table.bootstrapTable('refresh');
                         },
@@ -186,6 +143,7 @@
                 });
             }
         }
+
     </script>
 </div>
 </body>

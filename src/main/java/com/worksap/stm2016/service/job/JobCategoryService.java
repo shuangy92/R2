@@ -18,6 +18,7 @@ import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
+import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -47,7 +48,12 @@ public class JobCategoryService {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec = hasValue(key, search);
+                Specification spec;
+                if (key.equals("id")) {
+                    spec = isValue(key, Long.parseLong(search));
+                } else { // key = name
+                    spec = hasValue(key, search);
+                }
                 specs.add(spec);
             }
         }

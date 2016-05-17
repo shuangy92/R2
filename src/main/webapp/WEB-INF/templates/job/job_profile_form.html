@@ -22,7 +22,7 @@
             </div>
             <div class="form-group" id="field-jobId">
                 <label for="id" class="control-label">Job Code</label>
-                <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
+                <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
                 <input class="form-control" type="input" id="id" name="id" required="required" readonly="readonly"/>
             </div>
             <div class="form-group">
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="jobCategory" class="control-label">Job Category</label>
-                <a href="/job_categories" target="_blank" title="Click to view the job category list">?</a>
+                <a href="/job_category" target="_blank" title="Click to view the job category list">?</a>
                 <select class="form-control job-categoty-select" id="jobCategory" name="jobCategory" required="required">
                     <option></option>
                 </select>
@@ -71,7 +71,7 @@
                             data.jobCategory = jobCategory;
                             break;
                         case "department":
-                            if (window.location.pathname != "/job/create") {
+                            if (window.location.pathname != "/job_profile/create") {
                                 data.department = job.department;
                             } else {
                                 data.department = [[${currentUser.department}]];
@@ -88,7 +88,7 @@
                 var notify = $.notify({
                     icon: 'fa fa-info-circle',
                     message: "Saving...",
-                    url: '/jobs',
+                    url: '/job_profile',
                 });
                 var x= $(".job-categoty-select option:selected");
                 console.log(x.text());
@@ -127,7 +127,7 @@
                     var role = [[${currentUser.role}]];
                     if (role["$name"] == 'ADMIN' ||
                             (role["$name"] == 'MANAGER' && job.department.id == [[${currentUser.department.id}]]) ||
-                            (role["$name"] == 'MANAGER' && window.location.pathname == "/job/create")) {
+                            (role["$name"] == 'MANAGER' && window.location.pathname == "/job_profile/create")) {
                         $(".job-categoty-select").data('select2').trigger('select', {
                             data: {"id":job.jobCategory.id,"text":job.jobCategory.name}
                         });
@@ -143,7 +143,7 @@
         }
         jQuery(document).ready(function ($) {
 
-            if (window.location.pathname == "/job/create") {
+            if (window.location.pathname == "/job_profile/create") {
                 $("#field-jobId").hide();
                 var department = [[${currentUser.department.name}]]
                 $("#departmentName").val(department);

@@ -24,7 +24,6 @@ import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
  */
 @RestController
 @RequestMapping("/api/job_category")
-@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
 public class JobCategoryApi {
 
     private static final Logger logger = LoggerFactory.getLogger(JobCategoryApi.class);
@@ -42,7 +41,7 @@ public class JobCategoryApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getJobCategoryList(@RequestParam(name = "sort") String sort,
+    public JSONObject getList(@RequestParam(name = "sort") String sort,
                                          @RequestParam(name = "order") String order,
                                          @RequestParam(name = "limit") Integer limit,
                                          @RequestParam(name = "offset") Integer offset,

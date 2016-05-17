@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="vacancies" class="control-label">Job Code</label>
-                <a href="/jobs" target="_blank" title="Click to view the job list">?</a>
+                <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
                 <input class="form-control" type="input" id="jobId" name="jobId" required="required" readonly="readonly"/>
             </div>
             <div class="form-group">
@@ -69,7 +69,7 @@
             <fieldset>
                 <legend>For HR to Fill Only:</legend>
                 <div class="form-group">
-                    <label for="startDate" class="control-label">Deadline for Application</label>
+                    <label for="deadline" class="control-label">Deadline for Application</label>
                     <input class="form-control" placeholder="Leave blank = Post will close until all opening filled" type="input" id="deadline" name="deadline"/>
                 </div>
                 <div class="form-group required">
@@ -132,6 +132,9 @@
                         case "deadline":
                             data[field.name] = Date.parse(field.value);
                             break;
+                        case "contractLength":
+                            data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
+                            break;
                         default:
                             data[field.name] = field.value;
                     }
@@ -171,7 +174,7 @@
                         }, 1000);
                         localStorage.removeItem("request");
                         window.history.replaceState({}, '/job_post/create', '/job_post/' + post.id);
-                        window.location.href = "/job_posts";
+                        window.location.href = "/job_post";
                     }
                 });
             });

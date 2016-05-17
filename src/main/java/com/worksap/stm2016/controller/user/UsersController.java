@@ -21,9 +21,9 @@ public class UsersController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/users")
+    @RequestMapping(value = "/user")
     public String getUsersPage() {
-        return "user/users";
+        return "user/user_list";
     }
 
 }

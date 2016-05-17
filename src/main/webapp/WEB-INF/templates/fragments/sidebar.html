@@ -8,34 +8,28 @@
     <nav class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li><a href="#" th:href="@{/dashboard}" class="dashboard"> Dashboard</a></li>
-                <li class="user">
-                    <a href="#"> User Panel<span class="fa arrow"></span></a>
+                <li><a class="all" th:href="@{/dashboard}"> Dashboard</a></li>
+                <li>
+                    <a class="all" href="#"> User Panel<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/request}"> My Requests</a></li>
-                        <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/shifts}"> My Shifts</a></li>
-                        <li class="employee"><a href="#" th:href="@{/user/__${currentUser.id}__/schedule}"> My Schedules</a></li>
+                        <li class="employee"><a class="all" th:href="@{/user/__${currentUser.id}__/request}"> My Requests</a></li>
                     </ul>
                 </li>
-                <li class="admin" style="display: none;">
-                    <a href="#"> HR Panel<span class="fa arrow"></span></a>
+                <li><a class="admin manager" th:href="@{/user}"> Employee List</a></li>
+                <li><a class="admin" th:href="@{/request}"> Requests List</a></li>
+                <li>
+                    <a class="admin" href="#"> Recruitment<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="#" th:href="@{/users}"> Employee List</a></li>
-                        <li><a href="#" th:href="@{/request}"> Employee Requests</a></li>
-                        <li><a href="#" th:href="@{/user/create}"> Create New Employee</a></li>
-                        <li><a href="#" th:href="@{/jobs}"> Job List</a></li>
-                        <li><a href="#" th:href="@{/job_categories}"> Job Category List</a></li>
-                        <li><a href="#" th:href="@{/job_posts}"> Job Post List</a></li>
-
+                        <li><a class="admin manager" th:href="@{/job_post}"> Job Post List</a></li>
+                        <li><a class="admin manager" th:href="@{/job_application}"> Application List</a></li>
                     </ul>
                 </li>
-                <li class="manager" style="display: none;">
-                    <a href="#"> Manager Panel<span class="fa arrow"></span></a>
+                <li>
+                    <a class="admin manager" href="#"> Setting<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="#" th:href="@{/users}"> Employee List</a></li>
-                        <li><a href="#" th:href="@{/jobs}"> Job List</a></li>
-                        <li><a href="#" th:href="@{/job_categories}"> Job Category List</a></li>
-                        <li><a href="#" th:href="@{/job_posts}"> Job Post List</a></li>
+                        <li><a href="#" class="admin" th:href="@{/department}"> Department List</a></li>
+                        <li><a href="#" class="admin" th:href="@{/job_category}"> Job Category List</a></li>
+                        <li><a href="#" class="admin manager" th:href="@{/job_profile}"> Job List</a></li>
                     </ul>
                 </li>
             </ul>
@@ -51,10 +45,10 @@
             if (window.location.pathname != '/') {
                 $(".home").removeClass('active');
             }
+
+            $("#side-menu a").hide();
+            $(".all").show();
             var currentUser = [[${currentUser}]];
-            if (currentUser.user.active == false) {
-                $(".user .employee").hide();
-            }
             switch (currentUser.authorities[0].authority) {
                 case 'ADMIN':
                     connect();

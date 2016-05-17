@@ -49,12 +49,12 @@
             }, {
                 title: 'Job Title',
                 formatter: function (index, row, element) {
-                    return '<a href="/career/job_post/' + row.jobPost.id + '">' + row.jobPost.job.title + '</a>';
+                    return '<a href="/career/job_post/' + row.jobPost.id + '">' + row.jobPost.title + '</a>';
                 }
             }, {
                 title: 'Location',
                 formatter: function (index, row, element) {
-                    return row.jobPost.location;
+                    return row.jobPost.department.location;
                 }
             }, {
                 field: 'applyDate',
@@ -104,12 +104,6 @@
                     filter.uid = '' + [[${currentUser.user.id}]];
                     data.filter = JSON.stringify(filter);
                     return data;
-                },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
-                        res.rows[i].jobPost.location = res.rows[i].jobPost.department.location;
-                    });
-                    return res;
                 },
                 filterControl: true,
                 cookie: true,

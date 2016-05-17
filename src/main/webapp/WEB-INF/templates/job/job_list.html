@@ -65,7 +65,7 @@
                     sortable: true,
                     filterControl: 'input',
                     formatter: function (index, row, element) {
-                        return '<a href="/job/' + row.id + '">' + index + '</a>';
+                        return '<a href="/job_profile/' + row.id + '">' + index + '</a>';
                     }
                 }, {
                     field: 'department',
@@ -137,7 +137,7 @@
             var $insert = $("#btn-add-row");
 
             $insert.click(function () {
-                window.location.href = "/job/create";
+                window.location.href = "/job_profile/create";
             });
 
             $table.on('check.bs.table uncheck.bs.table ' +

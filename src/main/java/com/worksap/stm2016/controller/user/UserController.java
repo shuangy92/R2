@@ -34,12 +34,12 @@ public class UserController {
     @PreAuthorize("@currentUserServiceImpl.canAccessUserResigned(principal, #id)")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public String getUserProfilePage(@PathVariable Long id) {
-        return "user/user_profile";
+        return "user/user_profile_form";
     }
 
     @RequestMapping(value = "/user/profile", method = RequestMethod.GET)
     public String getUserProfilePage() {
-        return "user/user_profile";
+        return "user/user_profile_form";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUserResigned(principal, #id)")
@@ -78,6 +78,11 @@ public class UserController {
             return "user/user_create";
         }
         // ok, redirect
-        return "redirect:/user/users";
+        return "redirect:/user/user_list";
+    }
+
+    @RequestMapping(value = "/account_setting", method = RequestMethod.GET)
+    public String getAccountSettingPage() {
+        return "account_setting";
     }
 }

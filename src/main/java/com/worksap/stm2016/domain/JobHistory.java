@@ -10,14 +10,14 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "employment")
+@Table(name = "job_history")
 public class JobHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employment_id", nullable = false, updatable = false)
+    @Column(name = "job_history_id", nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne
@@ -35,6 +35,5 @@ public class JobHistory implements Serializable {
     @Column(name = "end_date")
     @Type(type="date")
     private Date endDate;
-
 
 }

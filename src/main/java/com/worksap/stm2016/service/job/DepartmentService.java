@@ -1,9 +1,14 @@
 package com.worksap.stm2016.service.job;
 
+import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.form.UserRegisterForm;
+import com.worksap.stm2016.repository.UserRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
+import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,6 +25,7 @@ import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
+import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -30,9 +36,24 @@ public class DepartmentService {
     private static final Logger logger = LoggerFactory.getLogger(DepartmentService.class);
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    UserService userService;
 
     public Department get(Long id){
         return departmentRepository.findOne(id);
+    }
+
+    public JSONObject getFull(Long id){
+        Department department = departmentRepository.findOne(id);
+        JSONObject result = new JSONObject();
+        result.put("id", department.getId());
+        result.put("name", department.getName());
+        result.put("location", department.getLocation());
+        if (department.getManagerId() != null) {
+            result.put("manager", userService.get(department.getManagerId()));
+
+        }
+        return result;
     }
 
     public Iterable<Department> getAll() {
@@ -49,7 +70,16 @@ public class DepartmentService {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec = hasValue(key, search);
+                Specification spec;
+                if (key.equals("id")) {
+                    spec = isValue(key, Long.parseLong(search));
+                } else if (key.equals("manager")) {
+                    spec = hasValue(key, "name", search);
+                } else if (key.equals("name")) {
+                    spec = hasValue(key, search);
+                } else { // key = location
+                    spec = isValue(key, search);
+                }
                 specs.add(spec);
             }
         }
@@ -62,6 +92,18 @@ public class DepartmentService {
     }
 
     public void update(Department department) throws ParseException {
+        Long original = departmentRepository.findOne(department.getId()).getManagerId();
+        if (original != null) {
+            User manager = userService.get(original);
+            manager.setRole(Role.EMPLOYEE);
+            userService.save(manager);
+        }
+        if (department.getManagerId() != null) {
+            User manager = userService.get(department.getManagerId());
+            manager.setRole(Role.MANAGER);
+            userService.save(manager);
+        }
+
         departmentRepository.save(department);
     }
 

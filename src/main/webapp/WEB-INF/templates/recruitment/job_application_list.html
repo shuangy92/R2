@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Career</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Job Application List</h3>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               data-detail-view="true"
+               data-minimum-count-columns="1"
+               data-id-field="id"
+               smartDisplay="true">
+        </table>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
+        function initTable() {
+            var url = "/api/job_application";
+            var $table = $('#table');
+
+            var columns =[{
+                field: 'applyDate',
+                title: 'Applied',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return (new Date(index)).toString("yyyy/M/dd");
+                }
+            }, {
+                field: 'applicant',
+                title: 'Applicant',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return index.name;
+                }
+            }, {
+                field: 'jobPostId',
+                title: 'JP ID',
+                sortable: true,
+                filterControl: 'input',
+                formatter: function (index, row, element) {
+                    return row.jobPost.id;
+                }
+            }, {
+                field: 'title',
+                title: 'Job Post',
+                sortable: true,
+                filterControl: 'input',
+                formatter: function (index, row, element) {
+                    return '<a href="/job_post/' + row.jobPost.id + '">' + row.jobPost.title + '</a>';
+                }
+            }, {
+                field: 'location',
+                title: 'Location',
+                sortable: true,
+                filterControl: 'select'
+            }, {
+                field: 'department',
+                title: 'Department',
+                sortable: true,
+                filterControl: 'select'
+            }, {
+                field: 'status',
+                title: 'Status',
+                sortable: true,
+                filterControl: 'select'
+            }];
+
+            $table.bootstrapTable({
+                columns: columns,
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "id";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                responseHandler: function(res) {
+                    $.each(res.rows, function( i, v ) {
+                        res.rows[i].location = res.rows[i].jobPost.department.location;
+                        res.rows[i].department = res.rows[i].jobPost.department.name;
+                    });
+                    return res;
+                },
+                filterControl: true,
+                cookie: true,
+                cookieIdTable: 'applicant_application',
+            });
+        }
+        function continueApplication(index) {
+            var application = $('#table').bootstrapTable('getData', true)[index];
+            localStorage.setItem("job_post", JSON.stringify(application.jobPost));
+            window.location.href = "/career/applicant_profile_submit"
+        }
+        function withdrewApplication(index) {
+            var application = $('#table').bootstrapTable('getData', true)[index];
+            if (confirm("Are you sure you would like to withdraw your application at this time?")) {
+                return $.ajax({
+                    url: "/api/job_application/",
+                    type: "DELETE",
+                    data: JSON.stringify(application),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#table').bootstrapTable('refresh');
+                    }
+                });
+            }
+        }
+
+
+    </script>
+</div>
+</body>
+</html>

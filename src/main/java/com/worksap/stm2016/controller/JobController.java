@@ -13,24 +13,39 @@ public class JobController {
 
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);
 
-    @RequestMapping(value = "/jobs", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_profile", method = RequestMethod.GET)
     public String getJobListPage() {
-        return "job/jobs";
+        return "job/job_list";
     }
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/job/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_profile/create", method = RequestMethod.GET)
     public String getJobProfilePage() {
         return "job/job_profile_form";
     }
 
-    @RequestMapping(value = "/job/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_profile/{id}", method = RequestMethod.GET)
     public String getJobProfilePage(@PathVariable Long id) {
         return "job/job_profile_form";
     }
 
-    @RequestMapping(value = "/job_categories", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_category", method = RequestMethod.GET)
     public String getJobCategoryListPage() {
-        return "job/job_categories";
+        return "job/job_category_list";
+    }
+
+    @RequestMapping(value = "/department", method = RequestMethod.GET)
+    public String getDepartmentListPage() {
+        return "job/department_list";
+    }
+
+    @RequestMapping(value = "/department/create", method = RequestMethod.GET)
+    public String getDepartmentPage() {
+        return "job/department_form";
+    }
+
+    @RequestMapping(value = "/department/{id}", method = RequestMethod.GET)
+    public String getDepartmentPage(@PathVariable Long id) {
+        return "job/department_form";
     }
 }

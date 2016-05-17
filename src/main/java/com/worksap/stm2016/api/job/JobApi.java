@@ -17,7 +17,6 @@ import java.util.ArrayList;
  */
 @RestController
 @RequestMapping("/api/job")
-@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
 public class JobApi {
 
     private static final Logger logger = LoggerFactory.getLogger(JobApi.class);

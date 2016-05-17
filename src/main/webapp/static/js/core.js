@@ -55,6 +55,21 @@ function initCountryList() {
         }
     });
 }
+function initDepartmentList() {
+    var departments;
+    $.ajax({
+        type: 'get',
+        url: "/api/department/all",
+        success: function (data) {
+            departments = $.map(data, function(obj) {
+                return { id: obj.id, text: obj.name };
+            })
+            $(".department-select").select2({
+                data: countries
+            });
+        }
+    });
+}
 
 function loadContactFormData(url) {
     $.ajax({
@@ -108,4 +123,24 @@ function submitContactForm(uid) {
             }, 500);
         }
     });
+}
+
+function checkJobApplicationExistence(job_post_id) {
+    var result;
+    $.ajax({
+        url: "/api/job_application/check/" + job_post_id,
+        type: "GET",
+        async: false,
+        success: function (data) {
+            result = (data != "");
+        }
+    });
+    return result;
+}
+
+function logout(data) {
+    $.post('/logout', data)
+        .done(function () {
+            window.location.href = "/";
+        });
 }

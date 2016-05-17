@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout_career">
 <head>
-    <title>Career</title>
+    <title>Application</title>
     <link th:href="@{/static/css/jquery.steps.css}" rel="stylesheet" media="screen" type="text/css"/>
     <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/js/jquery.steps.min.js}"></script>
@@ -26,7 +26,7 @@
                 $("#job-post-id").html(job_post.id);
                 $("#job-post-title").html(job_post.title);
                 $("#job-post-title").attr("href", "/career/job_post/" + job_post.id);
-                $("#job-post-location").html(job_post.location);
+                $("#job-post-location").html(job_post.department.location);
                 finishBtnTitle = "Save and submit";
                 checkJobApplicationExistence(job_post.id);
             }
@@ -62,6 +62,9 @@
                         submitContactForm([[${currentUser.id}]]);
                         if (job_post) {
                             submitJobApplication("SUBMITTED");
+                        } else {
+                            submitContactForm([[${currentUser.id}]]);
+                            window.location.href = "/career/user/profile";
                         }
                         return true;
                     }
@@ -78,8 +81,7 @@
 
     </script>
     <div id="job-info" style="display: none;">
-        <h1>Job Application</h1>
-        <p><a id="job-post-title"></a></p>
+        <h3><a id="job-post-title"></a></h3>
         <p id="job-post-location"></p>
         <p>Job Post ID: <strong id="job-post-id"></strong></p>
     </div>
@@ -193,6 +195,7 @@
                 data: JSON.stringify(job_application),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
+                    job_application = data;
                     if (status == "SUBMITTED") {
                         window.location.href = "/career/dashboard";
                     }

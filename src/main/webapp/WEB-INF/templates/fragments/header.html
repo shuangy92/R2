@@ -26,9 +26,6 @@
                     <ul class="dropdown-menu">
                         <li><a href="/login">Log in</a></li>
                         <li><a href="/career/register">Sign up</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" id="logged-in"  style="display:none;">
@@ -37,7 +34,8 @@
                         <li><a href="/user/profile">My Profile</a></li>
                         <li><a href="/dashboard">Dashboard</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/logout" class="logout">Log out</a></li>
+                        <li><a href="/account_setting">Account Setting</a></li>
+                        <li><a class="logout" style="cursor: pointer">Log out</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" id="logged-in-applicant"  style="display:none;">
@@ -46,7 +44,8 @@
                         <li><a href="/career/user/profile">My Profile</a></li>
                         <li><a href="/career/dashboard">Dashboard</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/logout" class="logout">Log out</a></li>
+                        <li><a href="/account_setting">Account Setting</a></li>
+                        <li><a class="logout" style="cursor: pointer">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -54,16 +53,9 @@
     </nav>
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        /*    var url = window.location.pathname;
-         if (!url.match(/\/$/)) {
-         url += '/';
-         }
-         window.history.pushState("", "", url);
-         */
-
 
     jQuery(document).ready(function ($) {
-        $('form').formcache();
+        //$('form').formcache();
 
         if (window.location.pathname == '/dashboard') {
             $(".dropdown").removeClass('active');
@@ -77,22 +69,12 @@
             } else {
                 $("#logged-in").show();
             }
-            logout();
-        }
-
-        function logout() {
             $(".logout").click(function () {
-                var url = '/logout';
-                var data = {[[${_csrf.parameterName}]]: [[${_csrf.token}]]};
-                $.post(url, data)
-                        .done(function () {
-                            window.location.href = "/";
-                        });
-            });
+                logout({[[${_csrf.parameterName}]]: [[${_csrf.token}]]});
+            })
         }
 
         $.datepicker.setDefaults({ beforeShow: function (i) { if ($(i).attr('readonly')) { return false; } } });
-
         $.notifyDefaults({
             element: 'body',
             type: 'info',

@@ -22,7 +22,7 @@ public class JobApplication implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contract_id", nullable = false, updatable = false)
+    @Column(name = "job_application_id", nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne
@@ -45,6 +45,6 @@ public class JobApplication implements Serializable {
     private Date applyDate;
 
     public enum JobApplicationStatus {
-        SAVED, SUBMITTED, PASSED, FAILED, WITHDREW
+        SAVED, SUBMITTED, REVIEWING, PASSED, FAILED, WITHDREW
     }
 }

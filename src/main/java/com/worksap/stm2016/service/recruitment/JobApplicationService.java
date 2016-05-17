@@ -46,7 +46,15 @@ public class JobApplicationService {
                 String search = (String) filterObj.get(key);
                 Specification spec;
                 if (key.equals("department")) {
-                    spec = isValue(key, "name", search);
+                    spec = isValue("jobPost", "department", "name", search);
+                } else if (key.equals("location")) {
+                    spec = isValue("jobPost", "department", "location", search);
+                } else if (key.equals("title")) {
+                    spec = hasValue("jobPost", "title", search);
+                } else if (key.equals("jobPostId")) {
+                    spec = isValue("jobPost", "id", Long.parseLong(search));
+                } else if (key.equals("status")) {
+                    spec = isValue(key, JobApplication.JobApplicationStatus.valueOf(search));
                 } else if (key.equals("uid")) {
                     spec = isValue("applicant", "id", Long.parseLong(search));
                 } else {

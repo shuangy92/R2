@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Job Post List</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Job Post List</h3>
+        <div id="toolbar" class="btn-group">
+            <button type="button" class="btn btn-default" id="btn-add-row">
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               data-detail-view="true"
+               data-minimum-count-columns="1"
+               data-id-field="id"
+               smartDisplay="true">
+        </table>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
+        function initTable() {
+            var url = "/api/job_post";
+            var $table = $('#table');
+
+            var columns =[{
+                field: 'state',
+                checkbox: true
+            }, {
+                field: 'lastModifiedDate',
+                title: 'Updated',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return (new Date(index)).toString("yyyy/M/dd");
+                }
+            }, {
+                field: 'deadline',
+                title: 'Deadline',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    if (index) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    } else {
+                        return "-";
+                    }
+                }
+            }, {
+                field: 'vacancies',
+                title: 'Vacancies',
+                sortable: true
+            }, {
+                field: 'title',
+                title: 'Title',
+                sortable: true,
+                filterControl: 'input',
+                formatter: function (index, row, element) {
+                    return '<a href="/job_post/' + row.id + '">' + index + '</a>';
+                }
+
+            }, {
+                field: 'department',
+                title: 'Department',
+                sortable: true,
+                filterControl: 'select'
+            }, {
+                field: 'location',
+                title: 'Location',
+                //sortable: true,
+                filterControl: 'select'
+            }, {
+                field: 'published',
+                title: 'Published (?)',
+                sortable: true,
+                filterControl: 'select',
+                formatter: function (index, row, element) {
+                    return (index==true? "Published" : "Draft");
+                }
+            }];
+
+            $table.bootstrapTable({
+                columns: columns,
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "lastModifiedDate";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                detailFormatter: function (index, row, element) {
+                },
+                responseHandler: function(res) {
+                    $.each(res.rows, function( i, v ) {
+                        res.rows[i].location = res.rows[i].department.location;
+                        res.rows[i].department = res.rows[i].department.name;
+                    });
+                    return res;
+                },
+                onPostBody: function () {
+                    $(".filterControl input").attr('placeholder', 'Search');
+                },
+                filterControl: true,
+                sortOrder: 'desc',
+                cookie: true,
+                cookieIdTable: 'job_post',
+            });
+
+            var $remove = $("#btn-delete-row");
+            var $insert = $("#btn-add-row");
+
+            $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            });
+            $remove.click(function () {
+                var ids = getIdSelections();
+                if (confirm("Are you sure to delete?")) {
+                    $.ajax({
+                        type: "delete",
+                        data: JSON.stringify(ids),
+                        contentType: "application/json; charset=utf-8",
+                        url: '/api/job_post',
+                        success: function () {
+                            $remove.prop('disabled', true);
+                            $table.bootstrapTable('refresh');
+                        },
+                        error: function (e) {
+                            if (e.status == 500) {
+                                $.notify({
+                                    icon: 'fa fa-exclamation-triangle',
+                                    message: "The item is referenced. You can't delete it.",
+                                },{
+                                    type: 'danger'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id
+                });
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;

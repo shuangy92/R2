@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain.job;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.User;
 import lombok.Data;
 
@@ -19,9 +20,8 @@ public class Department implements Serializable {
     @Column(name = "department_id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User manager;
+    @Column(name = "manager_id")
+    private Long managerId;
 
     @Column(name = "name")
     private String name;

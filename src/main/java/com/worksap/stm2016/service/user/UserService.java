@@ -2,6 +2,7 @@ package com.worksap.stm2016.service.user;
 
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
 import com.worksap.stm2016.form.UserCreateForm;
@@ -44,6 +45,10 @@ public class UserService {
         return userRepository.findOneByEmail(email);
     }
 
+    public Iterable<User> getAllByDepartment(Department department) {
+        return userRepository.findByDepartment(department);
+    }
+
     public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
@@ -58,8 +63,10 @@ public class UserService {
                 Specification spec;
                 if (key.equals("role")) {
                     spec = isValue(key, Role.valueOf(search));
-                } else if (key.equals("status")) {
-                    spec = isValue(key, UserStatus.valueOf(search));
+                } else if (key.equals("department")) {
+                    spec = isValue(key, "name", search);
+                } else if (key.equals("location")) {
+                    spec = isValue("department", "location", search);
                 } else if (key.equals("id")) {
                     spec = isValue(key, Long.parseLong(search));
                 } else { //key = name

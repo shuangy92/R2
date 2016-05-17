@@ -39,6 +39,14 @@ public class BasicSpecs {
             }
         };
     }
+    public static <S, T> Specification<T> isValue(String c_name, String cc_name, String ccc_name, S value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.equal(root.get(c_name).get(cc_name).get(ccc_name), value);
+            }
+        };
+    }
     public static <T> Specification<T> hasValue(String c_name, String value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,

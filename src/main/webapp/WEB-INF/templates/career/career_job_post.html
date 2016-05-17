@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout_career">
+<head>
+    <title>Job Post</title>
+</head>
+<body>
+
+<!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
+<div layout:fragment="content">
+    <h3 id="title"></h3>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4">Department: <span id="departmentName"></span></div>
+        <div class="col-md-4">Location: <span id="location"></span></div>
+        <div class="col-md-4">Open Positions: <span id="vacancies"></span></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Job Code: <span id="jobId"></span></div>
+        <div class="col-md-4">Job Category: <span id="jobCategory"></span></div>
+        <div class="col-md-4">Updated: <span id="updated"></span></div>
+    </div>
+    <hr/>
+
+    <div>
+        <label for="description" >Job Description:</label>
+        <p id="description"></p>
+    </div>
+    <div>
+        <label for="requirement" >Job Requirement:</label>
+        <p id="requirement"></p>
+    </div>
+    <div>
+        <label for="deadline" >Deadline for Application:</label>
+        <p id="deadline"></p>
+    </div>
+    <hr/>
+
+    <label>About Contract</label>
+    <div class="row">
+        <div class="col-md-4">Standard Hours: <span id="hours"></span></div>
+        <div class="col-md-4">Pay Rate: <span id="payRate"></span></div>
+        <div class="col-md-4">Salary: <span id="salary"></span></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Contract Starting Date: <span id="startDate"></span></div>
+        <div class="col-md-4">Contract Ending Date: <span id="endDate"></span></div>
+        <div class="col-md-4">Contract Length: <span id="contractLength"></span></div>
+    </div>
+
+    <br/>
+    <div id="apply-btn"></div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+
+        var job_post;
+        jQuery(document).ready(function ($) {
+            var job_post_id = window.location.pathname.split("/")[3];
+            $.ajax({
+                type: 'get',
+                url: '/api/public/job_post/' + job_post_id,
+                success: function (data) {
+                    job_post = data;
+                    $.each(data, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            if (v) {
+                                sel.html(v);
+                            } else {
+                                sel.html("N/A")
+                            }
+                        }
+                    });
+                    $("#jobId").html(data.job.id);
+                    $("#departmentName").html(data.department.name);
+                    $("#location").html(data.department.location);
+                    $("#jobCategory").html(data.job.jobCategory.name);
+                    $("#updated").html((new Date(data.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss"));
+                    if (checkJobApplicationExistence(data.id) && [[${currentUser}]] != null) {
+                        $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()" disabled="disabled">Apply</button>');
+                    } else {
+                        $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()">Apply</button>');
+                    }
+                }
+            });
+        });
+
+        function applyJob() {
+            if ([[${currentUser}]] == null) {
+                if (confirm("Please log in first. Do you want to log in now ?")) {
+                    window.location.href = "/login";
+                }
+            } else {
+                var role = [[${currentUser}]].role;
+                if (role["$name"] != "APPLICANT") {
+                    alert("You are already an employee");
+                } else {
+                    localStorage.setItem("job_post", JSON.stringify(job_post));
+                    window.location.href = "/career/applicant_profile_submit"
+                }
+            }
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>
+
+
+

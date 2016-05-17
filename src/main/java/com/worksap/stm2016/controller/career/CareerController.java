@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -31,6 +32,11 @@ public class CareerController {
     @PreAuthorize("hasAuthority('APPLICANT')")
     @RequestMapping(value = "/career/applicant_profile_submit", method = RequestMethod.GET)
     public String getApplicationSubmitPage() {
-        return "career/applicant_profile_submit";
+        return "career/applicant_profile_form";
+    }
+
+    @RequestMapping(value = "/career/job_post/{id}", method = RequestMethod.GET)
+    public String getJobPostPage(@PathVariable Long id) {
+        return "career/career_job_post";
     }
 }

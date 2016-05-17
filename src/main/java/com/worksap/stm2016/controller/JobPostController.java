@@ -14,16 +14,21 @@ public class JobPostController {
 
     @RequestMapping(value = "/job_post/create", method = RequestMethod.GET)
     public String getJobPostFormPage() {
-        return "job/job_post_form";
+        return "recruitment/job_post_form";
     }
 
     @RequestMapping(value = "/job_post/{id}", method = RequestMethod.GET)
     public String getJobPostFormPage(@PathVariable Long id) {
-        return "job/job_post_form";
+        return "recruitment/job_post_form";
     }
 
-    @RequestMapping(value = "/job_posts", method = RequestMethod.GET)
+    @RequestMapping(value = "/job_post", method = RequestMethod.GET)
     public String getJobPostListPage() {
-        return "job/job_posts";
+        return "recruitment/job_post_list";
+    }
+
+    @RequestMapping(value = "/job_application", method = RequestMethod.GET)
+    public String getJobApplicationListPage() {
+        return "recruitment/job_application_list";
     }
 }

@@ -23,16 +23,8 @@ public class Contract implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
-
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department; //===
 
     @Column(name = "startDate")
     @Type(type="date")

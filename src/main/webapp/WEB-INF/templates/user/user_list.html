@@ -57,8 +57,13 @@
                     sortable: true,
                     filterControl: 'select'
                 }, {
-                    field: 'status',
-                    title: 'Status',
+                    field: 'department',
+                    title: 'Department',
+                    sortable: true,
+                    filterControl: 'select'
+                }, {
+                    field: 'location',
+                    title: 'Location',
                     sortable: true,
                     filterControl: 'select'
                 }],
@@ -81,6 +86,13 @@
                     data.filter = p.filter;
                     return data;
                 },
+                responseHandler: function(res) {
+                    $.each(res.rows, function( i, v ) {
+                        res.rows[i].location = res.rows[i].department.location;
+                        res.rows[i].department = res.rows[i].department.name;
+                    });
+                    return res;
+                },
                 detailFormatter: function (index, row, element) {
                     var url = '/api/user/' + row.id;
                     var result;
@@ -97,7 +109,6 @@
                             '<dl class="col-md-4 dl-horizontal">' +
                             '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
                             '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
-                            '<dt>Status</dt>' + '<dd>' + user.status + '</dd>' +
                             '</dl>';
                             var active = "";
                             if (user.active == false) {

@@ -13,7 +13,7 @@
     <h1>User Profile</h1>
     <div class="col-sm-6">
         <div class="basic-info">
-            <form class="form-horizontal" role="basic-form">
+            <form class="form-horizontal" role="form" id="basic-form">
                 <div class="form-group">
                     <label for="name" class="col-sm-4 control-label">Name</label>
                     <div class="col-sm-8">
@@ -29,7 +29,7 @@
             </form>
         </div>
         <hr/>
-        <div class="detail-info">
+        <div class="contact-info">
             <form class="form-horizontal" role="form" id="contact-form">
                 <div class="form-group">
                     <label for="phone" class="col-sm-4 control-label">Phone</label>
@@ -62,12 +62,12 @@
                     </div>
                 </div>
             </form>
-            <a href="/career/applicant_profile_submit" target="_blank">Edit</a>
+            <a href="/career/applicant_profile_submit">Edit</a>
         </div>
         <hr/>
         <div class="file-info">
             <div th:replace="fragments/user_file_list :: user_file_list"></div>
-            <a href="/career/applicant_profile_submit" target="_blank">Edit</a>
+            <a href="/career/applicant_profile_submit">Edit</a>
         </div>
     </div>
     <script type="text/javascript" th:inline="javascript">
