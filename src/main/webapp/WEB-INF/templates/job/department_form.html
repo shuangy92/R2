@@ -16,7 +16,7 @@
         <h3>Department</h3>
         <form class="form-horizontal" role="form" id="department-form">
             <div class="col-sm-6">
-                <div class="form-group hide">
+                <div class="form-group">
                     <label for="id" class="col-sm-4 control-label">ID</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="id" id="id" name="id" required="required" readonly="readonly"/>
@@ -28,7 +28,7 @@
                         <input class="form-control" placeholder="Department Name" id="name" name="name" required="required"/>
                     </div>
                 </div>
-                <div class="form-group required hide">
+                <div class="form-group required">
                     <label for="manager" class="col-sm-4 control-label">Manager</label>
                     <div class="col-sm-8">
                         <select class="form-control manager-select" id="manager" name="managerId">
@@ -42,86 +42,64 @@
                         <input class="form-control" placeholder="Location" type="input" id="location" name="location" required="required"/>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="save" style="float: right">save</button>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
     <script type="text/javascript" th:inline="javascript">
         var department;
         jQuery(document).ready(function ($) {
-            if (window.location.pathname == "/department/create") {
-                handleFormSubmission("post");
-            } else {
-                $("#department-form .hide").removeClass('hide');
-                $.ajax({
-                    type: 'get',
-                    url: '/api' + window.location.pathname,
-                    success: function (data) {
-                        department = data;
-                        $.each(department, function (k, v) {
-                            var sel = $("#" + k);
-                            if (sel.length) {
-                                sel.val(v);
-                            }
-                        });
-
-                        initManagerCandidateList();
-                        handleFormSubmission("put");
-                    }
-                });
-            }
-        });
-
-        function handleFormSubmission(method) {
-            $('form').on('submit', function (e) {
-                e.preventDefault();
-                var data = {};
-                $.each($('form').serializeArray(), function(i, field) {
-                    switch (field.name) {
-                        case "managerId":
-                            data[field.name] = parseInt(field.value);
-                            break;
-                        default:
-                            data[field.name] = field.value;
-                    }
-                });
-                var notify = $.notify({
-                    icon: 'fa fa-info-circle',
-                    message: "Saving...",
-                });
-                $.ajax({
-                    type: method,
-                    url: "/api/department/",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        window.location.href = "/department";
-                    }
-                });
-            })
-        }
-        function initManagerCandidateList() {
             $.ajax({
                 type: 'get',
-                url: "/api/user/department/" + department.id,
+                url: '/api' + window.location.pathname,
                 success: function (data) {
-                    var candidates = $.map(data, function (obj) {
-                        return {id: obj.id, text: obj.name};
-                    })
-                    $(".manager-select").select2({
-                        data: candidates
+                    department = data;
+                    $.each(department, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            sel.val(v);
+                        }
                     });
-
-                    if (department.manager) {
-                        $(".manager-select").data('select2').trigger('select', {
-                            data: {"id": department.manager.id, "text": department.manager.name}
-                        });
-                    }
-
+                    initDepartmentMemberList($(".manager-select"));
                 }
             });
 
+            $('#department-form').on('submit', function (e) {
+                e.preventDefault();
+                submitDepartmentForm();
+            })
+        });
+
+        function submitDepartmentForm() {
+            var data = {};
+            $.each($('form').serializeArray(), function(i, field) {
+                switch (field.name) {
+                    case "managerId":
+                        data[field.name] = parseInt(field.value);
+                        break;
+                    default:
+                        data[field.name] = field.value;
+                }
+            });
+            $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+            $.ajax({
+                type: "PUT",
+                url: "/api/department/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    window.location.href = "/department";
+                }
+            });
         }
+
 
     </script>
 </div>

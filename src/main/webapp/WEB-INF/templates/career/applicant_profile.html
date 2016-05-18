@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout_career">
 <head>
     <title>User Profile</title>
 
@@ -72,11 +72,25 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
         var editable = false;
+
         jQuery(document).ready(function ($) {
             $("form :input").attr("readonly", true);
+
+            var uid;
+            if (window.location.pathname == "/career/user/profile") {
+                uid = [[${currentUser.id}]];
+            } else {
+                uid = window.location.pathname.split("/")[3];
+            }
+            loadBasicForm(uid);
+            initFileListTable(uid);
+            loadContactFormData("/api/user/profile/" + [[${currentUser.id}]])
+        });
+
+        function loadBasicForm(id) {
             $.ajax({
                 type: "GET",
-                url: "/api/user/" + [[${currentUser.id}]],
+                url: "/api/user/" + id,
                 success: function (data) {
                     if (data != null) {
                         $.each(data, function (k, v) {
@@ -88,8 +102,7 @@
                     }
                 }
             })
-            loadContactFormData("/api/user/profile/" + [[${currentUser.id}]])
-        });
+        }
     </script>
 </div>
 </body>

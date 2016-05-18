@@ -55,7 +55,7 @@ function initCountryList() {
         }
     });
 }
-function initDepartmentList() {
+function initDepartmentList($select , placeholder) {
     var departments;
     $.ajax({
         type: 'get',
@@ -64,13 +64,48 @@ function initDepartmentList() {
             departments = $.map(data, function(obj) {
                 return { id: obj.id, text: obj.name };
             })
-            $(".department-select").select2({
-                data: countries
+            $select.select2({
+                data: departments,
+                placeholder: placeholder
             });
         }
     });
 }
 
+function initDepartmentMemberList($select, placeholder) {
+    if (!department) {
+        $select.html('').select2({data: [{id: '', text: ''}]});
+        $select.select2({
+            maximumSelectionLength: 1,
+            allowClear: true,
+            placeholder: placeholder,
+        });
+    } else {
+        $.ajax({
+            type: 'get',
+            url: "/api/user/department/" + department.id,
+            success: function (data) {
+                var candidates = $.map(data, function (obj) {
+                    return {id: obj.id, text: obj.name};
+                })
+                //$select.html('').select2({data: [{id: '', text: ''}]});
+                $select.select2({
+                    data: candidates,
+                    minimumSelectionLength: 1,
+                    allowClear: true,
+                    placeholder: placeholder,
+                });
+
+                if (department.manager) {
+                    $select.data('select2').trigger('select', {
+                        data: {"id": department.manager.id, "text": department.manager.name}
+                    });
+                }
+
+            }
+        });
+    }
+}
 function loadContactFormData(url) {
     $.ajax({
         url: url,
@@ -144,3 +179,18 @@ function logout(data) {
             window.location.href = "/";
         });
 }
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};

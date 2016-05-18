@@ -83,7 +83,13 @@
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter={};
+                    for(var key in tmp) {
+                        filter[key]=tmp[key];
+                    }
+                    filter.notRole = "APPLICANT";
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
                 responseHandler: function(res) {

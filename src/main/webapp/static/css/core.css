@@ -184,7 +184,7 @@
     margin-top: 25%;
 }
 /** request */
-.btn-request.approve, .btn-request.decline {
+.btn-request {
     display: block;
     width: 150px;
     margin: auto;

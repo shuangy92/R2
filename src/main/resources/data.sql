@@ -4,7 +4,7 @@
 -- Dependencies: 411
 -- Data for Name: person; Type: TABLE DATA; Schema: ss1604c200_rd2; Owner: ss1604c200
 --
-/*INSERT INTO department (location, name) VALUES ('shanghai', 'Dept1');
+INSERT INTO department (location, name) VALUES ('shanghai', 'Dept1');
 INSERT INTO department (location, name) VALUES ('beijing', 'Dept2');
 INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'admin@gmail.com', 'admin', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'ADMIN', 'NORMAL', 1);
 INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'manager@gmail.com', 'manager', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'MANAGER', 'NORMAL', 1);
@@ -263,4 +263,3 @@ INSERT INTO country (code, name) VALUES ('YU', 'Yugoslavia');
 INSERT INTO country (code, name) VALUES ('ZR', 'Zaire');
 INSERT INTO country (code, name) VALUES ('ZM', 'Zambia');
 INSERT INTO country (code, name) VALUES ('ZW', 'Zimbabwe');
-*/

@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.*;
 
 @Service
 public class UserService {
@@ -65,10 +63,14 @@ public class UserService {
                     spec = isValue(key, Role.valueOf(search));
                 } else if (key.equals("department")) {
                     spec = isValue(key, "name", search);
+                } else if (key.equals("departmentId")) {
+                    spec = isValue("department", "id", Long.parseLong(search));
                 } else if (key.equals("location")) {
                     spec = isValue("department", "location", search);
                 } else if (key.equals("id")) {
                     spec = isValue(key, Long.parseLong(search));
+                } else if (key.equals("notRole")) {
+                    spec = isNotValue("role", Role.valueOf(search));
                 } else { //key = name
                     spec = hasValue(key, search);
                 }
@@ -78,6 +80,10 @@ public class UserService {
 
         JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
         return result;
+    }
+
+    public Iterable<User> getByNameContaining(String name) {
+        return userRepository.findByNameContainingIgnoreCase(name);
     }
 
     public User save(User user){

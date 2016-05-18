@@ -4,6 +4,7 @@ package com.worksap.stm2016.domain.recruitment;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.Job;
+import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
 import org.hibernate.annotations.Type;
@@ -48,6 +49,10 @@ public class JobPost implements Serializable {
 
     @Column(name = "published", nullable = false)
     private Boolean published = false;
+
+    @ManyToOne
+    @JoinColumn(name = "review_flow_id")
+    private ReviewFlow reviewFlow;
 
     /* from staffing request */
 

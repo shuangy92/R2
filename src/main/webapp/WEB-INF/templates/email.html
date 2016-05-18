@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Email</title>
+</head>
+<body>
+
+<!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
+<div layout:fragment="content">
+
+    <div th:replace="fragments/email_form :: email_form"></div>
+
+</div>
+</body>
+</html>

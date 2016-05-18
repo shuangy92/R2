@@ -31,7 +31,6 @@ public class UserController {
         binder.addValidators(userCreateFormValidator);
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUserResigned(principal, #id)")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public String getUserProfilePage(@PathVariable Long id) {
         return "user/user_profile_form";
@@ -42,7 +41,7 @@ public class UserController {
         return "user/user_profile_form";
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUserResigned(principal, #id)")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/career/user/{id}", method = RequestMethod.GET)
     public String getApplicantProfilePage(@PathVariable Long id) {
         return "career/applicant_profile";

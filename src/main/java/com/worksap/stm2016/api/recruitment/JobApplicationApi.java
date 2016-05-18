@@ -1,14 +1,20 @@
 package com.worksap.stm2016.api.recruitment;
 
 import com.worksap.stm2016.audit.CurrentUser;
+import com.worksap.stm2016.domain.Contract;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.UserProfile;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.service.job.ContractService;
 import com.worksap.stm2016.service.recruitment.JobApplicationService;
 import com.worksap.stm2016.service.recruitment.JobPostService;
+import com.worksap.stm2016.service.user.UserProfileService;
+import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -36,6 +42,12 @@ public class JobApplicationApi {
     JobApplicationService jobApplicationService;
     @Autowired
     JobPostService jobPostService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserProfileService userProfileService;
+    @Autowired
+    ContractService contractService;
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public JobApplication get(@PathVariable("id") Long id){
@@ -76,7 +88,28 @@ public class JobApplicationApi {
 
     @RequestMapping(method = RequestMethod.PUT)
     public JobApplication update(@RequestBody JobApplication jobApplication){
+        if (jobApplication.getStatus() == JobApplication.JobApplicationStatus.PASSED) {
+            JobPost jobPost = jobApplication.getJobPost();
+            Contract contract = new Contract();
+            contract.setJob(jobPost.getJob());
+            contract.setStartDate(jobPost.getStartDate());
+            contract.setEndDate(jobPost.getEndDate());
+            contract.setPayRate(jobPost.getPayRate());
+            contract.setSalary(jobPost.getSalary());
+            contract = contractService.save(contract);
 
+            User applicant = jobApplication.getApplicant();
+            applicant.setRole(Role.EMPLOYEE);
+            applicant.setDepartment(jobApplication.getJobPost().getDepartment());
+            userService.update(applicant);
+
+            UserProfile userProfile = userProfileService.getProfile(applicant.getId());
+            if (userProfile == null) {
+                userProfile = new UserProfile();
+            }
+            userProfile.setContract(contract);
+            userProfileService.saveOrUpdateProfile(userProfile);
+        }
         return jobApplicationService.update(jobApplication);
     }
 

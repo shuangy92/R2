@@ -62,8 +62,13 @@ public class UserApi {
         return userService.getList( sort, order, limit, offset, filter);
     }
 
+    @RequestMapping(value="/name", method = RequestMethod.GET)
+    public Iterable<User> getByNameContaining(@RequestParam(name = "name") String name) {
+        return userService.getByNameContaining(name);
+    }
+
     @RequestMapping(value="/department/{id}", method = RequestMethod.GET)
-    public Iterable<User> getAllByDepartment(@PathVariable("id") Long id) throws ParseException {
+    public Iterable<User> getAllByDepartment(@PathVariable("id") Long id) {
         return userService.getAllByDepartment(departmentService.get(id));
     }
 

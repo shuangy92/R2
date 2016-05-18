@@ -11,51 +11,93 @@
 </head>
 <body>
 <div th:fragment="email_form">
+    <div class="modal fade" id="emailModel" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Send Email</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="email-form" class="form-horizontal">
+                        <div class="form-group required">
+                            <label for="subject" class="col-sm-2 control-label">Subject</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="subject" placeholder="subject" required="required" size="60" />
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="to" class="col-sm-2 control-label">To</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="to" placeholder="johnsmith@example.com" required="required" size="60" readonly="readonly"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="body" class="col-sm-2 control-label">Body</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="body" required="required"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button type="submit" class="btn btn-success" >Send</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <h1>Spring email with Thymeleaf</h1>
-    <h2>Editable HTML email</h2>
-    <form action="sent.html" method="post">
-        <fieldset>
-            <input type="text" class="subject"
-                   placeholder="subject" required="required" size="60" /> <br />
-            <input type="email" class="to"
-                   placeholder="johnsmith@example.com" required="required" size="60" /> <br />
-            <input type="text" class="toName"
-                   placeholder="johnsmith" required="required" size="60" /> <br />
-            <input type="text" class="fromName"
-                   placeholder="me" required="required" size="60" /> <br />
-            <textarea id="body" class="body"
-                      required="required"></textarea>
-            <!--<script>
-                CKEDITOR.replace('body', {
-                    allowedContent : true,
-                    height: '400px'
-                });
-            </script>-->
-            <br />
-            <input type="submit" value="Send mail" class="button-primary" />
-        </fieldset>
-    </form>
 
     <script type="text/javascript" th:inline="javascript">
-
+        var recipient;
         jQuery(document).ready(function ($) {
-            $("form").submit(function(e) {
+            $("#email-form").submit(function(e) {
                 e.preventDefault();
-                data = {};
-                data.fromName = $(".fromName").val();
-                data.to = $(".to").val();
-                data.toName = $(".toName").val();
-                data.subject = $(".subject").val();
-                data.body = $(".body").val();
+                submitEmailForm();
+            })
 
-                $.post("/api/email", data)
-                        .done(function (data) {
-                            console.log(data);
+            $('#emailModel').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var toUid = button.data('touid') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
 
-                            });
-                        });
+                $.ajax({
+                    type: "get",
+                    url: "/api/user/" + toUid,
+                    async: false,
+                    success: function (data) {
+                        recipient = data;
+                    }
+                });
+                var modal = $(this);
+                modal.find('.modal-title').text('New email to ' + recipient.name);
+                modal.find('.modal-body #toName').val(recipient.name);
+                modal.find('.modal-body #to').val(recipient.name + ' (' + recipient.email + ')');
+            })
         });
+
+        function submitEmailForm() {
+            data = {};
+            data.from = [[${currentUser.user}]];
+            data.to = recipient;
+
+            data.subject = $("#subject").val();
+            data.body = $("#body").val();
+
+            $.ajax({
+                type: "post",
+                url: "/api/email",
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
 
 
     </script>

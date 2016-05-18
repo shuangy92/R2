@@ -26,13 +26,6 @@ public class CurrentUserServiceImpl implements CurrentUserService {
     }
 
     @Override
-    public boolean canAccessUserResigned(CurrentUser currentUser, Long userId) {
-        //LOGGER.debug("Checking if user={} has access to user={}", currentUser, userId);
-        return currentUser != null
-                && (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MANAGER || currentUser.getId().equals(userId));
-    }
-
-    @Override
     public boolean canAccessRequest(CurrentUser currentUser, Long requestId) {
         Request request = (Request) requestRepository.findOne(requestId);
         return currentUser != null

@@ -49,6 +49,7 @@
         function initTable() {
             var url = "/api/job_category";
             var $table = $('#table');
+            var selections = [];
 
             $table.bootstrapTable({
                 columns: [{
@@ -105,7 +106,8 @@
                 filterControl: true,
                 cookie: true,
                 cookieIdTable: 'job_category',
-                editable: true
+                editable: true,
+                maintainSelected: true
             });
 
             var $remove = $("#btn-delete-row");
@@ -133,24 +135,18 @@
             });
 
             $table.on('check.bs.table uncheck.bs.table ' +
-                    'check-all.bs.table uncheck-all.bs.table', function () {
+                    'check-all.bs.table uncheck-all.bs.table', function (e, rows) {
                 $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
             });
             $remove.click(function () {
                 var ids = getIdSelections();
                 if (confirm("Are you sure to delete?")) {
-
-
                     $.ajax({
                         type: "delete",
                         data: JSON.stringify(ids),
                         contentType: "application/json; charset=utf-8",
                         url: '/api/job_category',
                         success: function () {
-                            $table.bootstrapTable('remove', {
-                                field: 'id',
-                                values: ids
-                            });
                             $remove.prop('disabled', true);
                             $table.bootstrapTable('refresh');
                         },
@@ -172,6 +168,7 @@
                     return row.id
                 });
             }
+
         }
 
     </script>

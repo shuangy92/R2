@@ -6,8 +6,6 @@ public interface CurrentUserService {
 
     boolean canAccessUser(CurrentUser currentUser, Long userId);
 
-    boolean canAccessUserResigned(CurrentUser currentUser, Long userId);
-
     boolean canAccessRequest(CurrentUser currentUser, Long requestId);
 
     boolean hasLoggedIn(CurrentUser currentUser);

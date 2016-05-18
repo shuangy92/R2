@@ -1,6 +1,8 @@
 package com.worksap.stm2016.domain.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.recruitment.JobPost;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,12 +21,17 @@ public class ReviewResponse implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "review_run_id")
     private ReviewRun reviewRun;
+
+    @ManyToOne
+    @JoinColumn(name = "job_post_id")
+    private JobPost jobPost;
 
     @Column(name = "response")
     private String response;

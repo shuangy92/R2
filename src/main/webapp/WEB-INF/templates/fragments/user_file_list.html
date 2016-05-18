@@ -27,12 +27,12 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
         jQuery(document).ready(function ($) {
-            initTable();
+            //initFileListTable();
             if (editable) {
                 $(".file-upload-form").show();
             }
         });
-        function initTable() {
+        function initFileListTable(uid) {
             var url = "/api/file";
             var $table = $('#table');
 
@@ -62,6 +62,9 @@
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
+                    var filter={};
+                    filter.uid = "" + uid;
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
                 sortOrder: 'asc',

@@ -1,10 +1,15 @@
 package com.worksap.stm2016.domain.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.worksap.stm2016.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,16 +23,27 @@ public class ReviewRun implements Serializable {
     @Column(name = "review_run_id", nullable = false, updatable = false)
     private Long id;
 
+    @Column(name = "run_number")
+    private Short runNumber;
+
+    @Column(name = "task")
+    private String task;
+
+    @Column(name = "deadline")
+    private Date deadline;
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "review_flow_id")
     private ReviewFlow reviewFlow;
 
-    @Column(name = "run_number")
-    private Short runNumber;
+    @OneToMany
+    @JoinColumn(name = "reviewers")
+    private List<User> reviewers = new ArrayList<>();
 
-    @Column(name = "title")
-    private String title;
+    @Override
+    public String toString() {
+        return "";
+    }
 
-    @Column(name = "deadline")
-    private Date deadline;
 }

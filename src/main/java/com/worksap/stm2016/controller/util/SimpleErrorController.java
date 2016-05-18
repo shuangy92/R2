@@ -1,4 +1,4 @@
-package com.worksap.stm2016.controller;
+package com.worksap.stm2016.controller.util;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

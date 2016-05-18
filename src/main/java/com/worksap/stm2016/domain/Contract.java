@@ -35,7 +35,7 @@ public class Contract implements Serializable {
     private Date endDate;
 
     @Column(name = "salary")
-    private Integer salary;
+    private String salary;
 
     @Column(name = "pay_rate")
     @Enumerated(EnumType.STRING)

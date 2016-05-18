@@ -55,7 +55,7 @@ public class FileService {
                 String search = (String) filterObj.get(key);
                 Specification spec;
                 //if (key.equals("user")) {
-                    spec = isValue(key, search);
+                    spec = isValue("user", "id", Long.parseLong(search));
                 //}
                 specs.add(spec);
             }

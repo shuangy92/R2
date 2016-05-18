@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Job Post List</title>
+    <script type="text/javascript" th:src="@{/static/js/jquery.tablednd.min.js}"></script>
+
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/reorder-rows/bootstrap-table-reorder-rows.js}"></script>
+
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Review Flow</h3>
+        <form role="form" id="review-flow-form">
+            <div class="form-group">
+                <label for="reviewers" class=" control-label">Title</label>
+                    <input class="form-control" placeholder="Title" id="review-flow-title" name="review-flow-title" required="required"/>
+            </div>
+            <br/>
+
+            <div id="toolbar" class="btn-group">
+                <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#popup-model">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+                <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
+            </div>
+            <table id="table"
+                   data-toolbar="#toolbar"
+                   data-sortable="true"
+                   data-show-refresh="true"
+                   data-show-toggle="true"
+                   data-show-columns="true"
+                   data-show-export="true"
+                   data-pagination="true"
+                   data-side-pagination="server"
+                   data-page-list="[ALL]"
+                   data-minimum-count-columns="1"
+                   data-id-field="id"
+                   smartDisplay="true">
+            </table>
+            <button type="submit" class="btn btn-primary" id="btn-save" style="float: right">save</button>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="popup-model" tabindex="-1" role="dialog" aria-labelledby="popup-modelLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="popup-modelLabel">Create a review run</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="review-run-form" style="padding: 10px 0px;">
+                        <div class="form-group required">
+                            <label for="task" class="col-sm-4 control-label">Task</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Task" id="task" name="task" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="reviewers" class="col-sm-4 control-label">Reviewers</label>
+                            <div class="col-sm-8">
+                                <select class="form-control reviewer-select" id="reviewers" name="reviewers" multiple="multiple" style="width: 100%" required="required"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewers" class="col-sm-4 control-label">Department Filter</label>
+                            <div class="col-sm-8">
+                                <select class="form-control department-select" style="width: 100%"><option></option></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button type="submit" class="btn btn-success" >Create</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        var review_flow;
+        var $table = $('#table');
+        jQuery(document).ready(function ($) {
+
+            initTable();
+
+            $("#review-flow-form").on('submit', function (e) {
+                e.preventDefault();
+                submitReviewFlowForm();
+            })
+            $("#review-run-form").on('submit', function (e) {
+                e.preventDefault();
+                submitReviewRunForm();
+            })
+        });
+
+        function initTable() {
+
+            var columns =[{
+                field: 'state',
+                checkbox: true
+            }, {
+                field: 'runNumber',
+                title: 'Run No.',
+                formatter: function (index, row, element) {
+                    return element;
+                }
+            }, {
+                field: 'task',
+                title: 'Task'
+            }, {
+                field: 'reviewers',
+                title: 'Reviewers',
+                formatter: function (index, row, element) {
+                    var result = "";
+                    $.each(index, function( i, v ) {
+                        result += '<a target="_blank" href="/user/' + v.id + '">' + v.name + '</a><br/>';
+                    });
+                    return result;
+                }
+            }];
+
+            $table.bootstrapTable({
+                columns: columns,
+                url: '/api' + window.location.pathname,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "lastModifiedDate";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                responseHandler: function(res) {
+                    review_flow = res;
+                    $("#review-flow-title").val(review_flow.title);
+
+                    var data = {};
+                    data.rows = res.runs;
+                    data.total = res.runs.length;
+                    return data;
+                },
+                sortOrder: 'asc',
+                cookie: true,
+                cookieIdTable: 'review_run',
+                //reorderableRows: true,
+            });
+
+            var $remove = $("#btn-delete-row");
+            var $insert = $("#btn-add-row");
+
+            $insert.on('click', function () {
+                initReviewRunForm();
+            })
+            $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            });
+            $remove.click(function () {
+                var ids = getIdSelections();
+                if (confirm("Are you sure to delete?")) {
+                    $.ajax({
+                        type: "delete",
+                        data: JSON.stringify(ids),
+                        contentType: "application/json; charset=utf-8",
+                        url: '/api' + window.location.pathname,
+                        success: function () {
+                            $remove.prop('disabled', true);
+                            $table.bootstrapTable('refresh');
+                        },
+                        error: function (e) {
+                            if (e.status == 500) {
+                                $.notify({
+                                    icon: 'fa fa-exclamation-triangle',
+                                    message: "The item is referenced. You can't delete it.",
+                                },{
+                                    type: 'danger'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id
+                });
+            }
+        }
+        function submitReviewRunForm() {
+            var reviewers = [];
+            $.each($(".reviewer-select").val(), function( i, v ) {
+                var reviewer = {}
+                reviewer.id = parseInt(v);
+                reviewers.push(reviewer);
+            });
+            var data = {};
+            data.reviewers = reviewers;
+            data.task = $("#review-run-form #task").val();
+            data.reviewFlow = review_flow;
+            $.ajax({
+                type: 'post',
+                url: '/api/review_flow/run',
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (data) {
+                    review_flow = data;
+                    $('#popup-model').modal('hide')
+                    $table.bootstrapTable('refresh');
+
+                }
+            });
+        }
+
+        function submitReviewFlowForm() {
+            var data = {};
+            if (!review_flow) {
+                review_flow = {};
+            }
+            review_flow.title = $("#review-flow-title").val();
+            $.ajax({
+                type: 'post',
+                url: '/api/review_flow',
+                data: JSON.stringify(review_flow),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (data) {
+                    review_flow = data;
+                    window.location.href = "/review_flow";
+                }
+            });
+        }
+
+        var department;
+        var $department_select;
+        function initReviewRunForm() {
+            $department_select = $(".department-select");
+            var $reviewer_select = $(".reviewer-select");
+            $('#review-run-form').trigger("reset");
+            department = null;
+            initDepartmentList($department_select, "Filter employees by department");
+            initCandidateList($reviewer_select, "Select reviewers");
+        }
+        function initCandidateList($select, placeholder) {
+            $select.select2({
+                placeholder: "Reviewers",
+                allowClear: true,
+                ajax: {
+                    url: "/api/user",
+                    contentType: "application/json; charset=utf-8",
+                    delay: 250,
+                    cache: true,
+                    data: function (params) {
+                        var data = {};
+                        data.sort = "name";
+                        data.order = "asc";
+                        data.limit = 20;
+                        data.offset = 0;
+                        var filter = {};
+                        filter.name = params.term;
+                        if ($department_select.val() != "") {
+                            filter.departmentId = $department_select.val();
+                        }
+                        data.filter = JSON.stringify(filter);
+                        return data;
+                    },
+                    processResults: function (data, params) {
+                        var candidates = $.map(data.rows, function (obj) {
+                            return {id: obj.id, text: obj.name + " (ID. " + obj.id + ")"};
+                        })
+                        return {
+                            results: candidates,
+                        };
+                    },
+                },
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

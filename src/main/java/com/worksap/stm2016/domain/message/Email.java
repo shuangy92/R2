@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
+import com.worksap.stm2016.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,22 +18,19 @@ public class Email implements Serializable {
     @Column(name = "email_id", nullable = false, updatable = false)
     private Long id;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "from_id", referencedColumnName = "user_id")
     private User from;
 
     @ManyToOne
     @JoinColumn(name = "to_id", referencedColumnName = "user_id")
-    private User to;*/
+    private User to;
 
-    @Column(name = "from_name")
-    private String fromName;
-
-    @Column(name = "to")
+    /*@Column(name = "to")
     private String to;
 
     @Column(name = "to_name")
-    private String toName;
+    private String toName;*/
 
     @Column(name = "subject")
     private String subject;

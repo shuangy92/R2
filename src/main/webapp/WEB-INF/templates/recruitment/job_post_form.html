@@ -29,6 +29,10 @@
                 <input class="form-control" type="input" id="departmentName" name="department" required="required" readonly="readonly"/>
             </div>
             <div class="form-group">
+                <label for="jobCategory" class="control-label">Job Category</label>
+                <input class="form-control" type="input" id="jobCategory" name="jobCategory" required="required" readonly="readonly"/>
+            </div>
+            <div class="form-group">
                 <label for="description" class="control-label">Job Description</label>
                 <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
             </div>
@@ -85,6 +89,11 @@
                     <label for="salary" class="control-label">Salary</label>
                     <input class="form-control" placeholder="Salary / Salary Range / Negotiable" type="input" id="salary" name="salary"/>
                 </div>
+                <div class="form-group">
+                    <label for="reviewFlowId" class="control-label">Review Flow ID</label>
+                    <a href="/review_flow" target="_blank" title="Click to view the review flow list">?</a>
+                    <input class="form-control" placeholder="Review Flow ID" type="number" id="reviewFlowId" name="reviewFlowId"/>
+                </div>
                 <button type="submit" class="btn btn-default" id="save">Save</button>
                 <button type="submit" class="btn btn-success" id="publish" style="display: none;">Publish</button>
                 <button type="submit" class="btn btn-warning" id="unpublish" style="display: none;">Unpublish</button>
@@ -95,6 +104,7 @@
 
     <script type="text/javascript" th:inline="javascript">
         var request;
+        var reviewFlow;
 
         function handleContractDate() {
             $("#startDate, #contractLength, input[name='contractLengthUnit']").change(function () {
@@ -107,7 +117,7 @@
                 $("#endDate").val(endDate.toString("yyyy-M-dd"));
             });
         }
-        function handleRequestData() {
+        function loadRequestData() {
             $.each(request, function (k, v) {
                 var sel = $("#" + k);
                 if (sel.length) {
@@ -119,65 +129,105 @@
             $('input:radio[name="contractLengthUnit"]').filter('[value="' + cl[1] +'"]').attr('checked', true);
 
             $("#jobId").val(request.job.id);
+            $("#jobCategory").val(request.job.jobCategory.name);
             $("#departmentName").val(request.department.name);
+
+            if (request.reviewFlow) {
+                $("#reviewFlowId").val(request.reviewFlow.id);
+            }
         }
         function handleFormSubmission(method) {
+
             $('form').on('submit', function (e) {
                 e.preventDefault();
-
-                var data = {};
-                $.each($('form').serializeArray(), function(i, field) {
-                    switch (field.name) {
-                        case "startDate":
-                        case "deadline":
-                            data[field.name] = Date.parse(field.value);
-                            break;
-                        case "contractLength":
-                            data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
-                            break;
-                        default:
-                            data[field.name] = field.value;
-                    }
-                });
-                data.job = request.job;
-                data.department = request.department;
-                data.endDate = request.endDate;
-
-                if (method == "put") {
-                    data.author = request.author;
-                    data.createdDate = request.createdDate;
-                    data.id = request.id;
+                checkReviewFlowExistence();
+                if (reviewFlow == null) {
+                    $.notify({
+                        icon: 'fa fa-info-circle',
+                        message: "Please input a valid review flow id.",
+                    }, {
+                        delay: 500,
+                    })
                 }
+                else {
+                    var data = {};
+                    $.each($('form').serializeArray(), function (i, field) {
+                        switch (field.name) {
+                            case "startDate":
+                            case "deadline":
+                                data[field.name] = Date.parse(field.value);
+                                break;
+                            case "contractLength":
+                                data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
+                                break;
+                            case "reviewFlowId":
+                                var reviewFlow = {};
+                                reviewFlow.id = field.value;
+                                data.reviewFlow = reviewFlow;
+                                break;
+                            default:
+                                data[field.name] = field.value;
+                        }
+                    });
+                    data.job = request.job;
+                    data.department = request.department;
+                    data.endDate = request.endDate;
 
-                var btn = $(document.activeElement)[0].id;
-                if (btn == "unpublish") {
-                    data.published = false;
-                } else if (btn == "publish") {
-                    data.published = true;
-                } else { // save
-                    data.published = request.published;
-                }
-
-                var notify = $.notify({
-                    icon: 'fa fa-info-circle',
-                    message: "Waiting...",
-                });
-                $.ajax({
-                    type: method,
-                    url: '/api/job_post',
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (post) {
-                        notify.update('message', "Done");
-                        setTimeout(function() {
-                            notify.close();
-                        }, 1000);
-                        localStorage.removeItem("request");
-                        window.history.replaceState({}, '/job_post/create', '/job_post/' + post.id);
-                        window.location.href = "/job_post";
+                    if (method == "put") {
+                        data.author = request.author;
+                        data.createdDate = request.createdDate;
+                        data.id = request.id;
                     }
-                });
+
+                    var btn = $(document.activeElement)[0].id;
+                    if (btn == "unpublish") {
+                        data.published = false;
+                    } else if (btn == "publish") {
+                        data.published = true;
+                    } else { // save
+                        data.published = request.published;
+                    }
+
+                    var notify = $.notify({
+                        icon: 'fa fa-info-circle',
+                        message: "Waiting...",
+                    });
+                    $.ajax({
+                        type: method,
+                        url: '/api/job_post',
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (post) {
+                            notify.update('message', "Done");
+                            setTimeout(function () {
+                                notify.close();
+                            }, 1000);
+                            localStorage.removeItem("request");
+                            window.history.replaceState({}, '/job_post/create', '/job_post/' + post.id);
+                            window.location.href = "/job_post";
+                        }
+                    });
+                }
             });
+        }
+        function checkReviewFlowExistence() {
+            var id = $("#reviewFlowId").val();
+            if (id) {
+                $.ajax({
+                    type: 'get',
+                    url: '/api/review_flow/' + id,
+                    async: false,
+                    success: function (data) {
+                        reviewFlow = data;
+                        if (reviewFlow == "") {
+                            reviewFlow = null;
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                });
+            }
         }
         jQuery(document).ready(function ($) {
             $("#startDate").datepicker();
@@ -187,7 +237,7 @@
 
             if (window.location.pathname == "/job_post/create") {
                 request = JSON.parse(localStorage.getItem("request"));
-                handleRequestData();
+                loadRequestData();
                 handleFormSubmission("post");
                 $("#publish").show();
             } else {
@@ -196,7 +246,7 @@
                     url: '/api' + window.location.pathname,
                     success: function (data) {
                         request = data;
-                        handleRequestData();
+                        loadRequestData();
                         if (request.published == false) {
                             $("#publish").show();
                         } else {
@@ -211,8 +261,6 @@
                     }
                 });
             }
-
-
         });
     </script>
 </div>

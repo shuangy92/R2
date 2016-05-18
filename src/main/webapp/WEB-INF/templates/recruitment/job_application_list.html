@@ -30,8 +30,10 @@
                smartDisplay="true">
         </table>
     </div>
+    <div th:replace="fragments/email_form :: email_form"></div>
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
 
         jQuery(document).ready(function ($) {
             initTable();
@@ -53,7 +55,7 @@
                 title: 'Applicant',
                 sortable: true,
                 formatter: function (index, row, element) {
-                    return index.name;
+                    return '<a href="/career/user/' + index.id + '">' + index.name + '</a>';
                 }
             }, {
                 field: 'jobPostId',
@@ -113,32 +115,67 @@
                     });
                     return res;
                 },
+                detailFormatter: function (index, row, element) {
+                    var left, right;
+                    if (row.status != 'PASSED' && row.status != 'FAILED') {
+                        if (row.jobPost.reviewFlow) {
+                            left =
+                                    '<div class="col-md-8">' +
+                                    'Review Progress (under development): <a href="/review_flow/' + row.jobPost.reviewFlow.id + '">' + row.jobPost.reviewFlow.title + '</a>' +
+                                    '</div>';
+                        } else {
+                            left =
+                                    '<div class="col-md-8">' +
+                                    'Review Progress (under development): none' +
+                                    '</div>';
+                        }
+
+                        right = '<div class="col-md-4">' +
+                                '<button type="button" class="btn btn-success btn-request approve" onclick="handleApplicationStatus(\'PASSED\',' + index + ')">Approve</button>' +
+                                '<button type="button" class="btn btn-danger btn-request decline" onclick="handleApplicationStatus(\'FAILED\',' + index + ')">Decline</button>' +
+                                '</div>';
+                    } else {
+                        left =
+                                '<div class="col-md-8">' +
+                                '</div>';
+                        right =
+                                '<div class="col-md-4">' +
+                                '<button type="button" class="btn btn-primary btn-request" data-toggle="modal" data-target="#emailModel" data-touid="' + row.applicant.id + '">Send Email</a>' +
+                                '</div>';
+                    }
+                    return left + right;
+                },
                 filterControl: true,
                 cookie: true,
                 cookieIdTable: 'applicant_application',
             });
         }
-        function continueApplication(index) {
+        function handleApplicationStatus(status, index) {
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Waiting...",
+            });
             var application = $('#table').bootstrapTable('getData', true)[index];
-            localStorage.setItem("job_post", JSON.stringify(application.jobPost));
-            window.location.href = "/career/applicant_profile_submit"
-        }
-        function withdrewApplication(index) {
-            var application = $('#table').bootstrapTable('getData', true)[index];
-            if (confirm("Are you sure you would like to withdraw your application at this time?")) {
-                return $.ajax({
-                    url: "/api/job_application/",
-                    type: "DELETE",
-                    data: JSON.stringify(application),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        $('#table').bootstrapTable('refresh');
-                    }
-                });
-            }
+            application.status = status;
+
+            var url = "/api/job_application/";
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(application),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    notify.update('message', data);
+                    setTimeout(function() {
+                        notify.close();
+                    }, 1000);
+                    $('#table').bootstrapTable('updateRow', { index: index, row: application});
+                    $('#table').bootstrapTable('expandRow', index);
+                }
+            });
         }
 
-
+        //]]>
     </script>
 </div>
 </body>
