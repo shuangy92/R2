@@ -186,13 +186,14 @@
         function submitReviewFlowForm() {
             var data = {};
             data.title = $("#review-flow-title").val();
+
+            $('#popup-model').modal('hide')
             $.ajax({
                 type: 'post',
                 url: '/api/review_flow',
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $('#popup-model').modal('hide')
                     $table.bootstrapTable('refresh');
                 }
             });

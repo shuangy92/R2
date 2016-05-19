@@ -51,10 +51,10 @@ public abstract class Request implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "sender_message")
+    @Column(name = "sender_message", columnDefinition = "text")
     private String senderMessage;
 
-    @Column(name = "replier_message")
+    @Column(name = "replier_message", columnDefinition = "text")
     private String replierMessage;
 
     @Column(name = "send_date")

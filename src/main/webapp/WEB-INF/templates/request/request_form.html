@@ -13,7 +13,6 @@
 <div layout:fragment="content">
     <div class="row">
         <h3>Submit a Request</h3>
-        <a href="#" th:href="@{.}"> Requests</a>
         <select class="form-control request-select" id="requestType" name="requestType" required="required">
             <option></option>
             <option value="STAFFING">Staffing</option>
@@ -26,7 +25,7 @@
                 <div class="form-group required">
                     <label for="title" class="col-sm-4 control-label">Title</label>
                     <div class="col-sm-6">
-                        <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                        <input class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -47,7 +46,7 @@
                 <div class="form-group required">
                     <label for="vacancies" class="col-sm-4 control-label"># of vacancies</label>
                     <div class="col-sm-6">
-                        <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" min="0" id="vacancies" name="vacancies" required="required"/>
+                        <input class="form-control" placeholder="# of vacancies" type="number" min="0" id="vacancies" name="vacancies" required="required"/>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -59,7 +58,7 @@
                 <div class="form-group required">
                     <label for="contractLength" class="col-sm-4 control-label">Desired Contract Length</label>
                     <div class="col-sm-3">
-                        <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" min="0" id="contractLength" name="contractLength" required="required"/>
+                        <input class="form-control" placeholder="Desired Contract Length" type="number" min="0" id="contractLength" name="contractLength" required="required"/>
                     </div>
                     <div class="col-sm-3">
                         <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
@@ -86,7 +85,7 @@
                         <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
                     </div>
                     <div class="col-sm-8">
-                        <input th:value="2" class="form-control" placeholder="Job Code" type="number" min="0" id="jobId" name="jobId" required="required"/>
+                        <input class="form-control" placeholder="Job Code" type="number" min="0" id="jobId" name="jobId" required="required"/>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -123,7 +122,7 @@
                 <div class="form-group">
                     <label for="title" class="col-sm-2 control-label required">Title</label>
                     <div class="col-sm-8">
-                        <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
+                        <input class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">

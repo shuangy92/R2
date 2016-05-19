@@ -18,7 +18,7 @@
     <div class="row">
         <h3>Department</h3>
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row"  data-toggle="modal" data-target="#popup-model">
+            <button type="button" class="btn btn-default" id="btn-add-row"  data-toggle="modal" data-target="#department-create-modal">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
             <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
@@ -40,49 +40,14 @@
                smartDisplay="true">
         </table>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="popup-model" tabindex="-1" role="dialog" aria-labelledby="popup-modelLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="popup-modelLabel">Create a review flow</h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form" class="form-horizontal"  id="department-form">
-                        <div class="form-group required">
-                            <label for="name" class="col-sm-4 control-label">Name</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" placeholder="Department Name" id="name" name="name" required="required"/>
-                            </div>
-                        </div>
-                        <div class="form-group required">
-                            <label for="location" class="col-sm-4 control-label">Location</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" placeholder="Location" type="input" id="location" name="location" required="required"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-4">
-                                <button type="submit" class="btn btn-primary">Create</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/department_form :: department_form"></div>
+
+
     <script type="text/javascript" th:inline="javascript">
         var $table = $('#table');
 
         jQuery(document).ready(function ($) {
             initTable();
-
-            $('#department-form').on('submit', function (e) {
-                e.preventDefault();
-                submitDepartmentForm();
-            })
         });
 
         function initTable() {
@@ -103,7 +68,7 @@
                     sortable: true,
                     filterControl: 'input',
                     formatter: function (index, row, element) {
-                        return '<a href="/department/' + row.id + '">' + index + '</a>';
+                        return '<a data-toggle="modal" data-target="#department-edit-modal"  data-id="' + row.id + '" style="cursor: pointer;">' + index + '</a>';
                     }
                 }, {
                     field: 'location',
@@ -180,23 +145,7 @@
             }
         }
 
-        function submitDepartmentForm() {
 
-                var data = {};
-                $.each($('form').serializeArray(), function(i, field) {
-                    data[field.name] = field.value;
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/api/department/",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        $('#popup-model').modal('hide')
-                        $table.bootstrapTable('refresh');
-                    }
-                });
-        }
 
     </script>
 </div>

@@ -16,20 +16,20 @@
     <h3>Job Profile</h3>
     <form role="form">
         <div class="col-sm-6">
-            <div class="form-group">
+            <div class="form-group required">
                 <label for="title" class="control-label">Title</label>
                 <input class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
             </div>
-            <div class="form-group" id="field-jobId">
+            <div class="form-group required" id="field-jobId">
                 <label for="id" class="control-label">Job Code</label>
                 <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
                 <input class="form-control" type="input" id="id" name="id" required="required" readonly="readonly"/>
             </div>
-            <div class="form-group">
+            <div class="form-group required" id="field-department">
                 <label for="departmentName" class="control-label">Department</label>
                 <input class="form-control" type="input" id="departmentName" name="department" required="required" readonly="readonly"/>
             </div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label for="jobCategory" class="control-label">Job Category</label>
                 <a href="/job_category" target="_blank" title="Click to view the job category list">?</a>
                 <select class="form-control job-categoty-select" id="jobCategory" name="jobCategory" required="required">
@@ -74,16 +74,19 @@
                             if (window.location.pathname != "/job_profile/create") {
                                 data.department = job.department;
                             } else {
-                                data.department = [[${currentUser.department}]];
+                                if (currentUser.role == 'ADMIN') {
+                                    var department = {};
+                                    department.id = $(".department-select").val();
+                                    data.department = department;
+                                } else {
+                                    data.department = currentUser.department;
+                                }
                             }
                             break;
                         default:
                             data[field.name] = field.value;
                     }
                 });
-                if (method == "put") {
-
-                }
 
                 var notify = $.notify({
                     icon: 'fa fa-info-circle',
@@ -99,10 +102,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (job) {
                         notify.update('message', "Done");
-                        setTimeout(function() {
-                            notify.update('message', "Click to see the job list");
-                        }, 500);
-                        //window.location.href = "/jobs";
+                        window.location.href = "/job_profile";
                     },
                     error: function () {
                         notify.update('message', "Error");
@@ -124,10 +124,14 @@
                         data: categories
                     });
 
-                    var role = [[${currentUser.role}]];
-                    if (role["$name"] == 'ADMIN' ||
-                            (role["$name"] == 'MANAGER' && job.department.id == [[${currentUser.department.id}]]) ||
-                            (role["$name"] == 'MANAGER' && window.location.pathname == "/job_profile/create")) {
+                    var role = currentUser.role;
+                    if (role == 'ADMIN' && window.location.pathname == "/job_profile/create") {
+                        $("#field-department").html('<label for="departmentName" class="control-label">Department</label><select class="form-control department-select" name="department" style="width: 100%"><option></option></select>')
+                        initDepartmentList($(".department-select"), "Select a department");
+                    }
+                    if (role == 'ADMIN' ||
+                            (role == 'MANAGER' && job.department.id == currentUser.department.id) ||
+                            (role == 'MANAGER' && window.location.pathname == "/job_profile/create")) {
                         $(".job-categoty-select").data('select2').trigger('select', {
                             data: {"id":job.jobCategory.id,"text":job.jobCategory.name}
                         });
@@ -153,7 +157,7 @@
             } else {
                 $.ajax({
                     type: 'get',
-                    url: '/api' + window.location.pathname,
+                    url: '/api/job/' + window.location.pathname.split("/")[2],
                     success: function (data) {
                         job = data;
                         $.each(job, function (k, v) {

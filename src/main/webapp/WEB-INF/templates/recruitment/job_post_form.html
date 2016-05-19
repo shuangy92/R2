@@ -103,6 +103,7 @@
 
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var request;
         var reviewFlow;
 
@@ -141,7 +142,7 @@
             $('form').on('submit', function (e) {
                 e.preventDefault();
                 checkReviewFlowExistence();
-                if (reviewFlow == null) {
+                if ($("#reviewFlowId").val() && reviewFlow == null) {
                     $.notify({
                         icon: 'fa fa-info-circle',
                         message: "Please input a valid review flow id.",
@@ -161,9 +162,11 @@
                                 data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
                                 break;
                             case "reviewFlowId":
-                                var reviewFlow = {};
-                                reviewFlow.id = field.value;
-                                data.reviewFlow = reviewFlow;
+                                if (field.value) {
+                                    var reviewFlow = {};
+                                    reviewFlow.id = field.value;
+                                    data.reviewFlow = reviewFlow;
+                                }
                                 break;
                             default:
                                 data[field.name] = field.value;
@@ -262,6 +265,7 @@
                 });
             }
         });
+        //]]>
     </script>
 </div>
 </body>

@@ -73,10 +73,10 @@ public class JobPost implements Serializable {
     @Column(name = "contract_length")
     private String contractLength;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "requirement")
+    @Column(name = "requirement", columnDefinition = "text")
     private String requirement;
 
     @Column(name = "hours")

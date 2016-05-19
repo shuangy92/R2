@@ -45,6 +45,7 @@ public class UserApi {
     @Autowired
     DepartmentService departmentService;
 
+
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public User get(@PathVariable("id") Long id){

@@ -221,6 +221,8 @@
             data.reviewers = reviewers;
             data.task = $("#review-run-form #task").val();
             data.reviewFlow = review_flow;
+
+            $('#popup-model').modal('hide');
             $.ajax({
                 type: 'post',
                 url: '/api/review_flow/run',
@@ -229,9 +231,7 @@
                 async: false,
                 success: function (data) {
                     review_flow = data;
-                    $('#popup-model').modal('hide')
                     $table.bootstrapTable('refresh');
-
                 }
             });
         }

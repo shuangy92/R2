@@ -54,42 +54,60 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
 
-    jQuery(document).ready(function ($) {
-        //$('form').formcache();
+        var currentUser = getCurrentUser();
 
-        if (window.location.pathname == '/dashboard') {
-            $(".dropdown").removeClass('active');
-        }
-        var currentUser = [[${currentUser}]];
-        if (currentUser == null) {
-            $("#not-logged-in").show();
-        } else {
-            if (currentUser.role["$name"] == "APPLICANT") {
-                $("#logged-in-applicant").show();
+        jQuery(document).ready(function ($) {
+            //$('form').formcache();
+
+            if (window.location.pathname == '/dashboard') {
+                $(".dropdown").removeClass('active');
+            }
+            //var currentUser = [[${currentUser}]];
+            if (currentUser == null) {
+                $("#not-logged-in").show();
             } else {
-                $("#logged-in").show();
+                if (currentUser.role == "APPLICANT") {
+                    $("#logged-in-applicant").show();
+                } else {
+                    $("#logged-in").show();
+                }
+                $(".logout").click(function () {
+                    logout({[[${_csrf.parameterName}]]: [[${_csrf.token}]]});
+                })
             }
-            $(".logout").click(function () {
-                logout({[[${_csrf.parameterName}]]: [[${_csrf.token}]]});
-            })
-        }
 
-        $.datepicker.setDefaults({ beforeShow: function (i) { if ($(i).attr('readonly')) { return false; } } });
-        $.notifyDefaults({
-            element: 'body',
-            type: 'info',
-            delay: 0,
-            placement: {
-                from: "bottom",
-                align: "right"
-            },
-            animate: {
-                enter: "animated fadeInRight",
-                exit: "animated fadeOutRight"
-            }
+            $.datepicker.setDefaults({ beforeShow: function (i) { if ($(i).attr('readonly')) { return false; } } });
+            $.notifyDefaults({
+                element: 'body',
+                type: 'info',
+                delay: 0,
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: "animated fadeInRight",
+                    exit: "animated fadeOutRight"
+                }
+            });
         });
-    });
-    //]]>
+        function getCurrentUser() {
+            var currentUser;
+            $.ajax({
+                type: "get",
+                url: "/api/public/user/current",
+                async: false,
+                success: function (data) {
+                    if (data == "") {
+                        currentUser = null;
+                    } else {
+                        currentUser = data;
+                    }
+                }
+            });
+            return currentUser;
+        }
+        //]]>
     </script>
 </div>
 </body>

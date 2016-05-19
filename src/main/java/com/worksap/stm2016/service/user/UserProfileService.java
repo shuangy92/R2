@@ -33,12 +33,12 @@ public class UserProfileService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
-    public UserProfile getProfile(Long id){
+    public UserProfile get(Long id){
         UserProfile userProfile = userProfileRepository.findOne(id);
         userProfile.setName(userService.get(id).getName());
         return userProfile;
     }
-    public void saveOrUpdateProfile(UserProfile userProfile){
+    public void saveOrUpdate(UserProfile userProfile){
         userProfileRepository.save(userProfile);
         User user = userService.get(userProfile.getId());
         user.setName(userProfile.getName());

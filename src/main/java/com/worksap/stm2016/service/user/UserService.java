@@ -1,10 +1,8 @@
 package com.worksap.stm2016.service.user;
 
-import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.enums.UserStatus;
 import com.worksap.stm2016.form.UserCreateForm;
 import com.worksap.stm2016.form.UserRegisterForm;
 import com.worksap.stm2016.repository.UserRepository;
@@ -15,10 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -123,14 +119,14 @@ public class UserService {
 
     public void delete(User user){
         userRepository.delete(user);
-        if (userProfileService.getProfile(user.getId()) != null) {
+        if (userProfileService.get(user.getId()) != null) {
             userProfileService.delete(user.getId());
         }
     }
 
     public void delete(Long id){
         userRepository.delete(id);
-        if (userProfileService.getProfile(id) != null) {
+        if (userProfileService.get(id) != null) {
             userProfileService.delete(id);
         }
     }

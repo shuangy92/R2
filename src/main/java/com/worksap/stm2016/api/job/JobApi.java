@@ -30,12 +30,12 @@ public class JobApi {
 
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
-                                  @RequestParam(name = "order") String order,
-                                  @RequestParam(name = "limit") Integer limit,
-                                  @RequestParam(name = "offset") Integer offset,
-                                  @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+                              @RequestParam(name = "order") String order,
+                              @RequestParam(name = "limit") Integer limit,
+                              @RequestParam(name = "offset") Integer offset,
+                              @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
-       return jobService.getList(sort, order, limit, offset, filter);
+        return jobService.getList(sort, order, limit, offset, filter);
     }
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)

@@ -52,10 +52,10 @@ public class StaffingRequest extends Request implements Serializable {
     @Column(name = "job_title", nullable = false)
     private String jobTitle;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "requirement")
+    @Column(name = "requirement", columnDefinition = "text")
     private String requirement;
 
     @Column(name = "hours")

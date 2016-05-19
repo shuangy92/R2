@@ -2,6 +2,7 @@ package com.worksap.stm2016.api.publicApi;
 
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
+import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.form.UserRegisterForm;
 import com.worksap.stm2016.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,7 +25,14 @@ public class PublicUserApi {
     @Autowired
     UserService userService;
 
-
+    @RequestMapping(value="/current", method = RequestMethod.GET)
+    public User getCurrentUser(Authentication authentication){
+        if (authentication == null) {
+            return null;
+        } else {
+            return ((CurrentUser) authentication.getPrincipal()).getUser();
+        }
+    }
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public User get(@PathVariable("id") Long id){

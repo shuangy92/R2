@@ -52,6 +52,9 @@ function initCountryList() {
             $(".country-select").select2({
                 data: countries
             });
+            $(".country-select").data('select2').trigger('select', {
+                data: {"id": profile.country.id, "text": profile.country.name}
+            });
         }
     });
 }
@@ -194,3 +197,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+

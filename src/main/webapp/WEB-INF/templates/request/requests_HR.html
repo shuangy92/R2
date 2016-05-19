@@ -119,8 +119,9 @@
                         middle =
                                 '<dl class="col-md-4 dl-horizontal" >' +
                                 '<dt>Your Reply</dt>' + '<dd>' + row.replierMessage + '</dd>' +
-                                '<dt>Reply Date</dt>' + '<dd>' + (new Date(row.replyDate)).toString("yyyy/M/dd hh:mm:ss") + '</dd>' +
+                                '<dt>Reply Date</dt>' + '<dd>' + (row.replyDate == null ? "N/A" : (new Date(row.replyDate)).toString("yyyy/M/dd hh:mm:ss")) + '</dd>' +
                                 '</dl>';
+
                         if (row.requestType == "STAFFING") {
                             right =
                                     '<div class="col-md-4">' +

@@ -21,10 +21,10 @@ public class Job implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "requirement")
+    @Column(name = "requirement", columnDefinition = "text")
     private String requirement;
 
     @Column(name = "hours")

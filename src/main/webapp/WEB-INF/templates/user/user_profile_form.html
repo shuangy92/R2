@@ -5,7 +5,8 @@
       layout:decorator="layout">
 <head>
     <title>User Profile</title>
-
+    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
 </head>
 <body>
 
@@ -34,40 +35,39 @@
                 <div class="form-group">
                     <label for="name" class="col-sm-4 control-label">Department</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="department" name="department" required="required"/>
+                        <input class="form-control" type="input" id="departmentName" name="departmentName" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Job Code</label>
+                    <label for="jobId" class="col-sm-4 control-label">Job Code</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="email" name="email" required="required"/>
+                        <input class="form-control" type="input" id="jobId" name="jobId" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Contract Starting Date</label>
+                    <label for="startDate" class="col-sm-4 control-label">Contract Starting Date</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="input" id="startDate" name="startDate" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Contract Ending Date</label>
+                    <label for="endDate" class="col-sm-4 control-label">Contract Ending Date</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="input" id="endDate" name="endDate" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Salary</label>
+                    <label for="salary" class="col-sm-4 control-label">Salary</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="input" id="salary" name="salary" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Pay Rate</label>
+                    <label for="payRate" class="col-sm-4 control-label">Pay Rate</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="payrate" name="payrate" required="required"/>
+                        <input class="form-control" type="input" id="payRate" name="payRate" required="required"/>
                     </div>
                 </div>
-                <a onclick="edit('contract-form')" style="cursor: pointer;">Edit</a>
             </form>
         </div>
         <hr/>
@@ -103,26 +103,71 @@
                         <input class="form-control" type="input" id="birthday" name="birthday" required="required"/>
                     </div>
                 </div>
+                <div class="form-group" id="edit-save">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <button type="button" class="btn btn-default edit" onclick="edit('contact-form')">Edit</button>
+                        <button type="submit" class="btn btn-default save" onclick="save('contact-form')" style="display: none">Save</button>
+                    </div>
+                </div>
             </form>
-            <a onclick="edit('contact-form')" style="cursor: pointer;">Edit</a>
-        </div>
-        <hr/>
-        <div class="file-info">
-            <div th:replace="fragments/user_file_list :: user_file_list"></div>
-            <a onclick="edit('')" style="cursor: pointer;">Edit</a>
         </div>
     </div>
     <script type="text/javascript" th:inline="javascript">
         var editable = false;
+        var profile;
         jQuery(document).ready(function ($) {
             $("form :input").attr("readonly", true);
+            $("#birthday").datepicker();
+            var uid;
+            if (window.location.pathname == "/user/profile") {
+                uid = currentUser.id;
+                editable = true;
+            } else {
+                $("#edit-save").hide()
+                uid = window.location.pathname.split("/")[2];
+            }
+            loadBasicForm(uid);
+            loadContractForm(uid);
+
+            $('#contact-form').on('submit', function (e) {
+                e.preventDefault();
+                submitContactForm();
+            })
+        });
+        function submitContactForm() {
+            var data = {};
+            data.id = profile.id
+            $.each($('form').serializeArray(), function(i, field) {
+                switch (field.name) {
+                    case "country":
+                        var country = {};
+                        country.id = field.value
+                        data[field.name] = country;
+                        break;
+                    default:
+                        data[field.name] = field.value;
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "/api/user/profile",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var x = $(".country-select").select2('data')[0].text;
+                    $("#country-select").html('<input class="form-control" type="input" id="country" name="country" readonly="readonly" required="required"/>');
+                    $("#country").val(x);
+                }
+            })
+        }
+        function loadBasicForm(uid) {
             $.ajax({
                 type: "GET",
-                url: "/api/user/" + [[${currentUser.id}]],
+                url: "/api/user/" + uid,
                 success: function (data) {
                     if (data != null) {
                         $.each(data, function (k, v) {
-                            var sel = $("#" + k);
+                            var sel = $("#basic-form #" + k);
                             if (sel.length) {
                                 sel.val(v);
                             }
@@ -130,11 +175,50 @@
                     }
                 }
             })
-            loadContactFormData("/api/user/profile/" + [[${currentUser.id}]])
-        });
+        }
+        function loadContractForm(uid) {
+            $.ajax({
+                type: "GET",
+                url: "/api/user/profile/" + uid,
+                success: function (data) {
+                    profile = data;
+                    if (data != null) {
+                        $.each(data, function (k, v) {
+                            var sel = $("#contact-form #" + k);
+                            if (sel.length) {
+                                sel.val(v);
+                            }
+                        });
+                        $("#country").val(data.country.name);
+
+                        if (data.contract != null) {
+                            $.each(data.contract, function (k, v) {
+                                var sel = $("#" + k);
+                                if (sel.length) {
+                                    sel.val(v);
+                                }
+                            });
+                            $("#departmentName").val(data.contract.job.department.name);
+                            $("#jobId").val(data.contract.job.id);
+                        }
+                    }
+                }
+            })
+        }
+
         function edit(formId){
-            console.log(this);
             $("#" + formId + " :input").attr("readonly", false);
+            $("button.edit").hide();
+            $("button.save").show();
+
+            $("#country-select").html('<select class="form-control country-select" id="country" name="country" required="required" style="width:100%;"> <option></option> </select>')
+            initCountryList();
+
+        }
+        function save(formId){
+            $("#" + formId + " :input").attr("readonly", true);
+            $("button.edit").show();
+            $("button.save").hide();
         }
     </script>
 </div>

@@ -3,6 +3,7 @@ package com.worksap.stm2016.api;
 import com.worksap.stm2016.domain.message.Email;
 import com.worksap.stm2016.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class EmailApi {
     private EmailService emailService;
 
     @RequestMapping
-    public void send(Email email) throws UnsupportedEncodingException, MessagingException {
+    public void send(@RequestBody Email email) throws UnsupportedEncodingException, MessagingException {
         emailService.send(email);
     }
 }
