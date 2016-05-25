@@ -1,8 +1,9 @@
 package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
+import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,23 +25,19 @@ public class ReviewResponse implements Serializable {
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "review_run_id")
     private ReviewRun reviewRun;
 
+    @JsonBackReference(value="application-responses")
     @ManyToOne
-    @JoinColumn(name = "job_post_id")
-    private JobPost jobPost;
+    @JoinColumn(name = "job_application_id")
+    private JobApplication jobApplication;
 
-    @Column(name = "response")
+    @Column(name = "response", columnDefinition = "text")
     private String response;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ReviewResponseStatus status;
-
-    public enum ReviewResponseStatus {
-        PASSED, FAILED
-    }
+    private ReviewStatus status = ReviewStatus.REVIEWING;
 }

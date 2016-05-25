@@ -8,101 +8,83 @@
 
 </head>
 <body>
-
-<div layout:fragment="content">
-    <h1>User Profile</h1>
-    <div class="col-sm-6">
-        <div class="basic-info">
-            <form class="form-horizontal" role="form" id="basic-form">
-                <div class="form-group">
-                    <label for="name" class="col-sm-4 control-label">Name</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="input" id="name" name="name" required="required"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">Email</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="input" id="email" name="email" required="required"/>
-                    </div>
-                </div>
-            </form>
-        </div>
+<div th:fragment="applicant_profile_html">
+    <style>
+        .dl-horizontal dt {
+            text-align: left;
+        }
+    </style>
+    <h3>Applicant Profile</h3>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>Name:</dt>
+            <dd id="name"></dd>
+            <dt>email:</dt>
+            <dd id="sendDate"></dd>
+        </dl>
         <hr/>
-        <div class="contact-info">
-            <form class="form-horizontal" role="form" id="contact-form">
-                <div class="form-group">
-                    <label for="phone" class="col-sm-4 control-label">Phone</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="number" id="phone" name="phone" required="required"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="country" class="col-sm-4 control-label">Country</label>
-                    <div class="col-sm-8" id="country-select">
-                        <input class="form-control" type="input" id="country" name="country" required="required"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="address" class="col-sm-4 control-label">Address</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="address" id="address" name="address" maxlength="60" required="required"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="idNumber" class="control-label col-sm-4">National identification number <span><a href="//en.wikipedia.org/wiki/National_identification_number" target="_blank">?</a></span></label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="input" id="idNumber" name="idNumber" required="required"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="birthday" class="col-sm-4 control-label">Date of Birth</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="input" id="birthday" name="birthday" required="required"/>
-                    </div>
-                </div>
-            </form>
-            <a href="/career/applicant_profile_submit">Edit</a>
-        </div>
+        <dl class="dl-horizontal">
+            <dt>Phone:</dt>
+            <dd id="phone"></dd>
+            <dt>Country:</dt>
+            <dd id="country"></dd>
+            <dt>Address:</dt>
+            <dd id="address"></dd>
+            <dt>National ID No.<span><a href="//en.wikipedia.org/wiki/National_identification_number" target="_blank">?</a></span>:</dt>
+            <dd id="idNumber"></dd>
+            <dt>Date of Birth:</dt>
+            <dd id="birthday"></dd>
+        </dl>
         <hr/>
-        <div class="file-info">
-            <div th:replace="fragments/user_file_list :: user_file_list"></div>
-            <a href="/career/applicant_profile_submit">Edit</a>
-        </div>
+        <h4>Documents</h4>
+        <div th:replace="fragments/user_file_list :: user_file_list"></div>
     </div>
+</div>
+<div th:fragment="applicant_profile_script">
     <script type="text/javascript" th:inline="javascript">
         var editable = false;
-
-        jQuery(document).ready(function ($) {
-            $("form :input").attr("readonly", true);
-
-            var uid;
-            if (window.location.pathname == "/career/user/profile") {
-                uid = [[${currentUser.id}]];
-            } else {
-                uid = window.location.pathname.split("/")[3];
-            }
-            loadBasicForm(uid);
-            initFileListTable(uid);
-            loadContactFormData("/api/user/profile/" + [[${currentUser.id}]])
-        });
-
-        function loadBasicForm(id) {
+        function loadContactForm(url) {
             $.ajax({
+                url: url,
                 type: "GET",
-                url: "/api/user/" + id,
                 success: function (data) {
-                    if (data != null) {
+                    $.each(data.user, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            sel.html(v);
+                        }
+                    });
+                    if (data.user.name) {
                         $.each(data, function (k, v) {
                             var sel = $("#" + k);
                             if (sel.length) {
-                                sel.val(v);
+                                sel.html(v);
                             }
                         });
+                        $("#country").html(data.country.name);
                     }
                 }
-            })
+            });
         }
+    </script>
+</div>
+<div th:fragment="applicant_profile">
+    <div th:replace="career/applicant_profile :: applicant_profile_html"></div>
+    <div th:replace="career/applicant_profile :: applicant_profile_script"></div>
+</div>
+
+<div layout:fragment="content">
+    <div th:replace="career/applicant_profile :: applicant_profile_html"></div>
+    <hr/>
+    <a href="/career/applicant_profile_submit" class="btn btn-default">Edit</a>
+
+    <div th:replace="career/applicant_profile :: applicant_profile_script"></div>
+    <script type="text/javascript" th:inline="javascript">
+        jQuery(document).ready(function ($) {
+            var uid = currentUser.id;
+            initFileListTable(uid);
+            loadContactForm("/api/user/profile/" + uid);
+        });
     </script>
 </div>
 </body>

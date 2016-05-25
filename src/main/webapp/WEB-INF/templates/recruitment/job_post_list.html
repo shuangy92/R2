@@ -5,7 +5,7 @@
       layout:decorator="layout">
 <head>
     <title>Job Post List</title>
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
@@ -19,7 +19,7 @@
             <!--<button type="button" class="btn btn-default" id="btn-add-row">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>-->
-            <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
+            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
         </div>
@@ -38,21 +38,24 @@
                smartDisplay="true">
         </table>
     </div>
+    <div th:replace="fragments/common :: deletion"></div>
 
     <script type="text/javascript" th:inline="javascript">
+        var url = '/api/job_post';
+        var $table = $('#table');
 
         jQuery(document).ready(function ($) {
             initTable();
         });
 
         function initTable() {
-            var url = "/api/job_post";
-            var $table = $('#table');
-
-            var columns =[{
+            var columns = [{
                 field: 'state',
                 checkbox: true
             }, {
+                field: 'id',
+                title: 'ID'
+            },{
                 field: 'lastModifiedDate',
                 title: 'Updated',
                 sortable: true,
@@ -99,7 +102,7 @@
                 sortable: true,
                 filterControl: 'select',
                 formatter: function (index, row, element) {
-                    return (index==true? "Published" : "Draft");
+                    return (index == true ? "Published" : "Draft");
                 }
             }];
 
@@ -123,8 +126,8 @@
                 },
                 detailFormatter: function (index, row, element) {
                 },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
                         res.rows[i].location = res.rows[i].department.location;
                         res.rows[i].department = res.rows[i].department.name;
                     });
@@ -137,45 +140,8 @@
                 sortOrder: 'desc',
                 cookie: true,
                 cookieIdTable: 'job_post',
+                clickToSelect: true,
             });
-
-            var $remove = $("#btn-delete-row");
-            var $insert = $("#btn-add-row");
-
-            $table.on('check.bs.table uncheck.bs.table ' +
-                    'check-all.bs.table uncheck-all.bs.table', function () {
-                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-            });
-            $remove.click(function () {
-                var ids = getIdSelections();
-                if (confirm("Are you sure to delete?")) {
-                    $.ajax({
-                        type: "delete",
-                        data: JSON.stringify(ids),
-                        contentType: "application/json; charset=utf-8",
-                        url: '/api/job_post',
-                        success: function () {
-                            $remove.prop('disabled', true);
-                            $table.bootstrapTable('refresh');
-                        },
-                        error: function (e) {
-                            if (e.status == 500) {
-                                $.notify({
-                                    icon: 'fa fa-exclamation-triangle',
-                                    message: "The item is referenced. You can't delete it.",
-                                },{
-                                    type: 'danger'
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-            function getIdSelections() {
-                return $.map($table.bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
-            }
         }
     </script>
 </div>

@@ -21,7 +21,7 @@ public class MapUtil {
      * @param lng2 第二个点的经度
      * @return 距离单位为千米。
      *//*
-	public static double getDistance(double lat1, double lng1, double lat2, double lng2) {
+    public static double getDistance(double lat1, double lng1, double lat2, double lng2) {
 		double radLat1 = rad(lat1);
 		double radLat2 = rad(lat2);
 		double a = radLat1 - radLat2;

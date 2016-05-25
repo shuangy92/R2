@@ -27,27 +27,25 @@ public class RequestController {
     @Autowired
     private RequestRepository requestRepository;
 
-    @RequestMapping(value = "/request", method = RequestMethod.GET, produces = "text/html")
+    @RequestMapping(value = "/request", method = RequestMethod.GET)
     public String getRequestListPage() {
-        return "request/requests_HR";
+        return "request/request_list";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET, produces = "text/html")
+    @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET)
     public String getUserRequestListPage(@PathVariable Long id) {
-        return "request/requests_employee";
+        return "request/user_request_list";
     }
 
     @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET, produces = "text/html")
+    @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET)
     public String getRequestSubmitPage(@PathVariable Long id, Model model) {
         return "request/request_form";
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessRequest(principal, #id)")
-    @RequestMapping(value = "/request/{id}", method = RequestMethod.GET, produces = "text/html")
+    @RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
     public String getRequestPage(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.get(id));
         return "request/request";
     }
 

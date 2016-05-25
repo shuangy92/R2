@@ -5,10 +5,14 @@
       layout:decorator="layout_career">
 <head>
     <title>Career</title>
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
+          media="screen" type="text/css"/>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
 </head>
 <body>
 
@@ -43,7 +47,7 @@
             var url = "/api/public/job_post";
             var $table = $('#table');
 
-            var columns =[{
+            var columns = [{
                 field: 'title',
                 title: 'Title',
                 sortable: true,
@@ -101,9 +105,9 @@
                     data.limit = p.limit;
                     data.offset = p.offset;
                     var tmp = $.parseJSON(p.filter);
-                    var filter={};
-                    for(var key in tmp) {
-                        filter[key]=tmp[key];
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
                     }
                     filter.published = "true";
                     data.filter = JSON.stringify(filter);
@@ -112,7 +116,7 @@
                 detailFormatter: function (index, row, element) {
                     var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')">Apply</button>';
                     console.log(checkJobApplicationExistence(row.id))
-                    if (checkJobApplicationExistence(row.id) && [[${currentUser}]] != null) {
+                    if (checkJobApplicationExistence(row.id) && currentUser != null) {
                         var apply_btn = '<br/><button type="submit" class="btn btn-success" id="apply" onclick="applyJob(' + index + ')" disabled="disabled">Apply</button>';
                     }
                     var result =
@@ -127,8 +131,8 @@
                             '</div>';
                     return result;
                 },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
                         res.rows[i].location = res.rows[i].department.location;
                         res.rows[i].jobCategory = res.rows[i].job.jobCategory.name;
                     });
@@ -144,13 +148,12 @@
             });
         }
         function applyJob(index) {
-            if ([[${currentUser}]] == null) {
+            if (currentUser == null) {
                 if (confirm("Please log in first. Do you want to log in now ?")) {
                     window.location.href = "/login";
                 }
             } else {
-                var role = [[${currentUser}]].role;
-                if (role["$name"] != "APPLICANT") {
+                if (currentUser.role != "APPLICANT") {
                     alert("You are already an employee");
                 } else {
                     var job_post = $('#table').bootstrapTable('getData', true)[index];

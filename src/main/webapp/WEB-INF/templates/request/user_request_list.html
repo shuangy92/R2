@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>My Request</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
+          media="screen" type="text/css"/>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment-with-locales.min.js}"></script>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>My requests</h3>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               data-minimum-count-columns="1"
+               data-id-field="id"
+               smartDisplay="true">
+        </table>
+        <a href="#" th:href="@{/user/__${currentUser.id}__/request/submit}"> Create a new request</a>
+    </div>
+    <div th:replace="request/request :: request"></div>
+
+    <script type="text/javascript" th:inline="javascript">
+
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
+        function initTable() {
+            var url = "/api/request";
+
+            $('#table').bootstrapTable({
+                columns: [{
+                    field: 'sendDate',
+                    title: 'Date',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd hh:mm:ss");
+                    }
+                }, {
+                    field: 'title',
+                    title: 'Title',
+                    sortable: true,
+                    filterControl: 'input',
+                    formatter: function (index, row, element) {
+                        return '<a data-toggle="modal" data-target="#request-modal" style="cursor: pointer" data-id="' + row.id + '">' + index + '</a>';
+                    }
+                }, {
+                    field: 'requestType',
+                    title: 'Request Type',
+                    sortable: true,
+                    filterControl: 'select'
+                }, {
+                    field: 'status',
+                    title: 'Status',
+                    sortable: true,
+                    filterControl: 'select',
+                    formatter: function (index, row, element) {
+                        if (row.status == 'APPROVED') {
+                            return '<p class="bg-success">' + row.status + '</p>'
+                        } else if (row.status == 'DECLINED') {
+                            return '<p class="bg-danger">' + row.status + '</p>'
+                        } else {
+                            return '<p class="bg-warning">' + row.status + '</p>'
+                        }
+                    }
+                }],
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "sendDate";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    filter.uid = '' + currentUser.id;
+                    data.filter = JSON.stringify(filter);
+                    return data;
+                },
+                onPostBody: function () {
+                    $(".filterControl input").attr('placeholder', 'Search');
+                },
+                filterControl: true,
+                sortOrder: 'desc',
+                cookie: true,
+                cookieIdTable: 'user_request',
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

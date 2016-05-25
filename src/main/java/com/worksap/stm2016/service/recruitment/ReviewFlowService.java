@@ -1,11 +1,9 @@
 package com.worksap.stm2016.service.recruitment;
 
-import com.worksap.stm2016.domain.job.JobCategory;
-import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.domain.review.ReviewFlow;
-import com.worksap.stm2016.repository.job.JobCategoryRepository;
-import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
+import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewRunRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,12 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.*;
+import static com.worksap.stm2016.specification.BasicSpecs.filterAnd;
+import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 
 @Service
 public class ReviewFlowService {
@@ -29,6 +27,8 @@ public class ReviewFlowService {
     ReviewFlowRepository reviewFlowRepository;
     @Autowired
     ReviewRunRepository reviewRunRepository;
+    @Autowired
+    ReviewResponseRepository reviewResponseRepository;
 
     public ReviewFlow get(Long id){
         return reviewFlowRepository.findOne(id);
@@ -56,7 +56,7 @@ public class ReviewFlowService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
         return result;
     }
 
@@ -72,9 +72,28 @@ public class ReviewFlowService {
         reviewFlowRepository.delete(id);
     }
 
-    public void deleteList(@RequestBody ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
-            reviewFlowRepository.delete(id);
+            try {
+                reviewFlowRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
+    }
+
+    public Long deleteRunList(Long flowId, ArrayList<Long> ids){
+        ReviewFlow reviewFlow = this.get(flowId);
+        for (Long runId: ids) {
+            ReviewRun reviewRun = reviewRunRepository.findOne(runId);
+            reviewFlow.removeRun(reviewRun);
+            try {
+                reviewRunRepository.delete(runId);
+            } catch (Exception e) {
+                return runId;
+            }
+        }
+        return Long.valueOf(0);
     }
 }

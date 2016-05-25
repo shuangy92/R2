@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="job_profile_form">
+    <div class="modal fade" id="job-profile-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create a job category</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="job-profile-form">
+                        <div class="form-group required">
+                            <label for="title" class="col-sm-4 control-label">Title</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Title" type="input" id="title" name="title"
+                                       required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required" id="field-id">
+                            <label for="id" class="col-sm-4 control-label">Job Code <span><a href="/job_profile"
+                                                                                             target="_blank"
+                                                                                             title="Click to view the job list">?</a></span></label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="input" id="id" name="id" required="required"
+                                       readonly="readonly"/>
+                            </div>
+                        </div>
+                        <div class="form-group required" id="field-department">
+                            <label for="department" class="col-sm-4 control-label">Department <span><a
+                                    href="/department" target="_blank"
+                                    title="Click to view the department list">?</a></span></label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="department" name="department" required="required">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="jobCategory" class="col-sm-4 control-label">Job Category <span><a
+                                    href="/job_category" target="_blank"
+                                    title="Click to view the job category list">?</a></span></label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="jobCategory" name="jobCategory" required="required">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-4 control-label">Job Description</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" type="input" id="description" name="description"
+                                          rows="5"> </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="requirement" class="col-sm-4 control-label">Job Requirement</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" type="input" id="requirement" name="requirement"
+                                          rows="5"> </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hours" class="col-sm-4 control-label">Standard Hours</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="number" id="hours" name="hours"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button type="submit" class="btn btn-primary" id="create">Create</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var job;
+        var form = $("#job-profile-form");
+        var method;
+
+        jQuery(document).ready(function ($) {
+            initJobCategoryList($("#jobCategory"), "Select a category");
+            initDepartmentList($("#department"), "Select a department");
+            form.on('submit', function (e) {
+                e.preventDefault();
+                $('#job-profile-modal').modal('hide')
+                submitJobProfileForm(method, $(this));
+            })
+
+            $('#job-profile-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var action = button.data('action');
+                if (action == "create") { // create
+                    form[0].reset();
+                    form.find("select").val('').trigger('change')
+                    $("#field-id").hide();
+
+                    method = "post"
+
+                } else { // edit
+                    var id = button.data('id')
+                    loadJobProfileForm(id);
+
+                    $(".modal-title").html("Edit");
+                    $("#create").html("Save");
+
+                    method = "put";
+                }
+
+                if (currentUser.role == "MANAGER") {
+                    $("#department").prop('disabled', true)
+                    $("#department").data('select2').trigger('select', {
+                        data: {"id": currentUser.department.id, "text": currentUser.department.name}
+                    });
+                }
+            })
+
+        });
+        function loadJobProfileForm(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/job/' + id,
+                success: function (data) {
+                    job = data;
+                    $.each(job, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            sel.val(v);
+                        }
+                    });
+
+                    if (job.jobCategory) {
+                        $("#jobCategory").data('select2').trigger('select', {
+                            data: {"id": job.jobCategory.id, "text": job.jobCategory.name}
+                        });
+                    }
+                    if (job.department) {
+                        $("#department").data('select2').trigger('select', {
+                            data: {"id": job.department.id, "text": job.department.name}
+                        });
+                    }
+                }
+            });
+        }
+        function submitJobProfileForm(method) {
+            var data = {};
+            $.each($('form').serializeArray(), function (i, field) {
+                switch (field.name) {
+                    case "jobCategory":
+                    case "department":
+                        data[field.name] = {id: field.value};
+                        break;
+                    default:
+                        data[field.name] = field.value;
+                }
+            });
+
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+
+            $.ajax({
+                type: method,
+                url: '/api/job',
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (job) {
+                    $table.bootstrapTable('refresh');
+                    if (method = "post") {
+                        var options = $table.bootstrapTable('getOptions');
+                        $table.bootstrapTable('selectPage', options.totalPages);
+                    }
+                    notify.close();
+                },
+                error: function () {
+                    notify.update('message', "Error");
+                }
+            });
+        }
+        function initJobCategoryList($select, placeholder) {
+            var categories;
+            $.ajax({
+                type: 'get',
+                url: "/api/job_category/all",
+                success: function (data) {
+                    categories = $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
+                    })
+                    $select.html('').select2({data: [{id: '', text: ''}]});
+                    $select.select2({
+                        placeholder: placeholder,
+                        data: categories
+                    });
+                }
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>
+
+
+

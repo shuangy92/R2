@@ -1,7 +1,7 @@
 package com.worksap.stm2016.domain.roster;
 
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.RosterPlan;
 import lombok.Data;
 

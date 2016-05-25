@@ -1,15 +1,14 @@
 package com.worksap.stm2016.controller;
 
 
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.enums.UserStatus;
+import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
-import com.worksap.stm2016.repository.UserRepository;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.repository.job.JobRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
@@ -38,14 +37,15 @@ public class FakeController {
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public void data() {
         Department department = new Department();
-        department.setLocation("shanghai" );
+        department.setLocation("shanghai");
         department.setName("sales");
         departmentRepository.save(department);
 
         department = departmentRepository.findOne(Long.valueOf(2));
-       // department.setManager(admin);
+        // department.setManager(admin);
         //departmentRepository.save(department);
-        Job job = new Job();;
+        Job job = new Job();
+        ;
         JobCategory jobCategory;
         for (Integer i = 1; i < 20; i++) {
             job = new Job();
@@ -60,7 +60,7 @@ public class FakeController {
                 job.setDepartment(department);
             }
             Random rand = new Random();
-            int  n = rand.nextInt(4) + 1;
+            int n = rand.nextInt(4) + 1;
             jobCategory = jobCategoryRepository.findOne((long) n);
             job.setJobCategory(jobCategory);
             jobRepository.save(job);
@@ -70,7 +70,6 @@ public class FakeController {
             user.setEmail(i.toString() + "@gmail.com");
             user.setPasswordHash(new BCryptPasswordEncoder().encode("pass"));
             user.setRole(Role.EMPLOYEE);
-            user.setStatus(UserStatus.NORMAL);
             user.setDepartment(department);
             userRepository.save(user);
         }

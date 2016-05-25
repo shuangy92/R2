@@ -23,64 +23,27 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserCreateFormValidator userCreateFormValidator;
 
-    @InitBinder("form")
-    public void initBinder(WebDataBinder binder) {
-        binder.addValidators(userCreateFormValidator);
-    }
-
+    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public String getUserProfilePage(@PathVariable Long id) {
         return "user/user_profile_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/user/profile", method = RequestMethod.GET)
     public String getUserProfilePage() {
         return "user/user_profile_form";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/career/user/{id}", method = RequestMethod.GET)
-    public String getApplicantProfilePage(@PathVariable Long id) {
-        return "career/applicant_profile";
-    }
-
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/career/user/profile", method = RequestMethod.GET)
     public String getApplicantProfilePage() {
         return "career/applicant_profile";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/user/create", method = RequestMethod.GET)
-    public ModelAndView getUserCreatePage() {
-        LOGGER.debug("Getting user create form");
-        return new ModelAndView("user_create", "form", new UserCreateForm());
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/user/create", method = RequestMethod.POST)
-    public String handleUserCreateForm(@Valid @ModelAttribute("form") UserCreateForm form, BindingResult bindingResult) {
-        LOGGER.debug("Processing user create form={}, bindingResult={}", form, bindingResult);
-        if (bindingResult.hasErrors()) {
-            // failed validation
-            return "user/user_create";
-        }
-        try {
-            userService.create(form);
-        } catch (DataIntegrityViolationException e) {
-            // probably email already exists - very rare case when multiple admins are adding same user
-            // at the same time and form validation has passed for more than one of them.
-            LOGGER.warn("Exception occurred when trying to save the user, assuming duplicate email", e);
-            bindingResult.reject("email.exists", "Email already exists");
-            return "user/user_create";
-        }
-        // ok, redirect
-        return "redirect:/user/user_list";
-    }
-
-    @RequestMapping(value = "/account_setting", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/user/account_setting", method = RequestMethod.GET)
     public String getAccountSettingPage() {
         return "account_setting";
     }

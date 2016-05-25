@@ -6,12 +6,10 @@
 <head>
     <title>Employee List</title>
 
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
-          media="screen" type="text/css"/>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
-
 </head>
 <body>
 
@@ -71,10 +69,7 @@
                 contentType: "application/x-www-form-urlencoded",
                 queryParamsType: "limit",
                 queryParams: function (p) {
-                    console.log(p);
                     var data = {};
-                    var csrfName = [[${_csrf.parameterName}]];
-                    data[csrfName] = [[${_csrf.token}]];
                     if (p.sort) {
                         data.sort = p.sort;
                     } else {
@@ -84,16 +79,16 @@
                     data.limit = p.limit;
                     data.offset = p.offset;
                     var tmp = $.parseJSON(p.filter);
-                    var filter={};
-                    for(var key in tmp) {
-                        filter[key]=tmp[key];
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
                     }
                     filter.notRole = "APPLICANT";
                     data.filter = JSON.stringify(filter);
                     return data;
                 },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
                         res.rows[i].location = res.rows[i].department.location;
                         res.rows[i].department = res.rows[i].department.name;
                     });
@@ -107,15 +102,15 @@
                         url: url,
                         success: function (user) {
                             var basic =
-                            '<div class="row" id="user-info">' +
-                            '<dl class="col-md-4 dl-horizontal">' +
-                            '<dt>Name</dt>' + '<dd>' + user.name + '</dd>' +
-                            '<dt>Emp No.</dt>' + '<dd>' + user.id + '</dd>' +
-                            '</dl>' +
-                            '<dl class="col-md-4 dl-horizontal">' +
-                            '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
-                            '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
-                            '</dl>';
+                                    '<div class="row" id="user-info">' +
+                                    '<dl class="col-md-4 dl-horizontal">' +
+                                    '<dt>Name</dt>' + '<dd>' + user.name + '</dd>' +
+                                    '<dt>Emp No.</dt>' + '<dd>' + user.id + '</dd>' +
+                                    '</dl>' +
+                                    '<dl class="col-md-4 dl-horizontal">' +
+                                    '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
+                                    '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
+                                    '</dl>';
                             var active = "";
                             if (user.active == false) {
                                 active =

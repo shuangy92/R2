@@ -108,7 +108,7 @@
                 "a" === nodeName ?
                 element.href || isTabIndexNotNaN :
                     isTabIndexNotNaN) &&
-                // the element and all of its ancestors must be visible
+            // the element and all of its ancestors must be visible
             visible(element);
     }
 
@@ -1970,7 +1970,7 @@
             if (
                 // click on active header, but not collapsible
             ( clickedIsActive && !options.collapsible ) ||
-                // allow canceling activation
+            // allow canceling activation
             ( this._trigger("beforeActivate", event, eventData) === false )) {
                 return;
             }
@@ -3969,8 +3969,7 @@
                 return;
             }
             this._attachments(input, inst);
-            input.addClass(this.markerClassName).keydown(this._doKeyDown).
-            keypress(this._doKeyPress).keyup(this._doKeyUp);
+            input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).keyup(this._doKeyUp);
             this._autoSize(inst);
             $.data(target, "datepicker", inst);
             //If disabled option is true, disable the datepicker once it has been attached to the input (see ticket #5665)
@@ -4007,10 +4006,12 @@
                 buttonText = this._get(inst, "buttonText");
                 buttonImage = this._get(inst, "buttonImage");
                 inst.trigger = $(this._get(inst, "buttonImageOnly") ?
-                    $("<img/>").addClass(this._triggerClass).
-                    attr({src: buttonImage, alt: buttonText, title: buttonText}) :
-                    $("<button type='button'></button>").addClass(this._triggerClass).
-                    html(!buttonImage ? buttonText : $("<img/>").attr(
+                    $("<img/>").addClass(this._triggerClass).attr({
+                        src: buttonImage,
+                        alt: buttonText,
+                        title: buttonText
+                    }) :
+                    $("<button type='button'></button>").addClass(this._triggerClass).html(!buttonImage ? buttonText : $("<img/>").attr(
                         {src: buttonImage, alt: buttonText, title: buttonText})));
                 input[isRTL ? "before" : "after"](inst.trigger);
                 inst.trigger.click(function () {
@@ -4144,11 +4145,7 @@
             if (nodeName === "input") {
                 inst.append.remove();
                 inst.trigger.remove();
-                $target.removeClass(this.markerClassName).
-                unbind("focus", this._showDatepicker).
-                unbind("keydown", this._doKeyDown).
-                unbind("keypress", this._doKeyPress).
-                unbind("keyup", this._doKeyUp);
+                $target.removeClass(this.markerClassName).unbind("focus", this._showDatepicker).unbind("keydown", this._doKeyDown).unbind("keypress", this._doKeyPress).unbind("keyup", this._doKeyUp);
             } else if (nodeName === "div" || nodeName === "span") {
                 $target.removeClass(this.markerClassName).empty();
             }
@@ -4173,16 +4170,13 @@
             nodeName = target.nodeName.toLowerCase();
             if (nodeName === "input") {
                 target.disabled = false;
-                inst.trigger.filter("button").
-                each(function () {
+                inst.trigger.filter("button").each(function () {
                     this.disabled = false;
-                }).end().
-                filter("img").css({opacity: "1.0", cursor: ""});
+                }).end().filter("img").css({opacity: "1.0", cursor: ""});
             } else if (nodeName === "div" || nodeName === "span") {
                 inline = $target.children("." + this._inlineClass);
                 inline.children().removeClass("ui-state-disabled");
-                inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-                prop("disabled", false);
+                inline.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled", false);
             }
             this._disabledInputs = $.map(this._disabledInputs,
                 function (value) {
@@ -4205,16 +4199,13 @@
             nodeName = target.nodeName.toLowerCase();
             if (nodeName === "input") {
                 target.disabled = true;
-                inst.trigger.filter("button").
-                each(function () {
+                inst.trigger.filter("button").each(function () {
                     this.disabled = true;
-                }).end().
-                filter("img").css({opacity: "0.5", cursor: "default"});
+                }).end().filter("img").css({opacity: "0.5", cursor: "default"});
             } else if (nodeName === "div" || nodeName === "span") {
                 inline = $target.children("." + this._inlineClass);
                 inline.children().addClass("ui-state-disabled");
-                inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-                prop("disabled", true);
+                inline.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled", true);
             }
             this._disabledInputs = $.map(this._disabledInputs,
                 function (value) {
@@ -5863,17 +5854,14 @@
 
         var otherArgs = Array.prototype.slice.call(arguments, 1);
         if (typeof options === "string" && (options === "isDisabled" || options === "getDate" || options === "widget")) {
-            return $.datepicker["_" + options + "Datepicker"].
-            apply($.datepicker, [this[0]].concat(otherArgs));
+            return $.datepicker["_" + options + "Datepicker"].apply($.datepicker, [this[0]].concat(otherArgs));
         }
         if (options === "option" && arguments.length === 2 && typeof arguments[1] === "string") {
-            return $.datepicker["_" + options + "Datepicker"].
-            apply($.datepicker, [this[0]].concat(otherArgs));
+            return $.datepicker["_" + options + "Datepicker"].apply($.datepicker, [this[0]].concat(otherArgs));
         }
         return this.each(function () {
             typeof options === "string" ?
-                $.datepicker["_" + options + "Datepicker"].
-                apply($.datepicker, [this].concat(otherArgs)) :
+                $.datepicker["_" + options + "Datepicker"].apply($.datepicker, [this].concat(otherArgs)) :
                 $.datepicker._attachDatepicker(this, options);
         });
     };
@@ -12988,8 +12976,8 @@
                         .appendTo(this.element);
 
                     classes = "ui-slider-range" +
-                            // note: this isn't the most fittingly semantic framework class for this element,
-                            // but worked best visually with a variety of themes
+                        // note: this isn't the most fittingly semantic framework class for this element,
+                        // but worked best visually with a variety of themes
                         " ui-widget-header ui-corner-all";
                 } else {
                     this.range.removeClass("ui-slider-range-min ui-slider-range-max")
@@ -15990,13 +15978,13 @@
             event.preventDefault();
 
             if (tab.hasClass("ui-state-disabled") ||
-                    // tab is already loading
+                // tab is already loading
                 tab.hasClass("ui-tabs-loading") ||
-                    // can't switch durning an animation
+                // can't switch durning an animation
                 this.running ||
-                    // click on active header, but not collapsible
+                // click on active header, but not collapsible
                 ( clickedIsActive && !options.collapsible ) ||
-                    // allow canceling activation
+                // allow canceling activation
                 ( this._trigger("beforeActivate", event, eventData) === false )) {
                 return;
             }

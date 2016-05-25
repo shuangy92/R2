@@ -54,7 +54,7 @@ public class JobService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
         return result;
     }
 
@@ -66,12 +66,14 @@ public class JobService {
         jobRepository.save(job);
     }
 
-    public void delete(Long id){
-        jobRepository.delete(id);
-    }
-    public void deleteList(ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
-            jobRepository.delete(id);
+            try {
+                jobRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

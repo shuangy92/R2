@@ -1,10 +1,15 @@
 package com.worksap.stm2016.domain.message;
 
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,9 +20,9 @@ import java.util.Date;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "request")
 @Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name="DIS_REQUEST_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,17 +37,8 @@ public abstract class Request implements Serializable {
     private Thread thread;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
-    private User sender;
-
-    @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    @OrderBy("name ASC")
-    @ManyToOne
-    @JoinColumn(name = "replier_id", referencedColumnName = "user_id")
-    private User replier;
 
     @ManyToOne
     @JoinColumn(name = "prev_id", referencedColumnName = "request_id")
@@ -57,12 +53,6 @@ public abstract class Request implements Serializable {
     @Column(name = "replier_message", columnDefinition = "text")
     private String replierMessage;
 
-    @Column(name = "send_date")
-    private Date sendDate;
-
-    @Column(name = "reply_date")
-    private Date replyDate;
-
     @Column(name = "request_type")
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
@@ -70,5 +60,26 @@ public abstract class Request implements Serializable {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private RequestStatus status = RequestStatus.PENDING;
+
+    /* auditing */
+    @OrderBy("name ASC")
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "user_id", name = "sender_id")
+    @CreatedBy
+    private User sender;
+
+    @OrderBy("name ASC")
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "user_id", name = "replier_id")
+    @LastModifiedBy
+    private User replier;
+
+    @Column(name = "send_date")
+    @CreatedDate
+    private Date sendDate;
+
+    @Column(name = "reply_date")
+    @LastModifiedDate
+    private Date replyDate;
 
 }

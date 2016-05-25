@@ -9,16 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.*;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -57,7 +55,7 @@ public class JobCategoryService {
                 specs.add(spec);
             }
         }
-        JSONObject result = SortAndFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
+        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, jobCategoryRepository);
         return result;
     }
 
@@ -69,14 +67,15 @@ public class JobCategoryService {
         jobCategoryRepository.save(jobCategory);
     }
 
-    public void delete(Long id){
-        jobCategoryRepository.delete(id);
-    }
-
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
-            jobCategoryRepository.delete(id);
+            try {
+                jobCategoryRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

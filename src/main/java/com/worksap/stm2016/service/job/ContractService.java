@@ -1,9 +1,9 @@
 package com.worksap.stm2016.service.job;
 
-import com.worksap.stm2016.domain.Contract;
-import com.worksap.stm2016.domain.job.Job;
-import com.worksap.stm2016.repository.ContractRepository;
-import com.worksap.stm2016.repository.job.JobRepository;
+import com.worksap.stm2016.domain.job.Contract;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
+import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.repository.job.ContractRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -56,11 +56,19 @@ public class ContractService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
         return result;
     }
 
-    public Contract save(Contract contract){
+    public Contract create(JobApplication jobApplication){
+        JobPost jobPost = jobApplication.getJobPost();
+        Contract contract = new Contract();
+        contract.setJob(jobPost.getJob());
+        contract.setStartDate(jobPost.getStartDate());
+        contract.setEndDate(jobPost.getEndDate());
+        contract.setPayRate(jobPost.getPayRate());
+        contract.setSalary(jobPost.getSalary());
+        contract.setUser(jobApplication.getApplicant());
         return contractRepository.save(contract);
     }
 
@@ -68,12 +76,14 @@ public class ContractService {
         return contractRepository.save(contract);
     }
 
-    public void delete(Long id){
-        contractRepository.delete(id);
-    }
-    public void deleteList(ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
-            contractRepository.delete(id);
+            try {
+                contractRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

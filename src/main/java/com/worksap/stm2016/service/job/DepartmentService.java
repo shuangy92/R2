@@ -1,13 +1,9 @@
 package com.worksap.stm2016.service.job;
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
-import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.form.UserRegisterForm;
-import com.worksap.stm2016.repository.UserRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
-import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.*;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -83,15 +77,15 @@ public class DepartmentService {
                 specs.add(spec);
             }
         }
-        JSONObject result = SortAndFilter(sort, order, limit, offset, filter, specs, departmentRepository);
+        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, departmentRepository);
         return result;
     }
 
-    public void save(Department department) throws ParseException {
-        departmentRepository.save(department);
+    public Department save(Department department) throws ParseException {
+        return departmentRepository.save(department);
     }
 
-    public void update(Department department) throws ParseException {
+    public Department update(Department department) throws ParseException {
         Long original = departmentRepository.findOne(department.getId()).getManagerId();
         if (original != null) {
             User manager = userService.get(original);
@@ -104,17 +98,18 @@ public class DepartmentService {
             userService.save(manager);
         }
 
-        departmentRepository.save(department);
-    }
-
-    public void delete(Long id){
-        departmentRepository.delete(id);
+        return departmentRepository.save(department);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
-            departmentRepository.delete(id);
+            try {
+                departmentRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

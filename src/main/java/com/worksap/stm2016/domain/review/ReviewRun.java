@@ -1,8 +1,8 @@
 package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "review_run")
-public class ReviewRun implements Serializable {
+public class ReviewRun implements Comparable<ReviewRun> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,18 +32,30 @@ public class ReviewRun implements Serializable {
     @Column(name = "deadline")
     private Date deadline;
 
-    @JsonBackReference
+    @JsonBackReference(value="flow-runs")
     @ManyToOne
     @JoinColumn(name = "review_flow_id")
     private ReviewFlow reviewFlow;
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "reviewers")
     private List<User> reviewers = new ArrayList<>();
+
+    @Transient
+    private ReviewStatus status = ReviewStatus.REVIEWING;
 
     @Override
     public String toString() {
         return "";
+    }
+
+    @Override
+    public int compareTo(ReviewRun another) {
+        if (this.getRunNumber()<another.getRunNumber()){
+            return -1;
+        }else{
+            return 1;
+        }
     }
 
 }

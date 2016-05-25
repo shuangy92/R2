@@ -564,7 +564,7 @@ define([
             this.isDefaultPrevented = src.defaultPrevented ||
             src.defaultPrevented === undefined &&
 
-                // Support: Android<4.0
+            // Support: Android<4.0
             src.returnValue === false ?
                 returnTrue :
                 returnFalse;

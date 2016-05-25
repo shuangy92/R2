@@ -1,16 +1,19 @@
 package com.worksap.stm2016.domain.recruitment;
 
-import com.worksap.stm2016.domain.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.worksap.stm2016.domain.review.ReviewResponse;
+import com.worksap.stm2016.domain.review.ReviewRun;
+import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -43,6 +46,22 @@ public class JobApplication implements Serializable {
     @Column(name = "created_date")
     @LastModifiedDate
     private Date applyDate;
+
+    @JsonManagedReference(value="application-responses")
+    @OneToMany(mappedBy="jobApplication", cascade = {CascadeType.ALL})
+    private List<ReviewResponse> responses = new ArrayList<>();
+
+    public void addResponse(ReviewResponse reviewResponse) {
+        if (reviewResponse != null) {
+            responses.add(reviewResponse);
+            reviewResponse.setJobApplication(this);
+        }
+    }
+    public void removeResponse(ReviewResponse reviewResponse) {
+        if (reviewResponse != null) {
+            responses.remove(reviewResponse);
+        }
+    }
 
     public enum JobApplicationStatus {
         SAVED, SUBMITTED, REVIEWING, PASSED, FAILED, WITHDREW

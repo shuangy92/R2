@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.recruitment;
 
+import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.service.recruitment.JobPostService;
 import org.json.simple.JSONObject;
@@ -10,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+
+import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -29,10 +32,10 @@ public class JobPostApi {
 
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
-                                     @RequestParam(name = "order") String order,
-                                     @RequestParam(name = "limit") Integer limit,
-                                     @RequestParam(name = "offset") Integer offset,
-                                     @RequestParam(name = "filter", required = false) String filter
+                              @RequestParam(name = "order") String order,
+                              @RequestParam(name = "limit") Integer limit,
+                              @RequestParam(name = "offset") Integer offset,
+                              @RequestParam(name = "filter", required = false) String filter
     ) throws org.json.simple.parser.ParseException {
 
         return jobPostService.getList(sort, order, limit, offset, filter);
@@ -52,7 +55,8 @@ public class JobPostApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(@RequestBody ArrayList<Long> ids){
-        jobPostService.deleteList(ids);
+    public JsonResponse deleteList(@RequestBody ArrayList<Long> ids){
+        Long result = jobPostService.deleteList(ids);
+        return deletionResponse(null, result);
     }
 }

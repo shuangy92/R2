@@ -6,11 +6,9 @@
 <head>
     <title>Application</title>
     <link th:href="@{/static/css/jquery.steps.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/js/jquery.steps.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/jquery.cookie.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/jquery.validate.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
 </head>
 <body>
 
@@ -46,28 +44,22 @@
                 },
                 onStepChanged: function (event, currentIndex, priorIndex) {
                     if (currentIndex === 1) {
-                        loadContactFormData("/api/user/profile/" + [[${currentUser.id}]]);
+                        loadContactForm("/api/user/profile/" + currentUser.id);
                     }
                 },
                 onFinishing: function (event, currentIndex) {
                     $("#contact-form").validate().settings.ignore = ":disabled,:hidden";
                     if ($("#contact-form").valid()) {
-                        submitContactForm([[${currentUser.id}]]);
+                        submitContactForm(currentUser.id);
                         if (job_post) {
                             submitJobApplication("SUBMITTED");
                         } else {
-                            submitContactForm([[${currentUser.id}]]);
                             window.location.href = "/career/user/profile";
                         }
                         return true;
                     }
                     return false;
                 },
-                onFinished: function (event, currentIndex) {
-                    if (job_post) {
-                        localStorage.removeItem("job_post")
-                    }
-                }
             });
             /* all other jquery libs need to be after jquery-steps*/
         });
@@ -81,8 +73,11 @@
     <div id="steps">
         <h3>Document</h3>
         <section>
-            <p>You may submit any relevant documents to be saved on your profile.  Example documents are resumes, cover letters, work experience and education documentation.  You may review your attachments at any time under the My Profile tab.</p>
-            <p>This step is optional. To skip this step, click Next Without Document. Skipping this step will not impact your eligibility for employment.</p>
+            <p>You may submit any relevant documents to be saved on your profile. Example documents are resumes, cover
+                letters, work experience and education documentation. You may review your attachments at any time under
+                the My Profile tab.</p>
+            <p>This step is optional. To skip this step, click Next Without Document. Skipping this step will not impact
+                your eligibility for employment.</p>
             <div th:replace="fragments/user_file_list :: user_file_list"></div>
         </section>
         <h3>Contact</h3>
@@ -103,7 +98,8 @@
                 <div class="form-group required">
                     <label for="country" class="col-sm-4 control-label">Country</label>
                     <div class="col-sm-8" id="country-select">
-                        <select class="form-control country-select" id="country" name="country" required="required" style="width:100%;">
+                        <select class="form-control country-select" id="country" name="country" required="required"
+                                style="width:100%;">
                             <option></option>
                         </select>
                     </div>
@@ -111,11 +107,14 @@
                 <div class="form-group required">
                     <label for="address" class="col-sm-4 control-label">Address</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="address" id="address" name="address" maxlength="60" required="required"/>
+                        <input class="form-control" type="address" id="address" name="address" maxlength="60"
+                               required="required"/>
                     </div>
                 </div>
                 <div class="form-group required">
-                    <label for="idNumber" class="control-label col-sm-4">National identification number <span><a href="//en.wikipedia.org/wiki/National_identification_number" target="_blank">?</a></span></label>
+                    <label for="idNumber" class="control-label col-sm-4">National identification number <span><a
+                            href="//en.wikipedia.org/wiki/National_identification_number"
+                            target="_blank">?</a></span></label>
                     <div class="col-sm-8">
                         <input class="form-control" type="input" id="idNumber" name="idNumber" required="required"/>
                     </div>
@@ -133,12 +132,12 @@
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
+        var user_profile;
         var editable = true;
         jQuery(document).ready(function ($) {
-            $("#birthday").datepicker({ dateFormat: 'yy-mm-dd' });
+            $("#birthday").datepicker({dateFormat: 'yy-mm-dd'});
 
-            initCountryList();
-            initFileListTable([[${currentUser.id}]]);
+            initFileListTable(currentUser.id);
 
             $('#file-upload-form').on('submit', function (e) {
                 e.preventDefault();
@@ -150,8 +149,12 @@
                     icon: 'fa fa-info-circle',
                     message: "Saving...",
                 });
-                submitContactForm([[${currentUser.id}]]);
+                submitContactForm(currentUser.id);
             })
+
+            $( window ).unload(function() {
+                localStorage.removeItem("job_post")
+            });
         });
 
         function checkJobApplicationExistence(job_post_id) {
@@ -183,16 +186,74 @@
                 });
             }
 
+            var method = "post";
+            if (status == "SUBMITTED") {
+                method = "put";
+            }
             $.ajax({
                 url: "/api/job_application",
-                type: "POST",
+                type: method,
                 data: JSON.stringify(job_application),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     job_application = data;
                     if (status == "SUBMITTED") {
-                        window.location.href = "/career/dashboard";
+                        window.location.href = "/career/job_application";
                     }
+                }
+            });
+        }
+
+        function loadContactForm(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (data) {
+                    user_profile = data;
+                    initCountryList();
+
+                    if (data.user.name) {
+                        $.each(data, function (k, v) {
+                            var sel = $("#contact-form #" + k);
+                            if (sel.length) {
+                                sel.val(v);
+                            }
+                        });
+
+                        $("#contact-form #name").val(user_profile.user.name);
+                    }
+                }
+            });
+        }
+        function submitContactForm(uid) {
+            $.each($('#contact-form').serializeArray(), function (i, field) {
+                switch (field.name) {
+                    case "country":
+                        user_profile[field.name] = {"id": field.value};
+                        break;
+                    case "birthday":
+                        user_profile[field.name] = Date.parse(field.value);
+                        break;
+                    case "name":
+                        var user = user_profile.user;
+                        user.name = field.value;
+                        user_profile.user = user;
+                        break;
+                    default:
+                        user_profile[field.name] = field.value;
+                }
+            });
+
+            $.ajax({
+                url: "/api/user/profile",
+                type: "POST",
+                data: JSON.stringify(user_profile),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    notify.update('message', "Saved");
+                    setTimeout(function () {
+                        notify.close();
+                    }, 500);
                 }
             });
         }

@@ -1,9 +1,9 @@
 package com.worksap.stm2016.controller.roster;
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.roster.Shift;
-import com.worksap.stm2016.service.ScheduleService;
-import com.worksap.stm2016.service.ShiftService;
+import com.worksap.stm2016.service.roster.ScheduleService;
+import com.worksap.stm2016.service.roster.ShiftService;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

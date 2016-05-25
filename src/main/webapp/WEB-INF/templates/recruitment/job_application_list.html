@@ -5,10 +5,14 @@
       layout:decorator="layout">
 <head>
     <title>Career</title>
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
+          media="screen" type="text/css"/>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
 </head>
 <body>
 
@@ -30,20 +34,20 @@
                smartDisplay="true">
         </table>
     </div>
-    <div th:replace="fragments/email_form :: email_form"></div>
+    <div th:replace="form/email_form :: email_form"></div>
+    <div th:replace="career/career_job_post :: job_post_modal"></div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
+        var $table = $('#table');
+        var url = "/api/job_application";
 
         jQuery(document).ready(function ($) {
             initTable();
         });
 
         function initTable() {
-            var url = "/api/job_application";
-            var $table = $('#table');
-
-            var columns =[{
+            var columns = [{
                 field: 'applyDate',
                 title: 'Applied',
                 sortable: true,
@@ -51,19 +55,15 @@
                     return (new Date(index)).toString("yyyy/M/dd");
                 }
             }, {
+                field: 'id',
+                title: 'ID',
+                sortable: true,
+            }, {
                 field: 'applicant',
                 title: 'Applicant',
                 sortable: true,
                 formatter: function (index, row, element) {
-                    return '<a href="/career/user/' + index.id + '">' + index.name + '</a>';
-                }
-            }, {
-                field: 'jobPostId',
-                title: 'JP ID',
-                sortable: true,
-                filterControl: 'input',
-                formatter: function (index, row, element) {
-                    return row.jobPost.id;
+                    return '<a href="/job_application/' + row.id + '">' + index.name + '</a>';
                 }
             }, {
                 field: 'title',
@@ -71,7 +71,8 @@
                 sortable: true,
                 filterControl: 'input',
                 formatter: function (index, row, element) {
-                    return '<a href="/job_post/' + row.jobPost.id + '">' + row.jobPost.title + '</a>';
+                    return '<a href="/job_post/' + row.jobPost.id + '">' + row.jobPost.title + ' </a>' +
+                            '<a data-toggle="modal" data-target="#job-post-modal"  data-id="' + row.jobPost.id + '" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                 }
             }, {
                 field: 'location',
@@ -105,11 +106,17 @@
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    filter.notStatus = "SAVED";
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
-                responseHandler: function(res) {
-                    $.each(res.rows, function( i, v ) {
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
                         res.rows[i].location = res.rows[i].jobPost.department.location;
                         res.rows[i].department = res.rows[i].jobPost.department.name;
                     });
@@ -118,17 +125,9 @@
                 detailFormatter: function (index, row, element) {
                     var left, right;
                     if (row.status != 'PASSED' && row.status != 'FAILED') {
-                        if (row.jobPost.reviewFlow) {
-                            left =
-                                    '<div class="col-md-8">' +
-                                    'Review Progress (under development): <a href="/review_flow/' + row.jobPost.reviewFlow.id + '">' + row.jobPost.reviewFlow.title + '</a>' +
-                                    '</div>';
-                        } else {
-                            left =
-                                    '<div class="col-md-8">' +
-                                    'Review Progress (under development): none' +
-                                    '</div>';
-                        }
+                        left =
+                                '<div class="col-md-8">' +
+                                '</div>';
 
                         right = '<div class="col-md-4">' +
                                 '<button type="button" class="btn btn-success btn-request approve" onclick="handleApplicationStatus(\'PASSED\',' + index + ')">Approve</button>' +
@@ -166,10 +165,10 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     notify.update('message', data);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         notify.close();
                     }, 1000);
-                    $('#table').bootstrapTable('updateRow', { index: index, row: application});
+                    $('#table').bootstrapTable('updateRow', {index: index, row: application});
                     $('#table').bootstrapTable('expandRow', index);
                 }
             });

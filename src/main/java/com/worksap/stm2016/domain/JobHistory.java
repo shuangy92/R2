@@ -1,6 +1,8 @@
 package com.worksap.stm2016.domain;
 
 
+import com.worksap.stm2016.domain.job.Contract;
+import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -29,11 +31,11 @@ public class JobHistory implements Serializable {
     private Contract contract;
 
     @Column(name = "startDate")
-    @Type(type="date")
+    @Type(type = "date")
     private Date startDate;
 
     @Column(name = "end_date")
-    @Type(type="date")
+    @Type(type = "date")
     private Date endDate;
 
 }

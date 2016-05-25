@@ -6,9 +6,11 @@
 <body>
 
 <div th:fragment="user_file_list">
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
-    <table id="table"
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
+          media="screen" type="text/css"/>
+    <script type="text/javascript"
+            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <table id="file-table"
            data-toolbar="#toolbar"
            data-sortable="true"
            data-show-refresh="true"
@@ -23,20 +25,16 @@
            smartDisplay="true">
     </table>
     <div class="file-upload-form" style="display: none">
-        <div th:replace="fragments/file_upload_form :: file_upload_form"></div>
+        <div th:replace="form/file_upload_form :: file_upload_form"></div>
     </div>
     <script type="text/javascript" th:inline="javascript">
         jQuery(document).ready(function ($) {
-            //initFileListTable();
             if (editable) {
                 $(".file-upload-form").show();
             }
         });
         function initFileListTable(uid) {
-            var url = "/api/file";
-            var $table = $('#table');
-
-            $table.bootstrapTable({
+            $('#file-table').bootstrapTable({
                 columns: [{
                     field: 'name',
                     title: 'Document Name',
@@ -53,7 +51,7 @@
                         }
                     }
                 }],
-                url: url,
+                url: "/api/file",
                 contentType: "application/x-www-form-urlencoded",
                 queryParamsType: "limit",
                 queryParams: function (p) {
@@ -62,7 +60,7 @@
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    var filter={};
+                    var filter = {};
                     filter.uid = "" + uid;
                     data.filter = JSON.stringify(filter);
                     return data;
@@ -77,7 +75,7 @@
                 url: '/api/file/' + fileId,
                 success: function (data) {
                     if (data.response == "OK") {
-                        $('#table').bootstrapTable('refresh');
+                        $('#file-table').bootstrapTable('refresh');
                     } else {
                         alert(data.detail);
                     }

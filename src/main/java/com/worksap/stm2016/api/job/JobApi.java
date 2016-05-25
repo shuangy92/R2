@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.job;
 
+import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.service.job.JobService;
 import org.json.simple.JSONObject;
@@ -11,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+
+import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -51,7 +54,8 @@ public class JobApi {
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(@RequestBody ArrayList<Long> ids){
-        jobService.deleteList(ids);
+    public JsonResponse deleteList(@RequestBody ArrayList<Long> ids){
+        Long result = jobService.deleteList(ids);
+        return deletionResponse(null, result);
     }
 }

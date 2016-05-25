@@ -26,6 +26,8 @@ public class JobPostService {
     JobPostRepository jobPostRepository;
     @Autowired
     JobCategoryRepository jobCategoryRepository;
+    @Autowired
+    ReviewFlowService reviewFlowService;
 
     public JobPost get(Long id){
         return jobPostRepository.findOne(id);
@@ -63,7 +65,7 @@ public class JobPostService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobPostRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, jobPostRepository);
         return result;
     }
 
@@ -79,9 +81,14 @@ public class JobPostService {
         jobPostRepository.delete(id);
     }
 
-    public void deleteList(@RequestBody ArrayList<Long> ids){
+    public Long deleteList(@RequestBody ArrayList<Long> ids){
         for (Long id: ids) {
-            jobPostRepository.delete(id);
+            try {
+                jobPostRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

@@ -8,8 +8,7 @@
 </head>
 <body>
 
-<!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
-<div layout:fragment="content">
+<div th:fragment="job_post_html">
     <h3 id="title"></h3>
     <hr/>
     <div class="row">
@@ -25,15 +24,15 @@
     <hr/>
 
     <div>
-        <label for="description" >Job Description:</label>
+        <label for="description">Job Description:</label>
         <p id="description"></p>
     </div>
     <div>
-        <label for="requirement" >Job Requirement:</label>
+        <label for="requirement">Job Requirement:</label>
         <p id="requirement"></p>
     </div>
     <div>
-        <label for="deadline" >Deadline for Application:</label>
+        <label for="deadline">Deadline for Application:</label>
         <p id="deadline"></p>
     </div>
     <hr/>
@@ -49,19 +48,38 @@
         <div class="col-md-4">Contract Ending Date: <span id="endDate"></span></div>
         <div class="col-md-4">Contract Length: <span id="contractLength"></span></div>
     </div>
+</div>
 
-    <br/>
-    <div id="apply-btn"></div>
+<div th:fragment="job_post_modal">
+    <div class="modal fade" id="job-post-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div th:replace="career/career_job_post :: job_post_html"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="career/career_job_post :: job_post_script"></div>
+    <script type="text/javascript" th:inline="javascript">
+        jQuery(document).ready(function ($) {
+            $('#job-post-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                loadJobPost(id);
+            })
+        });
+    </script>
+</div>
 
+<div th:fragment="job_post_script">
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-
         var job_post;
-        jQuery(document).ready(function ($) {
-            var job_post_id = window.location.pathname.split("/")[3];
+        function loadJobPost(id) {
             $.ajax({
                 type: 'get',
-                url: '/api/public/job_post/' + job_post_id,
+                url: '/api/public/job_post/' + id,
                 success: function (data) {
                     job_post = data;
                     $.each(data, function (k, v) {
@@ -79,23 +97,22 @@
                     $("#location").html(data.department.location);
                     $("#jobCategory").html(data.job.jobCategory.name);
                     $("#updated").html((new Date(data.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss"));
-                    if (checkJobApplicationExistence(data.id) && [[${currentUser}]] != null) {
+                    if (checkJobApplicationExistence(data.id) && currentUser != null) {
                         $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()" disabled="disabled">Apply</button>');
                     } else {
                         $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()">Apply</button>');
                     }
                 }
             });
-        });
+        }
 
         function applyJob() {
-            if ([[${currentUser}]] == null) {
+            if (currentUser == null) {
                 if (confirm("Please log in first. Do you want to log in now ?")) {
                     window.location.href = "/login";
                 }
             } else {
-                var role = [[${currentUser}]].role;
-                if (role["$name"] != "APPLICANT") {
+                if (currentUser.role != "APPLICANT") {
                     alert("You are already an employee");
                 } else {
                     localStorage.setItem("job_post", JSON.stringify(job_post));
@@ -104,6 +121,21 @@
             }
         }
         //]]>
+    </script>
+</div>
+
+<!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
+<div layout:fragment="content">
+
+    <div th:replace="career/career_job_post :: job_post_html"></div>
+    <br/>
+    <div id="apply-btn"></div>
+    <div th:replace="career/career_job_post :: job_post_script"></div>
+    <script type="text/javascript" th:inline="javascript">
+        jQuery(document).ready(function ($) {
+            var id = window.location.pathname.split("/")[3];
+            loadJobPost(id);
+        });
     </script>
 </div>
 </body>

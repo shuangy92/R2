@@ -1,6 +1,6 @@
 package com.worksap.stm2016.repository.roster;
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.roster.Roster;
 import com.worksap.stm2016.domain.roster.Shift;
 import org.springframework.data.jpa.repository.JpaRepository;

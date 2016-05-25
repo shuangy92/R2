@@ -1,7 +1,7 @@
 package com.worksap.stm2016.controller.user;
 
-import com.worksap.stm2016.repository.UserRepository;
-import com.worksap.stm2016.service.ScheduleService;
+import com.worksap.stm2016.repository.user.UserRepository;
+import com.worksap.stm2016.service.roster.ScheduleService;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

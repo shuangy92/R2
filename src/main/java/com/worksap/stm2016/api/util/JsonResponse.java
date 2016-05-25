@@ -15,4 +15,14 @@ public class JsonResponse {
    public static enum ResponseStatus {
       OK, WARN, ERROR;
    }
+
+   public static JsonResponse deletionResponse(Long id, Long result) {
+      if(result == 0) {
+         return new JsonResponse(JsonResponse.ResponseStatus.OK, "Deleted");
+      } else if (result == -1) {
+         return new JsonResponse(JsonResponse.ResponseStatus.ERROR, "Item of id " + id + "does not exists.");
+      } else {
+         return new JsonResponse(JsonResponse.ResponseStatus.ERROR, "Item of id " + result + " is referenced and cannot be deleted");
+      }
+   }
 }

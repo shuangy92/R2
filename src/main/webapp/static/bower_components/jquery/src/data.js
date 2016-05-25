@@ -126,8 +126,8 @@ define([
                     // with the key as-is
                     data = dataUser.get(elem, key) ||
 
-                            // Try to find dashed key if it exists (gh-2779)
-                            // This is for 2.2.x only
+                        // Try to find dashed key if it exists (gh-2779)
+                        // This is for 2.2.x only
                         dataUser.get(elem, key.replace(rmultiDash, "-$&").toLowerCase());
 
                     if (data !== undefined) {

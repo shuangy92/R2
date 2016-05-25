@@ -183,6 +183,7 @@
 .login-panel {
     margin-top: 25%;
 }
+
 /** request */
 .btn-request {
     display: block;
@@ -191,11 +192,36 @@
     margin-top: 20px;
 }
 
+/* required star */
 .form-group.required label:after {
-    content:"*";
-    color:red;
+    content: "*";
+    color: red;
 }
 
-.form-horizontal .control-label{
-    text-align:left;
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+/* modal */
+.modal {
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.dl-horizontal dt {
+    white-space: normal !important;
 }

@@ -1,10 +1,10 @@
 package com.worksap.stm2016.controller.roster;
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.roster.Schedule;
 import com.worksap.stm2016.domain.roster.TimeSlot;
-import com.worksap.stm2016.service.ScheduleService;
-import com.worksap.stm2016.service.TimeSlotService;
+import com.worksap.stm2016.service.roster.ScheduleService;
+import com.worksap.stm2016.service.roster.TimeSlotService;
 import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;

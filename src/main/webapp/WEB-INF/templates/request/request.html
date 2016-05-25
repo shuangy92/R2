@@ -1,139 +1,143 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
-<head>
-    <title>User information</title>
-    <script type="text/javascript" th:src="@{/static/js/weekpicker.js}"></script>
-    <script type="text/javascript" th:src="@{/static/js/jquery.autosave.min.js}"></script>
-</head>
+      xmlns:th="http://www.thymeleaf.org">
+
 <body>
 
-<div layout:fragment="content">
-    <h1>User Information</h1>
-    <!-- staffing -->
-    <form class="form-horizontal" role="form" id="staffing-request-form">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label for="title" class="col-sm-4 control-label">Title</label>
-                <div class="col-sm-5">
-                    <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="department" class="col-sm-4 control-label">Department</label>
-                <div class="col-sm-5">
-                    <input th:value="${user.department.name}" class="form-control" type="input" id="department" name="department" disabled="disabled"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="staffingRequestType" class="col-sm-4 control-label">I would like to...</label>
-                <div class="col-sm-5">
-                    <select class="form-control staffing-request-select" id="staffingRequestType" name="staffingRequestType" required="required">
-                        <option value="REPLACE">Replace existing positions</option>
-                        <option value="ADD">Request new positions</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="jobId" class="col-sm-3 control-label">Job Code</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="Job Code" type="number" id="jobId" name="jobId" required="required"/>
-                </div>
-                <div class="col-sm-3">
-                    <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="vacancies" class="col-sm-4 control-label"># of vacancies</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="vacancies" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="startDate" class="col-sm-4 control-label">Desired Starting Date</label>
-                <div class="col-sm-5">
-                    <input class="form-control" placeholder="Desired Starting Date" type="input" id="startDate" name="startDate" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="contractLength" class="col-sm-4 control-label">Desired Contract Length</label>
-                <div class="col-sm-5">
-                    <input th:value="2" class="form-control" placeholder="Desired Contract Length" type="number" id="contractLength" name="contractLength" required="required"/>
-                </div>
-                <div class="col-sm-3">
-                    <input type="radio" name="contractLengthUnit" value="week" checked="checked"/> Week
-                    <input type="radio" name="contractLengthUnit" value="month" /> Month
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="startDate" class="col-sm-4 control-label">Deadline for Application</label>
-                <div class="col-sm-5">
-                    <input class="form-control" placeholder="Leave blank if not sure" type="input" id="deadline" name="deadline"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="senderMessage" class="col-sm-4 control-label">Reason for request</label>
-                <div class="col-sm-5">
-                    <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
+<div th:fragment="request">
+    <div class="modal fade bs-example-modal-lg" id="request-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 id="title"></h3>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-4">Department: <span id="departmentName"></span></div>
+                        <div class="col-md-4">Request Type: <span id="requestType"></span></div>
+                        <div class="col-md-4">Status: <span id="status"></span></div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal">
+                                <dt>Sender:</dt>
+                                <dd id="sender"></dd>
+                                <dt>Date:</dt>
+                                <dd id="sendDate"></dd>
+                                <dt>Message:</dt>
+                                <dd id="senderMessage"></dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal">
+                                <dt>Replier:</dt>
+                                <dd id="replier"></dd>
+                                <dt>Date:</dt>
+                                <dd id="replyDate"></dd>
+                                <dt>Message:</dt>
+                                <dd id="replierMessage"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row" id="staffing">
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal">
+                                <dt>Staffing Request Type:</dt>
+                                <dd id="staffingRequestType"></dd>
+                                <dt>Vacancies:</dt>
+                                <dd id="vacancies"></dd>
+                                <dt>Starting Date:</dt>
+                                <dd id="startDate"></dd>
+                                <dt>Contract Length:</dt>
+                                <dd id="contractLength"></dd>
+                                <dt>Ending Date:</dt>
+                                <dd id="endDate"></dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal">
+                                <dt>Job Code:</dt>
+                                <dd id="jobId"></dd>
+                                <dt>Job Title:</dt>
+                                <dd id="jobTitle"></dd>
+                                <dt>Job Description:</dt>
+                                <dd id="description"></dd>
+                                <dt>Job Requirement:</dt>
+                                <dd id="requirement"></dd>
+                                <dt>Standard Hour:</dt>
+                                <dd id="hours"></dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-5">
-            <div class="form-group">
-                <label for="description" class="control-label">Job Description: </label>
-                <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
-            </div>
-            <div class="form-group">
-                <label for="requirement" class=" control-label">Job Requirement: </label>
-                <textarea class="form-control" type="input" id="requirement" name="requirement" rows="5"> </textarea>
-            </div>
-            <div class="form-group">
-                <label for="standardHours" class=" control-label">Standard Hours: </label>
-                <input class="form-control" type="number" id="standardHours" name="hours" />
-            </div>
-            <div class="form-group">
-                <label class=" control-label">Proposed Contract End Date: </label>
-                <p id="endDate"></p>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-lg btn-success">Submit</button>
-    </form>
-
-    <!-- other -->
-    <form class="form-horizontal" role="form" id="other-request-form">
-        <div class="col-sm-7">
-            <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">Title</label>
-                <div class="col-sm-8">
-                    <input th:value="aa" class="form-control" placeholder="Title" type="input" id="title" name="title" required="required"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="senderMessage" class="col-sm-2 control-label">Message</label>
-                <div class="col-sm-8">
-                    <textarea class="form-control" type="input" id="senderMessage" name="senderMessage" rows="5"> </textarea>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-lg btn-success">Submit</button>
-        </div>
-    </form>
-
-
+    </div>
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+
+        var id;
         jQuery(document).ready(function ($) {
+            $("#staffing").hide();
 
-            $.ajax({
-                type: "GET",
-                url: "/api/" + window.location.pathname,
-                success: function (data) {
-                    console.log(data);
-                }
+            $('#request-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                id = button.data('id');
+                loadRequest(id);
             })
-
         });
+
+        function loadRequest(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/request/' + id,
+                success: function (data) {
+                    if (data.requestType == "STAFFING") {
+                        $("#staffing").show();
+                        $.each(data.job, function (k, v) {
+                            var sel = $("#" + k);
+                            if (sel.length) {
+                                if (v) {
+                                    sel.html(v);
+                                } else {
+                                    sel.html("N/A")
+                                }
+                            }
+                        });
+                        $("#jobId").html(data.job.id);
+                    }
+
+                    $.each(data, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            if (v) {
+                                sel.html(v);
+                            } else {
+                                sel.html("N/A")
+                            }
+                        }
+                    });
+
+                    $("#departmentName").html(data.department.name);
+                    $("#sender").html(data.sender.name);
+                    $("#sendDate").html((new Date(data.sendDate)).toString("yyyy/M/dd hh:mm:ss"));
+                    if (data.replier.id == data.sender.id) {
+                        $("#replier").html("N/A");
+                        $("#replyDate").html("N/A");
+                    } else {
+                        $("#replier").html(data.replier.name);
+                        $("#replyDate").html((new Date(data.replyDate)).toString("yyyy/M/dd hh:mm:ss"));
+                    }
+
+                }
+            });
+        }
+        //]]>
     </script>
 </div>
 </body>
 </html>
+
+
+

@@ -1,23 +1,18 @@
 package com.worksap.stm2016.api.job;
 
+import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.JobCategory;
-import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.service.job.JobCategoryService;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
+import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -60,7 +55,8 @@ public class JobCategoryApi {
 
     //@PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(@RequestBody ArrayList<Long> ids){
-        jobCategoryService.deleteList(ids);
+    public JsonResponse deleteList(@RequestBody ArrayList<Long> ids){
+        Long result = jobCategoryService.deleteList(ids);
+        return deletionResponse(null, result);
     }
 }

@@ -1,12 +1,9 @@
 package com.worksap.stm2016.service.recruitment;
 
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
-import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
-import com.worksap.stm2016.repository.recruitment.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -55,6 +52,8 @@ public class JobApplicationService {
                     spec = isValue("jobPost", "id", Long.parseLong(search));
                 } else if (key.equals("status")) {
                     spec = isValue(key, JobApplication.JobApplicationStatus.valueOf(search));
+                } else if (key.equals("notStatus")) {
+                    spec = isNotValue("status", JobApplication.JobApplicationStatus.valueOf(search));
                 } else if (key.equals("uid")) {
                     spec = isValue("applicant", "id", Long.parseLong(search));
                 } else {
@@ -64,7 +63,7 @@ public class JobApplicationService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
         return result;
     }
 
@@ -87,9 +86,14 @@ public class JobApplicationService {
         jobApplicationRepository.delete(jobApplication);
     }
 
-    public void deleteList(@RequestBody ArrayList<Long> ids){
+    public Long deleteList(@RequestBody ArrayList<Long> ids){
         for (Long id: ids) {
-            jobApplicationRepository.delete(id);
+            try {
+                jobApplicationRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
         }
+        return Long.valueOf(0);
     }
 }

@@ -1,7 +1,6 @@
 package com.worksap.stm2016.repository.recruitment;
 
 
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewRun;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

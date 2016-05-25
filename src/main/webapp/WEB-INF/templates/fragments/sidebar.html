@@ -38,10 +38,6 @@
 
         jQuery(document).ready(function ($) {
 
-            if (window.location.pathname != '/') {
-                $(".home").removeClass('active');
-            }
-
             $("#side-menu a").hide();
             $(".all").show();
             switch (currentUser.role) {
@@ -69,7 +65,7 @@
                     icon: 'fa fa-info-circle',
                     message: msg,
                     url: "/request"
-                },{
+                }, {
                     element: 'body',
                     type: 'info',
                     delay: 0,
@@ -91,11 +87,38 @@
                 console.log('closed');
             });
         };
-        window.onbeforeunload  = function() {
+        window.onbeforeunload = function () {
             sse.close();
         }
-       //]]>
+        //]]>
     </script>
 </div>
+
+<div th:fragment="sidebar_career">
+    <nav class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li><a id="career" th:href="@{/career}"> Career</a></li>
+                <li><a class="applicant" th:href="@{/career/job_application}"> My Job Applications</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </nav>
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        jQuery(document).ready(function ($) {
+
+            if (window.location.pathname != '/career') {
+                $("#career").removeClass('active');
+            }
+
+            if (currentUser == null) {
+                $(".applicant").hide();
+            }
+
+        });
+        //]]>
+        </script>
+</div>
+
 </body>
 </html>

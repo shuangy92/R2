@@ -627,19 +627,19 @@
 
             // Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
                 attributes = "\\[" + whitespace + "*(" + identifier + ")(?:" + whitespace +
-                        // Operator (capture 2)
+                    // Operator (capture 2)
                     "*([*^$|!~]?=)" + whitespace +
-                        // "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+                    // "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
                     "*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
                     "*\\]",
 
                 pseudos = ":(" + identifier + ")(?:\\((" +
-                        // To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
-                        // 1. quoted (capture 3; capture 4 or capture 5)
+                    // To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+                    // 1. quoted (capture 3; capture 4 or capture 5)
                     "('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
-                        // 2. simple (capture 6)
+                    // 2. simple (capture 6)
                     "((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
-                        // 3. anything else (capture 2)
+                    // 3. anything else (capture 2)
                     ".*" +
                     ")\\)|)",
 
@@ -1425,8 +1425,8 @@
 
                         // IE 9's matchesSelector returns false on disconnected nodes
                         if (ret || support.disconnectedMatch ||
-                                // As well, disconnected nodes are said to be in a document
-                                // fragment in IE 9
+                            // As well, disconnected nodes are said to be in a document
+                            // fragment in IE 9
                             elem.document && elem.document.nodeType !== 11) {
                             return ret;
                         }
@@ -1618,9 +1618,9 @@
 
                             // Strip excess characters from unquoted arguments
                         } else if (unquoted && rpseudo.test(unquoted) &&
-                                // Get excess from tokenize (recursively)
+                            // Get excess from tokenize (recursively)
                             (excess = tokenize(unquoted, true)) &&
-                                // advance to the next closing parenthesis
+                            // advance to the next closing parenthesis
                             (excess = unquoted.indexOf(")", unquoted.length - excess) - unquoted.length)) {
 
                             // excess is a negative index
@@ -1743,7 +1743,7 @@
 
                                         while ((node = ++nodeIndex && node && node[dir] ||
 
-                                                // Fallback to seeking `elem` from the start
+                                            // Fallback to seeking `elem` from the start
                                             (diff = nodeIndex = 0) || start.pop())) {
 
                                             // When found, cache indexes on `parent` and break
@@ -1996,8 +1996,8 @@
                         return elem.nodeName.toLowerCase() === "input" &&
                             elem.type === "text" &&
 
-                                // Support: IE<8
-                                // New HTML5 attribute values (e.g., "search") appear with elem.type === "text"
+                            // Support: IE<8
+                            // New HTML5 attribute values (e.g., "search") appear with elem.type === "text"
                             ( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === "text" );
                     },
 
@@ -3972,8 +3972,8 @@
                     // with the key as-is
                     data = dataUser.get(elem, key) ||
 
-                            // Try to find dashed key if it exists (gh-2779)
-                            // This is for 2.2.x only
+                        // Try to find dashed key if it exists (gh-2779)
+                        // This is for 2.2.x only
                         dataUser.get(elem, key.replace(rmultiDash, "-$&").toLowerCase());
 
                     if (data !== undefined) {
@@ -4977,7 +4977,7 @@
             this.isDefaultPrevented = src.defaultPrevented ||
             src.defaultPrevented === undefined &&
 
-                // Support: Android<4.0
+            // Support: Android<4.0
             src.returnValue === false ?
                 returnTrue :
                 returnFalse;
@@ -7646,7 +7646,7 @@
                         // IE8-9 doesn't update selected after form reset (#2551)
                         if (( option.selected || i === index ) &&
 
-                                // Don't return options that are disabled or in a disabled optgroup
+                            // Don't return options that are disabled or in a disabled optgroup
                             ( support.optDisabled ?
                                 !option.disabled : option.getAttribute("disabled") === null ) &&
                             ( !option.parentNode.disabled || !jQuery.nodeName(option.parentNode, "optgroup") )) {

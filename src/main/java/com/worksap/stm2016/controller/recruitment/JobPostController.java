@@ -26,9 +26,4 @@ public class JobPostController {
     public String getJobPostListPage() {
         return "recruitment/job_post_list";
     }
-
-    @RequestMapping(value = "/job_application", method = RequestMethod.GET)
-    public String getJobApplicationListPage() {
-        return "recruitment/job_application_list";
-    }
 }

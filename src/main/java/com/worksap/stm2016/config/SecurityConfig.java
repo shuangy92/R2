@@ -18,7 +18,7 @@ public class SecurityConfig {
 
     @Configuration
     @Order(1)
-    public static class ApiWebSecurityConfig  extends WebSecurityConfigurerAdapter {
+    public static class ApiWebSecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .csrf().disable()
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
     //@EnableGlobalMethodSecurity(prePostEnabled = true)
     @Configuration
-    public static class FormWebSecurityConfig  extends WebSecurityConfigurerAdapter {
+    public static class FormWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private UserDetailsService userDetailsService;
@@ -86,4 +86,5 @@ public class SecurityConfig {
                     .passwordEncoder(new BCryptPasswordEncoder());
         }
 
-    }}
+    }
+}

@@ -16,7 +16,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@DiscriminatorValue(value=RequestType.Values.STAFFING)
 @Table(name = "staffing_request")
 public class StaffingRequest extends Request implements Serializable {
 

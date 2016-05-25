@@ -3,16 +3,13 @@ package com.worksap.stm2016.api;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.domain.FileProfile;
-import com.worksap.stm2016.domain.User;
-import com.worksap.stm2016.repository.FileProfileRepository;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.service.FileService;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,11 +18,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -46,7 +38,7 @@ public class FileApi {
                               @RequestParam(name = "offset") Integer offset,
                               @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
-        return fileService.getList( sort, order, limit, offset, filter);
+        return fileService.getList(sort, order, limit, offset, filter);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -113,7 +105,7 @@ public class FileApi {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public JsonResponse delete(@PathVariable("id") Long id){
+    public JsonResponse delete(@PathVariable("id") Long id) {
         if (fileService.delete(id)) {
             return new JsonResponse(ResponseStatus.OK, "File deleted");
         } else {

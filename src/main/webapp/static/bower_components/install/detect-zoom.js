@@ -127,7 +127,7 @@
         zoom = Math.round(zoom * 100) / 100;
         document.body.removeChild(container);
 
-        return{
+        return {
             zoom: zoom,
             devicePxPerCssPx: zoom * devicePixelRatio()
         };

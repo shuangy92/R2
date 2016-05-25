@@ -1,9 +1,6 @@
 package com.worksap.stm2016.service;
 
-import com.worksap.stm2016.api.util.JsonResponse;
-import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.domain.FileProfile;
-import com.worksap.stm2016.domain.User;
 import com.worksap.stm2016.repository.FileProfileRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,18 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.SortAndFilter;
+import static com.worksap.stm2016.specification.BasicSpecs.filterAnd;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
@@ -55,13 +48,13 @@ public class FileService {
                 String search = (String) filterObj.get(key);
                 Specification spec;
                 //if (key.equals("user")) {
-                    spec = isValue("user", "id", Long.parseLong(search));
+                spec = isValue("user", "id", Long.parseLong(search));
                 //}
                 specs.add(spec);
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, fileProfileRepository);
+        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, fileProfileRepository);
         return result;
     }
 
@@ -69,7 +62,7 @@ public class FileService {
         return fileProfileRepository.save(fileProfile);
     }
 
-    public boolean delete(Long id){
+    public boolean delete(Long id) {
         String path = fileProfileRepository.findOne(id).getPath();
         File file = new File(path);
         if (file.delete()) {

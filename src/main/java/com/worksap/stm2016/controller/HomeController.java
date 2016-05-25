@@ -1,7 +1,7 @@
 package com.worksap.stm2016.controller;
 
 import com.worksap.stm2016.audit.CurrentUser;
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
@@ -37,6 +37,6 @@ public class HomeController {
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard() {
-        return "dashboard";
+        return "notification_list";
     }
 }

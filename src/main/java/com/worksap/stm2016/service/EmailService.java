@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -26,7 +25,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(mail, true);
         helper.setFrom(new InternetAddress(email.getFrom().getEmail(), email.getFrom().getName()));
         helper.setTo(new InternetAddress(email.getTo().getEmail(), email.getTo().getName()));
-       // helper.setReplyTo(replyTo);
+        // helper.setReplyTo(replyTo);
         helper.setSubject(email.getSubject());
         helper.setText(email.getBody(), true);
 

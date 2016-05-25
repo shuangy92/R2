@@ -450,21 +450,21 @@ module.exports = function (grunt) {
     var testSubtasks = [];
     // Skip core tests if running a different subset of the test suite
     if (runSubset('core') &&
-            // Skip core tests if this is a Savage build
+        // Skip core tests if this is a Savage build
         process.env.TRAVIS_REPO_SLUG !== 'twbs-savage/bootstrap') {
         testSubtasks = testSubtasks.concat(['dist-css', 'dist-js', 'csslint:dist', 'test-js', 'docs']);
     }
     // Skip HTML validation if running a different subset of the test suite
     if (runSubset('validate-html') &&
-            // Skip HTML5 validator on Travis when [skip validator] is in the commit message
+        // Skip HTML5 validator on Travis when [skip validator] is in the commit message
         isUndefOrNonZero(process.env.TWBS_DO_VALIDATOR)) {
         testSubtasks.push('validate-html');
     }
     // Only run Sauce Labs tests if there's a Sauce access key
     if (typeof process.env.SAUCE_ACCESS_KEY !== 'undefined' &&
-            // Skip Sauce if running a different subset of the test suite
+        // Skip Sauce if running a different subset of the test suite
         runSubset('sauce-js-unit') &&
-            // Skip Sauce on Travis when [skip sauce] is in the commit message
+        // Skip Sauce on Travis when [skip sauce] is in the commit message
         isUndefOrNonZero(process.env.TWBS_DO_SAUCE)) {
         testSubtasks.push('connect');
         testSubtasks.push('saucelabs-qunit');

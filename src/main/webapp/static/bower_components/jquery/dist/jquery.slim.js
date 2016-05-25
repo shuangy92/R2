@@ -606,19 +606,19 @@
 
             // Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
                 attributes = "\\[" + whitespace + "*(" + identifier + ")(?:" + whitespace +
-                        // Operator (capture 2)
+                    // Operator (capture 2)
                     "*([*^$|!~]?=)" + whitespace +
-                        // "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+                    // "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
                     "*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
                     "*\\]",
 
                 pseudos = ":(" + identifier + ")(?:\\((" +
-                        // To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
-                        // 1. quoted (capture 3; capture 4 or capture 5)
+                    // To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+                    // 1. quoted (capture 3; capture 4 or capture 5)
                     "('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
-                        // 2. simple (capture 6)
+                    // 2. simple (capture 6)
                     "((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
-                        // 3. anything else (capture 2)
+                    // 3. anything else (capture 2)
                     ".*" +
                     ")\\)|)",
 
@@ -1003,14 +1003,14 @@
                     return "label" in elem && elem.disabled === disabled ||
                         "form" in elem && elem.disabled === disabled ||
 
-                            // Check non-disabled form elements for fieldset[disabled] ancestors
+                        // Check non-disabled form elements for fieldset[disabled] ancestors
                         "form" in elem && elem.disabled === false && (
                             // Support: IE6-11+
                             // Ancestry is covered for us
                             elem.isDisabled === disabled ||
 
-                                // Otherwise, assume any non-<option> under fieldset[disabled] is disabled
-                                /* jshint -W018 */
+                            // Otherwise, assume any non-<option> under fieldset[disabled] is disabled
+                            /* jshint -W018 */
                             elem.isDisabled !== !disabled &&
                             ("label" in elem || !disabledAncestor(elem)) !== disabled
                         );
@@ -1468,8 +1468,8 @@
 
                         // IE 9's matchesSelector returns false on disconnected nodes
                         if (ret || support.disconnectedMatch ||
-                                // As well, disconnected nodes are said to be in a document
-                                // fragment in IE 9
+                            // As well, disconnected nodes are said to be in a document
+                            // fragment in IE 9
                             elem.document && elem.document.nodeType !== 11) {
                             return ret;
                         }
@@ -1665,9 +1665,9 @@
 
                             // Strip excess characters from unquoted arguments
                         } else if (unquoted && rpseudo.test(unquoted) &&
-                                // Get excess from tokenize (recursively)
+                            // Get excess from tokenize (recursively)
                             (excess = tokenize(unquoted, true)) &&
-                                // advance to the next closing parenthesis
+                            // advance to the next closing parenthesis
                             (excess = unquoted.indexOf(")", unquoted.length - excess) - unquoted.length)) {
 
                             // excess is a negative index
@@ -1790,7 +1790,7 @@
 
                                         while ((node = ++nodeIndex && node && node[dir] ||
 
-                                                // Fallback to seeking `elem` from the start
+                                            // Fallback to seeking `elem` from the start
                                             (diff = nodeIndex = 0) || start.pop())) {
 
                                             // When found, cache indexes on `parent` and break
@@ -2038,8 +2038,8 @@
                         return elem.nodeName.toLowerCase() === "input" &&
                             elem.type === "text" &&
 
-                                // Support: IE<8
-                                // New HTML5 attribute values (e.g., "search") appear with elem.type === "text"
+                            // Support: IE<8
+                            // New HTML5 attribute values (e.g., "search") appear with elem.type === "text"
                             ( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === "text" );
                     },
 
@@ -3470,9 +3470,9 @@
                                         // Retrieve `then` only once
                                         then = returned &&
 
-                                                // Support: Promises/A+ section 2.3.4
-                                                // https://promisesaplus.com/#point-64
-                                                // Only check objects and functions for thenability
+                                            // Support: Promises/A+ section 2.3.4
+                                            // https://promisesaplus.com/#point-64
+                                            // Only check objects and functions for thenability
                                             ( typeof returned === "object" ||
                                             typeof returned === "function" ) &&
                                             returned.then;
@@ -4504,8 +4504,8 @@
                 }
                 if (elem.style.display === "" && jQuery.css(elem, "display") === "none" &&
 
-                        // Support: Firefox <=42 - 43
-                        // Don't set inline display on disconnected elements with computed display: none
+                    // Support: Firefox <=42 - 43
+                    // Don't set inline display on disconnected elements with computed display: none
                     jQuery.contains(elem.ownerDocument, elem)) {
 
                     values[index] = getDefaultDisplay(elem);
@@ -5278,7 +5278,7 @@
             this.isDefaultPrevented = src.defaultPrevented ||
             src.defaultPrevented === undefined &&
 
-                // Support: Android<4.0
+            // Support: Android<4.0
             src.returnValue === false ?
                 returnTrue :
                 returnFalse;
@@ -6338,12 +6338,12 @@
                     // but it must have a current display style that would benefit
                     return rdisplayswap.test(jQuery.css(elem, "display")) &&
 
-                        // Support: Safari 8+
-                        // Table columns in Safari have non-zero offsetWidth & zero
-                        // getBoundingClientRect().width unless display is changed.
-                        // Support: IE <= 11 only
-                        // Running getBoundingClientRect on a disconnected node
-                        // in IE throws an error.
+                    // Support: Safari 8+
+                    // Table columns in Safari have non-zero offsetWidth & zero
+                    // getBoundingClientRect().width unless display is changed.
+                    // Support: IE <= 11 only
+                    // Running getBoundingClientRect on a disconnected node
+                    // in IE throws an error.
                     ( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?
                         swap(elem, cssShow, function () {
                             return getWidthOrHeight(elem, name, extra);
@@ -6987,7 +6987,7 @@
                         // IE8-9 doesn't update selected after form reset (#2551)
                         if (( option.selected || i === index ) &&
 
-                                // Don't return options that are disabled or in a disabled optgroup
+                            // Don't return options that are disabled or in a disabled optgroup
                             !option.disabled &&
                             ( !option.parentNode.disabled || !jQuery.nodeName(option.parentNode, "optgroup") )) {
 

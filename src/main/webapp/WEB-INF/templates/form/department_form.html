@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="department_form">
+    <div class="modal fade" id="department-create-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create a department</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="department-create-form">
+                        <div class="form-group required">
+                            <label for="name" class="col-sm-4 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Department Name" id="name" name="name"
+                                       required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="location" class="col-sm-4 control-label">Location</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Location" type="input" id="location"
+                                       name="location" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="department-edit-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" id="department-edit-form">
+                        <div class="form-group">
+                            <label for="id" class="col-sm-4 control-label">ID</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="id" id="id" name="id" required="required"
+                                       readonly="readonly"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="name" class="col-sm-4 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Department Name" id="name" name="name"
+                                       required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="manager" class="col-sm-4 control-label">Manager</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="manager" name="managerId">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="location" class="col-sm-4 control-label">Location</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" placeholder="Location" type="input" id="location"
+                                       name="location" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        var department;
+        jQuery(document).ready(function ($) {
+            $('#department-edit-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                loadDepartmentForm(id);
+            })
+
+            $('#department-create-form').on('submit', function (e) {
+                e.preventDefault();
+                $('#department-create-modal').modal('hide')
+                submitDepartmentForm("post", $(this));
+            })
+            $('#department-edit-form').on('submit', function (e) {
+                e.preventDefault();
+                $('#department-edit-modal').modal('hide')
+                submitDepartmentForm("put", $(this));
+            })
+        });
+
+        function loadDepartmentForm(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/department/' + id,
+                success: function (data) {
+                    department = data;
+                    $.each(department, function (k, v) {
+                        var sel = $("#department-edit-form #" + k);
+                        if (sel.length) {
+                            sel.val(v);
+                        }
+                    });
+                    var manager_select = $("#manager")
+                    initDepartmentMemberList(manager_select, "Select a manager");
+
+                    if (department.manager) {
+                        manager_select.data('select2').trigger('select', {
+                            data: {"id": department.manager.id, "text": department.manager.name}
+                        });
+                    }
+                }
+            });
+        }
+
+        function submitDepartmentForm(method, form) {
+            var data = {};
+            $.each(form.serializeArray(), function (i, field) {
+                switch (field.name) {
+                    case "managerId":
+                        data[field.name] = parseInt(field.value);
+                        break;
+                    default:
+                        data[field.name] = field.value;
+                }
+            });
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+            $.ajax({
+                type: method,
+                url: "/api/department/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $table.bootstrapTable('refresh');
+                    var options = $table.bootstrapTable('getOptions');
+                    $table.bootstrapTable('selectPage', options.totalPages);
+                    notify.close();
+                }
+            });
+        }
+
+        function initDepartmentMemberList($select, placeholder) {
+            $.ajax({
+                type: 'get',
+                url: "/api/user/department/" + department.id,
+                success: function (data) {
+                    var candidates = $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
+                    })
+                    $select.html('').select2({data: [{id: '', text: ''}]});
+                    $select.select2({
+                        data: candidates,
+                        placeholder: placeholder,
+                    });
+                }
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

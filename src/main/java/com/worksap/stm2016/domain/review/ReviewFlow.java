@@ -1,11 +1,9 @@
 package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,13 +29,14 @@ public class ReviewFlow implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy="reviewFlow")
+    @JsonManagedReference(value="flow-runs")
+    @OneToMany(mappedBy="reviewFlow", cascade = {CascadeType.ALL})
     private List<ReviewRun> runs = new ArrayList<>();
 
     public void addRun(ReviewRun reviewRun) {
         if (reviewRun != null) {
             runs.add(reviewRun);
+            reviewRun.setRunNumber((short) runs.size());
             reviewRun.setReviewFlow(this);
         }
     }

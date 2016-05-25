@@ -24,10 +24,12 @@
                                        required="required" autofocus="autofocus"/>
                             </div>
                             <div class="form-group">
-                                <input type="password" placeholder="Password" class="form-control" name="password" id="password" required="required"/>
+                                <input type="password" placeholder="Password" class="form-control" name="password"
+                                       id="password" required="required"/>
                             </div>
                             <div class="form-group">
-                                <input type="password" placeholder="Password Repeat" class="form-control" name="passwordRepeated" id="passwordRepeated" required="required"/>
+                                <input type="password" placeholder="Password Repeat" class="form-control"
+                                       name="passwordRepeated" id="passwordRepeated" required="required"/>
                             </div>
                             <button type="submit" class="btn btn-lg btn-success btn-block">Sign up</button>
                         </fieldset>
@@ -58,7 +60,7 @@
             form.on('submit', function (e) {
                 e.preventDefault();
                 var data = {};
-                $.each(form.serializeArray(), function(i, field) {
+                $.each(form.serializeArray(), function (i, field) {
                     data[field.name] = field.value;
                 });
                 data.role = "APPLICANT";

@@ -11,9 +11,6 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/reorder-rows/bootstrap-table-reorder-rows.js}"></script>
-
-    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
 </head>
 <body>
 
@@ -23,7 +20,8 @@
         <form role="form" id="review-flow-form">
             <div class="form-group">
                 <label for="reviewers" class=" control-label">Title</label>
-                    <input class="form-control" placeholder="Title" id="review-flow-title" name="review-flow-title" required="required"/>
+                <input class="form-control" placeholder="Title" id="review-flow-title" name="review-flow-title"
+                       required="required"/>
             </div>
             <br/>
 
@@ -31,13 +29,12 @@
                 <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#popup-model">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
-                <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
+                <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
                     <i class="glyphicon glyphicon-trash"></i>
                 </button>
             </div>
             <table id="table"
                    data-toolbar="#toolbar"
-                   data-sortable="true"
                    data-show-refresh="true"
                    data-show-toggle="true"
                    data-show-columns="true"
@@ -47,18 +44,22 @@
                    data-page-list="[ALL]"
                    data-minimum-count-columns="1"
                    data-id-field="id"
-                   smartDisplay="true">
+                   smartDisplay="true"
+                   data-use-row-attr-func="true"
+                   data-reorderable-rows="true">
             </table>
             <button type="submit" class="btn btn-primary" id="btn-save" style="float: right">save</button>
         </form>
     </div>
 
-    <!-- Modal -->
+    <div th:replace="fragments/common :: deletion"></div>
+
     <div class="modal fade" id="popup-model" tabindex="-1" role="dialog" aria-labelledby="popup-modelLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="popup-modelLabel">Create a review run</h4>
                 </div>
                 <div class="modal-body">
@@ -66,24 +67,28 @@
                         <div class="form-group required">
                             <label for="task" class="col-sm-4 control-label">Task</label>
                             <div class="col-sm-8">
-                                <input class="form-control" placeholder="Task" id="task" name="task" required="required"/>
+                                <input class="form-control" placeholder="Task" id="task" name="task"
+                                       required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
                             <label for="reviewers" class="col-sm-4 control-label">Reviewers</label>
                             <div class="col-sm-8">
-                                <select class="form-control reviewer-select" id="reviewers" name="reviewers" multiple="multiple" style="width: 100%" required="required"></select>
+                                <select class="form-control reviewer-select" id="reviewers" name="reviewers"
+                                        multiple="multiple" style="width: 100%" required="required"></select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="reviewers" class="col-sm-4 control-label">Department Filter</label>
                             <div class="col-sm-8">
-                                <select class="form-control department-select" style="width: 100%"><option></option></select>
+                                <select class="form-control department-select" style="width: 100%">
+                                    <option></option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-4">
-                                <button type="submit" class="btn btn-success" >Create</button>
+                                <button type="submit" class="btn btn-success">Create</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -96,6 +101,9 @@
     <script type="text/javascript" th:inline="javascript">
         var review_flow;
         var $table = $('#table');
+        var url = '/api' + window.location.pathname
+        var final_rows;
+
         jQuery(document).ready(function ($) {
 
             initTable();
@@ -112,14 +120,17 @@
 
         function initTable() {
 
-            var columns =[{
+            var columns = [{
                 field: 'state',
                 checkbox: true
+            }, {
+                field: 'id',
+                title: 'ID'
             }, {
                 field: 'runNumber',
                 title: 'Run No.',
                 formatter: function (index, row, element) {
-                    return element;
+                    return index;
                 }
             }, {
                 field: 'task',
@@ -129,7 +140,7 @@
                 title: 'Reviewers',
                 formatter: function (index, row, element) {
                     var result = "";
-                    $.each(index, function( i, v ) {
+                    $.each(index, function (i, v) {
                         result += '<a target="_blank" href="/user/' + v.id + '">' + v.name + '</a><br/>';
                     });
                     return result;
@@ -138,7 +149,7 @@
 
             $table.bootstrapTable({
                 columns: columns,
-                url: '/api' + window.location.pathname,
+                url: url,
                 contentType: "application/x-www-form-urlencoded",
                 queryParamsType: "limit",
                 queryParams: function (p) {
@@ -154,7 +165,7 @@
                     data.filter = p.filter;
                     return data;
                 },
-                responseHandler: function(res) {
+                responseHandler: function (res) {
                     review_flow = res;
                     $("#review-flow-title").val(review_flow.title);
 
@@ -163,56 +174,27 @@
                     data.total = res.runs.length;
                     return data;
                 },
+                onReorderRow: function (rows) {
+                    final_rows = rows;
+                    $.each(final_rows, function( i, row ) {
+                        row.runNumber = i;
+                    });
+                },
                 sortOrder: 'asc',
                 cookie: true,
                 cookieIdTable: 'review_run',
-                //reorderableRows: true,
+                clickToSelect: true,
             });
 
-            var $remove = $("#btn-delete-row");
             var $insert = $("#btn-add-row");
 
             $insert.on('click', function () {
                 initReviewRunForm();
             })
-            $table.on('check.bs.table uncheck.bs.table ' +
-                    'check-all.bs.table uncheck-all.bs.table', function () {
-                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-            });
-            $remove.click(function () {
-                var ids = getIdSelections();
-                if (confirm("Are you sure to delete?")) {
-                    $.ajax({
-                        type: "delete",
-                        data: JSON.stringify(ids),
-                        contentType: "application/json; charset=utf-8",
-                        url: '/api' + window.location.pathname,
-                        success: function () {
-                            $remove.prop('disabled', true);
-                            $table.bootstrapTable('refresh');
-                        },
-                        error: function (e) {
-                            if (e.status == 500) {
-                                $.notify({
-                                    icon: 'fa fa-exclamation-triangle',
-                                    message: "The item is referenced. You can't delete it.",
-                                },{
-                                    type: 'danger'
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-            function getIdSelections() {
-                return $.map($table.bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
-            }
         }
         function submitReviewRunForm() {
             var reviewers = [];
-            $.each($(".reviewer-select").val(), function( i, v ) {
+            $.each($(".reviewer-select").val(), function (i, v) {
                 var reviewer = {}
                 reviewer.id = parseInt(v);
                 reviewers.push(reviewer);
@@ -242,6 +224,15 @@
                 review_flow = {};
             }
             review_flow.title = $("#review-flow-title").val();
+
+            var runs = [];
+            $.each($('#table').bootstrapTable('getData', true), function( i, row ) { //reorder run number
+                row.runNumber = i + 1;
+                row.reviewFlow = {"id": review_flow.id};
+                runs.push(row);
+            });
+            review_flow.runs = runs
+
             $.ajax({
                 type: 'post',
                 url: '/api/review_flow',
@@ -250,7 +241,6 @@
                 async: false,
                 success: function (data) {
                     review_flow = data;
-                    window.location.href = "/review_flow";
                 }
             });
         }

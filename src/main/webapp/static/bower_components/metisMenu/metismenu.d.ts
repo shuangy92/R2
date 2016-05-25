@@ -6,17 +6,17 @@
 /// <reference path="../jquery/jquery.d.ts"/>
 
 interface MetisMenuOptions {
-    toggle?: boolean;
-    doubleTapToGo?: boolean;
-    preventDefault?: boolean;
-    activeClass?: string;
-    collapseClass?: string;
-    collapseInClass?: string;
-    collapsingClass?: string;
-    onTransitionStart?: boolean
-    onTransitionEnd?: boolean
+    toggle?:boolean;
+    doubleTapToGo?:boolean;
+    preventDefault?:boolean;
+    activeClass?:string;
+    collapseClass?:string;
+    collapseInClass?:string;
+    collapsingClass?:string;
+    onTransitionStart?:boolean
+    onTransitionEnd?:boolean
 }
 
 interface JQuery {
-    metisMenu(options?:MetisMenuOptions): JQuery;
+    metisMenu(options?:MetisMenuOptions):JQuery;
 }

@@ -8,13 +8,10 @@
 </head>
 <body>
 <!--/* Standard layout can be mixed with Layout Dialect */-->
-<div id="wrapper-career">
-    <div class="container">
-        <div class="row">
-            <div th:replace="fragments/header :: header"></div>
-        </div>
-    </div>
-    <div id="page-wrapper-career">
+<div id="wrapper">
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/sidebar :: sidebar_career"></div>
+    <div id="page-wrapper">
         <div class="container">
             <div layout:fragment="content"></div>
         </div>

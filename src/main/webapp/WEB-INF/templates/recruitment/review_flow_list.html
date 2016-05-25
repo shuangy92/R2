@@ -9,9 +9,6 @@
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-
-    <link th:href="@{/static/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" th:src="@{/static/bower_components/select2/dist/js/select2.min.js}"></script>
 </head>
 <body>
 
@@ -19,10 +16,10 @@
     <div class="row">
         <h3>Review Flow List</h3>
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row"  data-toggle="modal" data-target="#popup-model">
+            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#popup-model">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
-            <button type="button" class="btn btn-default" id="btn-delete-row" disabled="disabled">
+            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
         </div>
@@ -41,12 +38,15 @@
                smartDisplay="true">
         </table>
     </div>
-    <!-- Modal -->
+
+    <div th:replace="fragments/common :: deletion"></div>
+
     <div class="modal fade" id="popup-model" tabindex="-1" role="dialog" aria-labelledby="popup-modelLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="popup-modelLabel">Create a review flow</h4>
                 </div>
                 <div class="modal-body">
@@ -54,7 +54,8 @@
                         <div class="form-group required">
                             <label for="review-flow-title" class="col-sm-4 control-label">Title</label>
                             <div class="col-sm-8">
-                                <input class="form-control" placeholder="Title" id="review-flow-title" name="review-flow-title" required="required"/>
+                                <input class="form-control" placeholder="Title" id="review-flow-title"
+                                       name="review-flow-title" required="required"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -70,6 +71,8 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
         var $table = $('#table');
+        var url = '/api/review_flow';
+
         jQuery(document).ready(function ($) {
             initTable();
             $("#review-flow-form").on('submit', function (e) {
@@ -79,16 +82,14 @@
         });
 
         function initTable() {
-            var url = "/api/review_flow";
-
-            var columns =[{
+            var columns = [{
                 field: 'state',
                 checkbox: true
             }, {
                 field: 'id',
                 title: 'ID',
                 sortable: true
-            },{
+            }, {
                 field: 'title',
                 title: 'Title',
                 sortable: true,
@@ -134,54 +135,19 @@
                 },
                 detailFormatter: function (index, row, element) {
                 },
-                responseHandler: function(res) {
+                responseHandler: function (res) {
                     return res;
                 },
                 filterControl: true,
                 sortOrder: 'desc',
                 cookie: true,
                 cookieIdTable: 'review_flow',
+                clickToSelect: true,
             });
 
-            var $remove = $("#btn-delete-row");
             var $insert = $("#btn-add-row");
 
             //$insert.on('click', function () {})
-
-            $table.on('check.bs.table uncheck.bs.table ' +
-                    'check-all.bs.table uncheck-all.bs.table', function () {
-                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-            });
-            $remove.click(function () {
-                var ids = getIdSelections();
-                if (confirm("Are you sure to delete?")) {
-                    $.ajax({
-                        type: "delete",
-                        data: JSON.stringify(ids),
-                        contentType: "application/json; charset=utf-8",
-                        url: '/api/review_flow',
-                        success: function () {
-                            $remove.prop('disabled', true);
-                            $table.bootstrapTable('refresh');
-                        },
-                        error: function (e) {
-                            if (e.status == 500) {
-                                $.notify({
-                                    icon: 'fa fa-exclamation-triangle',
-                                    message: "The item is referenced. You can't delete it. (Try to clear the review runs at first)",
-                                },{
-                                    type: 'danger'
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-            function getIdSelections() {
-                return $.map($table.bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
-            }
         }
         function submitReviewFlowForm() {
             var data = {};

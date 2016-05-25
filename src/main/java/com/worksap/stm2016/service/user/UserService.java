@@ -1,11 +1,11 @@
 package com.worksap.stm2016.service.user;
 
-import com.worksap.stm2016.domain.User;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.form.UserCreateForm;
-import com.worksap.stm2016.form.UserRegisterForm;
-import com.worksap.stm2016.repository.UserRepository;
+import com.worksap.stm2016.repository.user.UserProfileRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserProfileService userProfileService;
+    private UserProfileRepository userProfileRepository;
 
     public User get(long id) {
         return userRepository.findOne(id);
@@ -74,7 +74,7 @@ public class UserService {
             }
         }
 
-        JSONObject result = SortAndFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
+        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, userRepository);
         return result;
     }
 
@@ -94,41 +94,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User create(UserCreateForm form) {
-        User user = new User();
-        user.setEmail(form.getEmail());
-        user.setPasswordHash(new BCryptPasswordEncoder().encode(form.getPassword()));
-        user.setRole(form.getRole());
-        user.setName(form.getName());
-        user.setStatus(form.getStatus());
-        user.setActive(true);
-        return userRepository.save(user);
-    }
-
-    public User register(UserRegisterForm form) {
-        if (userRepository.findOneByEmail(form.getEmail()) != null) {
+    public User create(User user) {
+        if (userRepository.findOneByEmail(user.getEmail()) != null) {
             return null;
         } else {
-            User user = new User();
-            user.setEmail(form.getEmail());
-            user.setPasswordHash(new BCryptPasswordEncoder().encode(form.getPassword()));
-            user.setRole(form.getRole());
-            return userRepository.save(user);
+            user.setPasswordHash(new BCryptPasswordEncoder().encode(user.getPassword()));
+            user = userRepository.save(user);
+
+            UserProfile userProfile = new UserProfile();
+            userProfile.setUser(user);
+            userProfileRepository.save(userProfile);
+
+            return user;
         }
     }
-
-    public void delete(User user){
-        userRepository.delete(user);
-        if (userProfileService.get(user.getId()) != null) {
-            userProfileService.delete(user.getId());
-        }
-    }
-
-    public void delete(Long id){
-        userRepository.delete(id);
-        if (userProfileService.get(id) != null) {
-            userProfileService.delete(id);
-        }
-    }
-
 }

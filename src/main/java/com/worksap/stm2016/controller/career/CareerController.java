@@ -23,10 +23,10 @@ public class CareerController {
         return "user/user_register_form";
     }
 
-    @PreAuthorize("hasAuthority('APPLICANT')")
-    @RequestMapping(value = "/career/dashboard", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/career/job_application", method = RequestMethod.GET)
     public String getApplicantDashboardPage() {
-        return "career/career_dashboard";
+        return "career/applicant_application_list";
     }
 
     @PreAuthorize("hasAuthority('APPLICANT')")

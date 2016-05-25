@@ -31,6 +31,7 @@ public class BasicSpecs {
             }
         };
     }
+
     public static <S, T> Specification<T> isValue(String c_name, String cc_name, S value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -39,6 +40,7 @@ public class BasicSpecs {
             }
         };
     }
+
     public static <S, T> Specification<T> isValue(String c_name, String cc_name, String ccc_name, S value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -47,6 +49,7 @@ public class BasicSpecs {
             }
         };
     }
+
     public static <T> Specification<T> hasValue(String c_name, String value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -59,6 +62,7 @@ public class BasicSpecs {
             }
         };
     }
+
     public static <S, T> Specification<T> isNotValue(String c_name, S value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -67,6 +71,7 @@ public class BasicSpecs {
             }
         };
     }
+
     public static <T> Specification<T> hasValue(String c_name, String cc_name, String value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -80,7 +85,7 @@ public class BasicSpecs {
         };
     }
 
-    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject SortAndFilter(
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject filterAnd(
             String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
         Integer page = offset / limit;
         Sort.Direction direction = Sort.Direction.ASC;
@@ -116,4 +121,39 @@ public class BasicSpecs {
         return result;
     }
 
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject filterOr(
+            String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
+        Integer page = offset / limit;
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (order.equals("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = new PageRequest(page, limit, direction, sort);
+
+        List rows;
+        Long count;
+
+        if (filter != null) {
+            Specifications andSpecs = null;
+            for (int i = 0; i < specs.size(); i++) {
+                if (i == 0) {
+                    andSpecs = where(specs.get(i));
+                } else {
+                    andSpecs = andSpecs.or(specs.get(i));
+                }
+            }
+            rows = repository.findAll(andSpecs, pageable).getContent();
+            count = repository.count(andSpecs);
+
+        } else {
+            rows = repository.findAll(pageable).getContent();
+            count = repository.count();
+        }
+
+        JSONObject result = new JSONObject();
+        result.put("rows", rows);
+        result.put("total", count);
+
+        return result;
+    }
 }

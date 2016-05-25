@@ -1,6 +1,7 @@
 package com.worksap.stm2016.api.job;
 
-import com.worksap.stm2016.domain.Contract;
+import com.worksap.stm2016.api.util.JsonResponse;
+import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.service.job.ContractService;
 import com.worksap.stm2016.service.user.UserProfileService;
 import org.json.simple.JSONObject;
@@ -12,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+
+import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -31,12 +34,6 @@ public class ContractApi {
         return contractService.get(id);
     }
 
-    @RequestMapping(value="/user/{id}", method = RequestMethod.GET)
-    public Contract getUserContract(@PathVariable("id") Long id){
-        return userProfileService.get(id).getContract();
-    }
-
-
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
                               @RequestParam(name = "order") String order,
@@ -45,22 +42,5 @@ public class ContractApi {
                               @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return contractService.getList(sort, order, limit, offset, filter);
-    }
-    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.POST)
-    public Contract save(@RequestBody Contract contract){
-        return contractService.save(contract);
-    }
-
-    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.PUT)
-    public Contract update(@RequestBody Contract contract){
-        return contractService.update(contract);
-    }
-
-    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteList(@RequestBody ArrayList<Long> ids){
-        contractService.deleteList(ids);
     }
 }

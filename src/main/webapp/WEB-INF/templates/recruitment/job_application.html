@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Job Post List</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <style>
+        .th-inner {
+            font-weight: normal;
+            font-style: italic;
+        }
+    </style>
+    <div class="row">
+        <div th:replace="career/applicant_profile :: applicant_profile"></div>
+
+        <h3>Review Detail</h3>
+        <h4 id="notice"></h4>
+
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-show-header="false"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[ALL]"
+               data-detail-view="true"
+               data-id-field="id"
+               smartDisplay="true"
+               style="word-wrap: break-word">
+        </table>
+
+        <div id="form" class="hide">
+            <div class="form-group">
+                <label for="response" class="control-label"></label>
+                <textarea class="form-control" id="response" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" id="pass" onclick="submitResponse('PASSED')">Pass</button>
+                <button class="btn btn-danger" id="fail" onclick="submitResponse('FAILED')">Fail</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+
+        var job_application;
+        var my_response;
+        var my_run;
+        var my_run_status = 0;
+        var has_run = false;
+        var $table = $('#table');
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
+        function initTable() {
+            $table.bootstrapTable({
+                columns: [{
+                    formatter: function (index, row, element) { // one row is one reviewRun
+                        return "Run " + row.runNumber + ": " + row.task;
+                    },
+                    width: "3000"
+                }],
+                url: '/api/job_application/' + window.location.pathname.split("/")[2],
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "lastModifiedDate";
+                    }
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                responseHandler: function (res) {
+                    job_application = res;
+                    var data = {};
+                    data.rows = res.jobPost.reviewFlow.runs;
+                    data.total = res.jobPost.reviewFlow.runs.length;
+
+                    if (job_application.status == "REVIEWING") {
+                        setMyRunStatus();
+                        if (has_run) {
+                            if (my_run_status == 1) {
+                                $("#notice").html("It's your turn now")
+                                $("#form").removeClass("hide");
+                                $("label,[for='response']").html("Your comment for run " + my_run.runNumber + ": " + my_run.task)
+                            } else if (my_run_status == -1) {
+                                $("#notice").html("You have finished your turn")
+                            } else {
+                                $("#notice").html("It's not your turn yet")
+                            }
+                        }
+                    } else {
+                        $("#notice").html("The application was " + job_application.status);
+                    }
+
+                    var uid = job_application.applicant.id;
+                    initFileListTable(uid);
+                    loadContactForm("/api/user/profile/" + uid);
+
+
+                    return data;
+                },
+                rowStyle: function rowStyle(value, row, index) {
+                    return {
+                        css: {"font-weight": "bolder"}
+                    }
+                },
+                onExpandRow: function(index, row, $detail) { // one row is one reviewRun
+                    $detail.html('<table></table>').find('table').bootstrapTable({
+                        columns: [{
+                            field: 'reviewer',
+                            title: 'Reviewer',
+                            width:"15%",
+                            formatter: function (index, row, element) {
+                                if (my_run_status == 1 && index.id == my_response.reviewer.id) {
+                                    return '<b>' + index.name + '</b>';
+                                }
+                                return index.name;
+                            },
+                        }, {
+                            field: 'response',
+                            title: 'Comment',
+                            formatter: function (index, row, element) { // one row is one reviewResponse
+                                if (index) {
+                                    return index;
+                                }
+                            },
+                            cellStyle: function (value, row, index) {
+                                return {
+                                css: {"max-width": "100px"}
+                            };
+                }
+                        }, {
+                            field: 'status',
+                            title: 'Status',
+                            width:"10%",
+                        }],
+                        data: getResponsesOfRun(row.runNumber),
+                    });
+                },
+                onLoadSuccess: function () {
+                    $table.bootstrapTable('expandAllRows', false);
+                },
+                cookie: true,
+                cookieIdTable: 'review_run',
+            });
+
+        }
+
+        function getResponsesOfRun(runNumber) {
+            var responses = [];
+            $.each(job_application.responses, function( i, v ) {
+                if (v.reviewRun.runNumber == runNumber) {
+                    responses.push(v);
+                }
+            });
+            return responses;
+        }
+        function setMyTurn() {
+            $.each(job_application.responses, function( i, v ) {
+                if (v.reviewer.id == currentUser.id) {
+                    has_run = true;
+                    if (!my_run || v.reviewRun.runNumber < my_run.runNumber) {
+                        if (v.status != "REVIEWING") {
+                            my_run = null
+                        } else {
+                            my_run = v.reviewRun;
+                            my_response = v;
+                        }
+                    }
+                }
+            });
+        }
+        function setMyRunStatus() {
+            setMyTurn();
+            if (!my_run) {
+                my_run_status = -1;
+                return
+            }
+            if (my_run.runNumber == 1) {
+                my_run_status = 1;
+                return
+            }
+            var result = true;
+            var responses = getResponsesOfRun(my_run.runNumber - 1);
+            $.each(responses, function( i, v ) {
+                if (v.status == "REVIEWING") {
+                    result = false;
+                }
+            });
+            my_run_status = 1;
+            return;
+        }
+        function submitResponse(status) {
+            my_response.response = $("#response").val();
+            my_response.status = status;
+
+            $.ajax({
+                type: "put",
+                url: "/api/review_flow/" + job_application.id,
+                data: JSON.stringify(my_response),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#form").hide();
+                    $table.bootstrapTable('refresh');
+                }
+            });
+        }
+
+        //]]>
+    </script>
+</div>
+</body>
+</html>

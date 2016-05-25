@@ -1,7 +1,7 @@
 $(function () {
     $('#side-menu').metisMenu();
 
-    $.urlParam = function(name){
+    $.urlParam = function (name) {
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
         return results[1] || 0;
     }
@@ -46,119 +46,33 @@ function initCountryList() {
         type: 'get',
         url: "/api/public/country",
         success: function (data) {
-            countries = $.map(data, function(obj) {
-                return { id: obj.id, text: obj.name };
+            countries = $.map(data, function (obj) {
+                return {id: obj.id, text: obj.name};
             })
             $(".country-select").select2({
                 data: countries
             });
-            $(".country-select").data('select2').trigger('select', {
-                data: {"id": profile.country.id, "text": profile.country.name}
-            });
+            if (user_profile.country) {
+                $("#country").data('select2').trigger('select', {
+                    data: {"id": user_profile.country.id, "text": user_profile.country.name}
+                });
+            }
         }
     });
 }
-function initDepartmentList($select , placeholder) {
-    var departments;
+function initDepartmentList($select, placeholder) {
     $.ajax({
         type: 'get',
         url: "/api/department/all",
         success: function (data) {
-            departments = $.map(data, function(obj) {
-                return { id: obj.id, text: obj.name };
+            var departments = $.map(data, function (obj) {
+                return {id: obj.id, text: obj.name};
             })
+            $select.html('').select2({data: [{id: '', text: ''}]});
             $select.select2({
                 data: departments,
                 placeholder: placeholder
             });
-        }
-    });
-}
-
-function initDepartmentMemberList($select, placeholder) {
-    if (!department) {
-        $select.html('').select2({data: [{id: '', text: ''}]});
-        $select.select2({
-            maximumSelectionLength: 1,
-            allowClear: true,
-            placeholder: placeholder,
-        });
-    } else {
-        $.ajax({
-            type: 'get',
-            url: "/api/user/department/" + department.id,
-            success: function (data) {
-                var candidates = $.map(data, function (obj) {
-                    return {id: obj.id, text: obj.name};
-                })
-                //$select.html('').select2({data: [{id: '', text: ''}]});
-                $select.select2({
-                    data: candidates,
-                    minimumSelectionLength: 1,
-                    allowClear: true,
-                    placeholder: placeholder,
-                });
-
-                if (department.manager) {
-                    $select.data('select2').trigger('select', {
-                        data: {"id": department.manager.id, "text": department.manager.name}
-                    });
-                }
-
-            }
-        });
-    }
-}
-function loadContactFormData(url) {
-    $.ajax({
-        url: url,
-        type: "GET",
-        success: function (data) {
-            if (data != "") {
-                $.each(data, function (k, v) {
-                    var sel = $("#contact-form #" + k);
-                    if (sel.length) {
-                        sel.val(v);
-                    }
-                });
-                if (editable) {
-                    $("#contact-form #country").data('select2').trigger('select', {
-                        data: {"id": data.country.id, "text": data.country.name}
-                    });
-                } else {
-                    $("#contact-form #country").val(data.country.name);
-                }
-            }
-        }
-    });
-}
-function submitContactForm(uid) {
-    var data = {};
-    $.each($('#contact-form').serializeArray(), function(i, field) {
-        switch (field.name) {
-            case "country":
-                var country = {};
-                country.id = field.value;
-                data.country = country;
-                break;
-            case "birthday":
-                data[field.name] = Date.parse(field.value);
-                break;
-            default:
-                data[field.name] = field.value;
-        }
-    });
-    data.id = uid;
-    $.ajax({
-        url: "/api/user/profile",
-        type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            notify.update('message', "Saved");
-            setTimeout(function() {
-                notify.close();
-            }, 500);
         }
     });
 }
@@ -177,6 +91,7 @@ function checkJobApplicationExistence(job_post_id) {
 }
 
 function logout(data) {
+    localStorage.clear();
     $.post('/logout', data)
         .done(function () {
             window.location.href = "/";
@@ -197,4 +112,3 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
-
