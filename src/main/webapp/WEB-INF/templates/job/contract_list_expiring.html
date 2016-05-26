@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Department</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{//rawgit.com/eternicode/bootstrap-datepicker/master/dist/js/bootstrap-datepicker.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h3>Contract</h3>
+        <div id="toolbar" class="btn-group">
+            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#department-create-modal">
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-list="[10, 25, 50, 100]"
+               data-minimum-count-columns="1"
+               data-id-field="id"
+               smartDisplay="true">
+        </table>
+    </div>
+
+    <div th:replace="fragments/common :: deletion"></div>
+
+    <script type="text/javascript" th:inline="javascript">
+        var $table = $('#table');
+        var url = '/api/contract';
+
+        jQuery(document).ready(function ($) {
+            initTable();
+        });
+
+        function initTable() {
+            $table.bootstrapTable({
+                columns: [{
+                    field: 'state',
+                    checkbox: true
+                }, {
+                    field: 'id',
+                    title: 'ID',
+                    sortable: true,
+                }, {
+                    field: 'user',
+                    title: 'Employee',
+                    sortable: true,
+                    filterControl: 'input',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + index.id + '">' + index.name + '</a>';
+                    }
+                }, {
+                    field: 'job',
+                    title: 'Job',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return index.title + " (" + index.id + ")";
+                    }
+                }, {
+                    field: 'salary',
+                    title: 'Salary',
+                    sortable: true,
+                }, {
+                    field: 'payRate',
+                    title: 'payRate',
+                    sortable: true,
+                    filterControl: 'select',
+                }, {
+                    field: 'startDate',
+                    title: 'Start Date',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    }
+                }, {
+                    field: 'endDate',
+                    title: 'End Date',
+                    sortable: true,
+                    filterControl: 'datepicker',
+                    filterDatepickerOptions: {"autoclose":true, "clearBtn": true, "todayHighlight": true},
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    }
+                }, {
+                    field: 'department',
+                    title: 'Department',
+                    filterControl: 'select'
+                }, {
+                    field: 'location',
+                    title: 'Location',
+                    filterControl: 'select'
+                }],
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                queryParamsType: "limit",
+                queryParams: function (p) {
+                    var data = {};
+                    if (p.sort) {
+                        data.sort = p.sort;
+                    } else {
+                        data.sort = "id";
+                    }
+
+                    data.order = p.order;
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.filter = p.filter;
+                    return data;
+                },
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
+                        res.rows[i].location = res.rows[i].job.department.location;
+                        res.rows[i].department = res.rows[i].job.department.name;
+                    });
+                    return res;
+                },
+                filterControl: true,
+                clickToSelect: true,
+                cookie: true,
+                cookieIdTable: 'contract',
+            });
+        }
+
+
+    </script>
+</div>
+</body>
+</html>
