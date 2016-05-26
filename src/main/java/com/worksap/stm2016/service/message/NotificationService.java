@@ -1,9 +1,11 @@
 package com.worksap.stm2016.service.message;
 
-import com.sun.jmx.remote.security.NotificationAccessController;
 import com.worksap.stm2016.domain.message.Notification;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
+import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.message.NotificationRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,9 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
@@ -25,6 +29,8 @@ public class NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public Notification get(Long id) {
         return notificationRepository.findOne(id);
@@ -53,11 +59,50 @@ public class NotificationService {
 
         }
 
-        JSONObject result = filterOr(sort, order, limit, offset, filter, specs, notificationRepository);
+        JSONObject result = orFilter(sort, order, limit, offset, filter, specs, notificationRepository);
         return result;
     }
 
-    public Notification update (@RequestBody Notification notification) {
+    public Notification update (Notification notification) {
+        return notificationRepository.save(notification);
+    }
+
+    public Notification createReviewNotification (JobApplication jobApplication, ReviewResponse reviewResponse, Notification.NotificationType type) {
+        Notification notification = new Notification();
+        switch (type) {
+            case REVIEW_START:
+                notification.setContent("You have a new review task: " + reviewResponse.getReviewRun().getTask());
+                notification.setType(Notification.NotificationType.REVIEW_START);
+                notification.setItemId(jobApplication.getId());
+                notification.setUser(reviewResponse.getReviewer());
+                break;
+            case REVIEW_UPDATE:
+                notification.setContent("It's your turn for review: " + reviewResponse.getReviewRun().getTask());
+                notification.setType(type);
+                notification.setItemId(jobApplication.getId());
+                notification.setUser(reviewResponse.getReviewer());
+                break;
+            case REVIEW_UPDATE_HR:
+                notification.setContent("Review \"" + reviewResponse.getReviewRun().getTask() + "\" for application " + jobApplication.getId() + " has finished.");
+                notification.setType(type);
+                notification.setItemId(jobApplication.getId());
+                notification.setRole(Role.ADMIN);
+                break;
+
+        }
+        return notificationRepository.save(notification);
+    }
+    public Notification createContractNotification (Long managerId, Long expiringCount, Date from, Date to, Notification.NotificationType type) {
+        Notification notification = new Notification();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        switch (type) {
+            case CONTRACT_EXPIRING:
+                notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
+                notification.setType(type);
+                notification.setItemNote(df.format(from) + "-" + df.format(to));
+                notification.setUser(userRepository.findOne(managerId));
+                break;
+        }
         return notificationRepository.save(notification);
     }
 }

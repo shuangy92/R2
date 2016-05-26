@@ -17,32 +17,32 @@
         <div class="col-sm-5">
             <div class="form-group required">
                 <label for="jobTitle" class="control-label">Title</label>
-                <input class="form-control" placeholder="Title" type="input" id="jobTitle" name="title"
+                <input class="form-control" placeholder="Title" id="jobTitle" name="title"
                        required="required"/>
             </div>
             <div class="form-group">
                 <label for="vacancies" class="control-label">Job Code</label>
                 <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
-                <input class="form-control" type="input" id="jobId" name="jobId" required="required"
+                <input class="form-control" id="jobId" name="jobId" required="required"
                        readonly="readonly"/>
             </div>
             <div class="form-group">
                 <label for="departmentName" class="control-label">Department</label>
-                <input class="form-control" type="input" id="departmentName" name="department" required="required"
+                <input class="form-control" id="departmentName" name="department" required="required"
                        readonly="readonly"/>
             </div>
             <div class="form-group">
                 <label for="jobCategory" class="control-label">Job Category</label>
-                <input class="form-control" type="input" id="jobCategory" name="jobCategory" required="required"
+                <input class="form-control" id="jobCategory" name="jobCategory" required="required"
                        readonly="readonly"/>
             </div>
             <div class="form-group">
                 <label for="description" class="control-label">Job Description</label>
-                <textarea class="form-control" type="input" id="description" name="description" rows="5"> </textarea>
+                <textarea class="form-control" id="description" name="description" rows="5"> </textarea>
             </div>
             <div class="form-group">
                 <label for="requirement" class="control-label">Job Requirement</label>
-                <textarea class="form-control" type="input" id="requirement" name="requirement" rows="5"> </textarea>
+                <textarea class="form-control" id="requirement" name="requirement" rows="5"> </textarea>
             </div>
             <div class="form-group">
                 <label for="hours" class="control-label">Standard Hours</label>
@@ -52,7 +52,7 @@
         <div class="col-sm-5">
             <div class="form-group required">
                 <label for="startDate" class="control-label">Contract Starting Date</label>
-                <input class="form-control" placeholder="Contract Starting Date" type="input" id="startDate"
+                <input class="form-control" placeholder="Contract Starting Date" id="startDate"
                        name="startDate" required="required"/>
             </div>
             <div class="form-group required">
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
                 <label for="endDate" class="control-label">Contract Ending Date </label>
-                <input class="form-control" placeholder="Contract Ending Date" type="input" id="endDate" name="endDate"
+                <input class="form-control" placeholder="Contract Ending Date" id="endDate" name="endDate"
                        required="required" readonly="readonly"/>
             </div>
             <div class="form-group required">
@@ -83,7 +83,7 @@
                 <div class="form-group">
                     <label for="deadline" class="control-label">Deadline for Application</label>
                     <input class="form-control" placeholder="Leave blank = Post will close until all opening filled"
-                           type="input" id="deadline" name="deadline"/>
+                           id="deadline" name="deadline"/>
                 </div>
                 <div class="form-group required">
                     <label for="payRate" class="control-label">Pay By</label>
@@ -94,10 +94,10 @@
                         <option value="MONTHLY">Month</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="salary" class="control-label">Salary</label>
                     <input class="form-control" placeholder="Salary / Salary Range / Negotiable" type="input"
-                           id="salary" name="salary"/>
+                           id="salary" name="salary" required="required"/>
                 </div>
                 <div class="form-group">
                     <label for="reviewFlowId" class="control-label">Review Flow ID</label>

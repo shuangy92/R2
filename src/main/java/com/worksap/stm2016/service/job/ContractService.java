@@ -3,7 +3,9 @@ package com.worksap.stm2016.service.job;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.enums.PayRate;
 import com.worksap.stm2016.repository.job.ContractRepository;
+import com.worksap.stm2016.util.DateUtil;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
@@ -41,22 +44,24 @@ public class ContractService {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
                 Specification spec;
-                if (key.equals("id")) {
-                    spec = isValue(key, Long.parseLong(search));
+                if (key.equals("user")) {
+                    spec = hasValue(key, "name", search);
+                } else if (key.equals("payRate")) {
+                    spec = isValue(key, PayRate.valueOf(search));
                 } else if (key.equals("department")) {
-                    spec = isValue(key, "name", search);
-                } else if (key.equals("location")) {
-                    spec = isValue("department", "location", search);
-                } else if (key.equals("title")){
-                    spec = hasValue(key, search);
-                } else { // key = jobCategory
-                    spec = isValue(key, search);
+                    spec = isValue("job", "department", "name", search);
+                } else if (key.equals("date")) {
+                    Date from = DateUtil.parseDate(search.split("-")[0], "MM/dd/yyyy");
+                    Date to = DateUtil.parseDate(search.split("-")[1], "MM/dd/yyyy");
+                    spec = betweenDates("endDate", from, to);
+                } else { // key = location
+                    spec = isValue("job", "department", "location", search);
                 }
                 specs.add(spec);
             }
         }
 
-        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
         return result;
     }
 

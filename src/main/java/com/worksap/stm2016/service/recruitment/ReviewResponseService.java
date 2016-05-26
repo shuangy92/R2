@@ -12,6 +12,7 @@ import com.worksap.stm2016.repository.message.NotificationRepository;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
+import com.worksap.stm2016.service.message.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ReviewResponseService {
     @Autowired
     ReviewFlowRepository reviewFlowRepository;
     @Autowired
-    NotificationRepository notificationRepository;
+    NotificationService notificationService;
     @Autowired
     JobApplicationRepository jobApplicationRepository;
 
@@ -54,22 +55,12 @@ public class ReviewResponseService {
         }
         /*Review notification for HR*/
         if (finishRun) {
-            Notification notification = new Notification();
-            notification.setContent("Review \"" + reviewResponse.getReviewRun().getTask() + "\" for application " + jobApplication.getId() + " has finished.");
-            notification.setType(Notification.NotificationType.REVIEW_UPDATE_HR);
-            notification.setItemId(jobApplication.getId());
-            notification.setRole(Role.ADMIN);
-            notificationRepository.save(notification);
+            notificationService.createReviewNotification(jobApplication, reviewResponse, Notification.NotificationType.REVIEW_UPDATE_HR);
 
             /*Review notification for reviewers*/
             for (ReviewResponse response: jobApplication.getResponses()) {
                 if (response.getReviewRun().getRunNumber() == reviewResponse.getReviewRun().getRunNumber() + 1) {
-                    notification = new Notification();
-                    notification.setContent("It's your turn for review: " + response.getReviewRun().getTask());
-                    notification.setType(Notification.NotificationType.REVIEW_UPDATE);
-                    notification.setItemId(jobApplication.getId());
-                    notification.setUser(response.getReviewer());
-                    notificationRepository.save(notification);
+                    notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_UPDATE);
                 }
             }
         }
@@ -92,26 +83,21 @@ public class ReviewResponseService {
         return Long.valueOf(0);
     }
 
-    public JobApplication createResponseList(JobApplication application){
-        ReviewFlow reviewFlow = reviewFlowRepository.findOne(application.getJobPost().getReviewFlow().getId());
+    public JobApplication createResponseList(JobApplication jobApplication){
+        ReviewFlow reviewFlow = reviewFlowRepository.findOne(jobApplication.getJobPost().getReviewFlow().getId());
         for (ReviewRun reviewRun: reviewFlow.getRuns()) {
             for (User reviewer: reviewRun.getReviewers()) {
                 ReviewResponse response = new ReviewResponse();
-                response.setJobApplication(application);
+                response.setJobApplication(jobApplication);
                 response.setReviewRun(reviewRun);
                 response.setReviewer(reviewer);
                 response = reviewResponseRepository.save(response);
-                application.addResponse(response);
+                jobApplication.addResponse(response);
 
                 /* Review notification for reviewers */
-                Notification notification = new Notification();
-                notification.setUser(reviewer);
-                notification.setContent("You have a new review task: " + reviewRun.getTask());
-                notification.setType(Notification.NotificationType.REVIEW_START);
-                notification.setItemId(application.getId());
-                notificationRepository.save(notification);
+                notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_START);
             }
         }
-        return jobApplicationRepository.save(application);
+        return jobApplicationRepository.save(jobApplication);
     }
 }

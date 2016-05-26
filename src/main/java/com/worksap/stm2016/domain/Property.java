@@ -8,18 +8,20 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "country")
+@Table(name = "property")
 public class Property implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "country_id", nullable = false, updatable = false)
-    private Long id;
+    @Column(name = "name", nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private PropertyName name;
 
-    @Column(name = "code", nullable = false, updatable = false)
-    private String code;
+    @Column(name = "value", nullable = false)
+    private Integer value;
 
-    @Column(name = "name")
-    private String name;
+    public enum PropertyName {
+        contractNotifyDaysBefore, contractNotifyDayLength
+    }
 }

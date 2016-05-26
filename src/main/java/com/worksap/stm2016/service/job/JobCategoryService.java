@@ -55,7 +55,7 @@ public class JobCategoryService {
                 specs.add(spec);
             }
         }
-        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, jobCategoryRepository);
+        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
         return result;
     }
 

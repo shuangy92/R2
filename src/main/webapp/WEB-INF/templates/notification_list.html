@@ -8,7 +8,7 @@
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
 </head>
 <body>
 
@@ -32,7 +32,12 @@
            smartDisplay="true">
     </table>
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var $table = $('#table');
+        jQuery(document).ready(function ($) {
+            initTable();
+        })
+
         function initTable() {
             $table.bootstrapTable({
                 columns: [{
@@ -78,13 +83,20 @@
                         type: "put",
                         url: "/api/notification/",
                         data: JSON.stringify(row),
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-
-                        }
+                        contentType: "application/json; charset=utf-8"
                     });
 
-                    window.open('/job_application/' + row.itemId, "_self");
+                    switch (row.type) {
+                        case 'REVIEW_START':
+                        case 'REVIEW_UPDATE':
+                        case 'REVIEW_UPDATE_HR':
+                            window.open('/job_application/' + row.itemId, "_self");
+                            break;
+                        case 'CONTRACT_EXPIRING':
+                            var from = row.itemNote.split("-")[0], to = row.itemNote.split("-")[1];
+                            window.open('/contract?from=' + from + '&to=' + to, "_self");
+                            break;
+                    }
                 },
                 filterControl: true,
                 cookie: true,
@@ -92,10 +104,8 @@
                 cardView: true,
             });
         }
+        //]]>
 
-        jQuery(document).ready(function ($) {
-            initTable();
-        })
     </script>
 </div>
 </body>

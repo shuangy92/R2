@@ -54,7 +54,7 @@ public class JobService {
             }
         }
 
-        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
         return result;
     }
 

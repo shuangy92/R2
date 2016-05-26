@@ -77,7 +77,7 @@ public class DepartmentService {
                 specs.add(spec);
             }
         }
-        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, departmentRepository);
+        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, departmentRepository);
         return result;
     }
 

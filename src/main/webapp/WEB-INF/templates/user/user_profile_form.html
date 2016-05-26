@@ -16,13 +16,13 @@
                 <div class="form-group">
                     <label for="name" class="col-sm-4 control-label">Name</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="name" name="name" required="required"/>
+                        <input class="form-control" id="name" name="name" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="email" class="col-sm-4 control-label">Email</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="email" name="email" required="required"/>
+                        <input class="form-control" id="email" name="email" required="required"/>
                     </div>
                 </div>
             </form>
@@ -33,38 +33,38 @@
                 <div class="form-group">
                     <label for="name" class="col-sm-4 control-label">Department</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="departmentName" name="departmentName"
+                        <input class="form-control" id="departmentName" name="departmentName"
                                required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="jobId" class="col-sm-4 control-label">Job Code</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="jobId" name="jobId" required="required"/>
+                        <input class="form-control" id="jobId" name="jobId" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="startDate" class="col-sm-4 control-label">Contract Starting Date</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="startDate" name="startDate" required="required"/>
+                        <input class="form-control" id="startDate" name="startDate" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="endDate" class="col-sm-4 control-label">Contract Ending Date</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="endDate" name="endDate" required="required"/>
+                        <input class="form-control" id="endDate" name="endDate" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="salary" class="col-sm-4 control-label">Salary</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="salary" name="salary" required="required"/>
+                        <input class="form-control" id="salary" name="salary" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="payRate" class="col-sm-4 control-label">Pay Rate</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="payRate" name="payRate" required="required"/>
+                        <input class="form-control" id="payRate" name="payRate" required="required"/>
                     </div>
                 </div>
             </form>
@@ -81,7 +81,7 @@
                 <div class="form-group required">
                     <label for="country" class="col-sm-4 control-label">Country</label>
                     <div class="col-sm-8" id="country-select">
-                        <input class="form-control" type="input" id="country" name="country" required="required"/>
+                        <input class="form-control" id="country" name="country" required="required"/>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -96,13 +96,13 @@
                             href="//en.wikipedia.org/wiki/National_identification_number"
                             target="_blank">?</a></span></label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="idNumber" name="idNumber" required="required"/>
+                        <input class="form-control" id="idNumber" name="idNumber" required="required"/>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label for="birthday" class="col-sm-4 control-label">Date of Birth</label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="input" id="birthday" name="birthday" required="required"/>
+                        <input class="form-control" id="birthday" name="birthday" required="required"/>
                     </div>
                 </div>
                 <div class="form-group" id="edit-save">
@@ -157,7 +157,7 @@
                 data: JSON.stringify(user_profile),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $("#country-select").html('<input class="form-control" type="input" id="country" name="country" readonly="readonly" required="required"/>');
+                    $("#country-select").html('<input class="form-control" id="country" name="country" readonly="readonly" required="required"/>');
                     $("#country").val(data.country.name);
                 }
             })

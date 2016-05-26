@@ -43,12 +43,15 @@ public class Notification implements Serializable {
     @Column(name = "item_id")
     private Long itemId;
 
+    @Column(name = "item_note")
+    private String itemNote;
+
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
     public enum NotificationType {
-        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT
+        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING
     }
 
     /* auditing */

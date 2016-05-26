@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -63,15 +64,6 @@ public class BasicSpecs {
         };
     }
 
-    public static <S, T> Specification<T> isNotValue(String c_name, S value) {
-        return new Specification<T>() {
-            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
-                                         CriteriaBuilder builder) {
-                return builder.notEqual(root.get(c_name), value);
-            }
-        };
-    }
-
     public static <T> Specification<T> hasValue(String c_name, String cc_name, String value) {
         return new Specification<T>() {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
@@ -85,7 +77,25 @@ public class BasicSpecs {
         };
     }
 
-    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject filterAnd(
+    public static <S, T> Specification<T> isNotValue(String c_name, S value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.notEqual(root.get(c_name), value);
+            }
+        };
+    }
+
+    public static <T> Specification<T> betweenDates(String c_name, Date from, Date to) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.between(root.get(c_name), from, to);
+            }
+        };
+    }
+
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject andFilter(
             String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
         Integer page = offset / limit;
         Sort.Direction direction = Sort.Direction.ASC;
@@ -121,7 +131,7 @@ public class BasicSpecs {
         return result;
     }
 
-    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject filterOr(
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject orFilter(
             String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
         Integer page = offset / limit;
         Sort.Direction direction = Sort.Direction.ASC;
@@ -134,16 +144,16 @@ public class BasicSpecs {
         Long count;
 
         if (filter != null) {
-            Specifications andSpecs = null;
+            Specifications orSpecs = null;
             for (int i = 0; i < specs.size(); i++) {
                 if (i == 0) {
-                    andSpecs = where(specs.get(i));
+                    orSpecs = where(specs.get(i));
                 } else {
-                    andSpecs = andSpecs.or(specs.get(i));
+                    orSpecs = orSpecs.or(specs.get(i));
                 }
             }
-            rows = repository.findAll(andSpecs, pageable).getContent();
-            count = repository.count(andSpecs);
+            rows = repository.findAll(orSpecs, pageable).getContent();
+            count = repository.count(orSpecs);
 
         } else {
             rows = repository.findAll(pageable).getContent();
@@ -155,5 +165,33 @@ public class BasicSpecs {
         result.put("total", count);
 
         return result;
+    }
+
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> List andFilterRows(
+            ArrayList<Specification> specs, T repository) {
+
+        Specifications andSpecs = null;
+        for (int i = 0; i < specs.size(); i++) {
+            if (i == 0) {
+                andSpecs = where(specs.get(i));
+            } else {
+                andSpecs = andSpecs.or(specs.get(i));
+            }
+        }
+        return repository.findAll(andSpecs);
+    }
+
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> Long andFilterCount(
+            ArrayList<Specification> specs, T repository) {
+
+        Specifications andSpecs = null;
+        for (int i = 0; i < specs.size(); i++) {
+            if (i == 0) {
+                andSpecs = where(specs.get(i));
+            } else {
+                andSpecs = andSpecs.or(specs.get(i));
+            }
+        }
+        return repository.count(andSpecs);
     }
 }

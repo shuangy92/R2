@@ -5,26 +5,35 @@
       layout:decorator="layout">
 <head>
     <title>Department</title>
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
-          media="screen" type="text/css"/>
-    <script type="text/javascript"
-            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
-    <script type="text/javascript"
-            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
-    <script type="text/javascript"
-            th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
 </head>
 <body>
 
 <div layout:fragment="content">
     <div class="row">
         <h3>Contract</h3>
+        <form class="form-inline" role="form" id="date-range-form">
+            <label>Contract expires between</label>
+            <div class="form-group required">
+                <input class="form-control" id="from" name="from" required="required"/>
+            </div>
+            -
+            <div class="form-group required">
+                <input class="form-control" id="to" name="to" required="required"/>
+            </div>
+            <div class="form-group required">
+                <button class="btn btn-default" type="submit">Search</button>
+            </div>
+        </form>
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#department-create-modal">
+            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#contract-modal" data-action="create">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
-            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
-                <i class="glyphicon glyphicon-trash"></i>
+            <button type="button" class="btn btn-default" id="btn-copy-row" data-toggle="modal" data-target="#contract-modal" data-action="copy">
+                <i class="fa fa-clone"></i>
             </button>
         </div>
         <table id="table"
@@ -32,7 +41,6 @@
                data-sortable="true"
                data-show-refresh="true"
                data-show-toggle="true"
-               data-show-columns="true"
                data-show-export="true"
                data-pagination="true"
                data-side-pagination="server"
@@ -42,15 +50,24 @@
                smartDisplay="true">
         </table>
     </div>
+    <div th:replace="form/contract_form :: contract_form"></div>
 
-    <div th:replace="fragments/common :: deletion"></div>
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var $table = $('#table');
         var url = '/api/contract';
+        var from = $("#from"), to = $("#to");
 
         jQuery(document).ready(function ($) {
+            from.datepicker().val(getUrlParameter("from"));
+            to.datepicker().val(getUrlParameter("to"));
+
             initTable();
+            $('#date-range-form').on('submit', function (e) {
+                e.preventDefault();
+                $table.bootstrapTable('refresh');
+            })
         });
 
         function initTable() {
@@ -62,20 +79,52 @@
                     field: 'id',
                     title: 'ID',
                     sortable: true,
-                    filterControl: 'input',
                 }, {
-                    field: 'name',
-                    title: 'Name',
+                    field: 'user',
+                    title: 'Employee',
                     sortable: true,
                     filterControl: 'input',
                     formatter: function (index, row, element) {
-                        return '<a data-toggle="modal" data-target="#department-edit-modal"  data-id="' + row.id + '" style="cursor: pointer;">' + index + '</a>';
+                        return '<a href="/user/' + index.id + '">' + index.name + '</a>';
                     }
+                }, {
+                    field: 'job',
+                    title: 'Job',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return index.title + " (" + index.id + ")";
+                    }
+                }, {
+                    field: 'salary',
+                    title: 'Salary',
+                    sortable: true,
+                }, {
+                    field: 'payRate',
+                    title: 'payRate',
+                    sortable: true,
+                    filterControl: 'select',
+                }, {
+                    field: 'startDate',
+                    title: 'Start Date',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    }
+                }, {
+                    field: 'endDate',
+                    title: 'End Date',
+                    sortable: true,
+                    formatter: function (index, row, element) {
+                        return (new Date(index)).toString("yyyy/M/dd");
+                    }
+                }, {
+                    field: 'department',
+                    title: 'Department',
+                    filterControl: 'select'
                 }, {
                     field: 'location',
                     title: 'Location',
-                    sortable: true,
-                    filterControl: 'select',
+                    filterControl: 'select'
                 }],
                 url: url,
                 contentType: "application/x-www-form-urlencoded",
@@ -87,23 +136,49 @@
                     } else {
                         data.sort = "id";
                     }
+
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    if (from.val() && to.val()) {
+                        filter.date = $("#from").val() + "-" + $("#to").val()
+                    }
+                    if (currentUser.role == "MANAGER") {
+                        filter.department = currentUser.department.name;
+                        filter.loaction = currentUser.department.location;
+                    }
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
-                onPostBody: function () {
-                    $(".filterControl input").attr('placeholder', 'Search');
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
+                        res.rows[i].location = res.rows[i].job.department.location;
+                        res.rows[i].department = res.rows[i].job.department.name;
+                    });
+                    return res;
+                },
+                onLoadSuccess: function () {
+                    if (currentUser.role == "MANAGER") {
+                        $table.bootstrapTable('hideColumn', "department");
+                        $table.bootstrapTable('hideColumn', "location");
+                        $("#toolbar").hide();
+                    }
                 },
                 filterControl: true,
                 clickToSelect: true,
                 cookie: true,
-                cookieIdTable: 'department',
+                cookieIdTable: 'contract',
+                cookiesEnabled: ['bs.table.sortOrder', 'bs.table.sortName', 'bs.table.pageNumber', 'bs.table.pageList', 'bs.table.searchText', 'bs.table.filterControl'],
+                showColumns: (currentUser.role == "ADMIN")
             });
         }
 
-
+        //]]>
     </script>
 </div>
 </body>

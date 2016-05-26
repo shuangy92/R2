@@ -2,71 +2,58 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="job_profile_form">
-    <div class="modal fade" id="job-profile-modal" tabindex="-1" role="dialog">
+<div th:fragment="contract_form">
+    <div class="modal fade" id="contract-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Create a job category</h4>
+                    <h4 class="modal-title">Create a contract</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" class="form-horizontal" id="job-profile-form">
                         <div class="form-group required">
-                            <label for="title" class="col-sm-4 control-label">Title</label>
+                            <label for="user" class="col-sm-4 control-label">Employee</label>
                             <div class="col-sm-8">
-                                <input class="form-control" placeholder="Title" type="input" id="title" name="title"
-                                       required="required"/>
+                                <select class="form-control" id="user" name="user" required="required">
+                                    <option></option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group required" id="field-id">
-                            <label for="id" class="col-sm-4 control-label">Job Code <span><a href="/job_profile"
-                                                                                             target="_blank"
-                                                                                             title="Click to view the job list">?</a></span></label>
+                            <label for="id" class="col-sm-4 control-label">Job Code <span><a href="/job_profile" target="_blank" title="Click to view the job list">?</a></span></label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="input" id="id" name="id" required="required"
-                                       readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="form-group required" id="field-department">
-                            <label for="department" class="col-sm-4 control-label">Department <span><a
-                                    href="/department" target="_blank"
-                                    title="Click to view the department list">?</a></span></label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="department" name="department" required="required">
-                                    <option></option>
-                                </select>
+                                <input class="form-control" id="id" name="id" type="number" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
-                            <label for="jobCategory" class="col-sm-4 control-label">Job Category <span><a
-                                    href="/job_category" target="_blank"
-                                    title="Click to view the job category list">?</a></span></label>
+                            <label for="startDate" class="col-sm-4 control-label">Contract Start Date</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="jobCategory" name="jobCategory" required="required">
-                                    <option></option>
+                                <input class="form-control" id="startDate" name="startDate" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="endDate" class="col-sm-4 control-label">Contract End Date</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="endDate" name="endDate" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="salary" class="col-sm-4 control-label">Salary</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="salary" name="salary" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="payRate" class="col-sm-4 control-label">Pay By</label>
+                            <div class="col-sm-8">
+                                <select class="form-control pay-rate-select" id="payRate" name="payRate" required="required">
+                                    <option value="HOURLY">Hour</option>
+                                    <option value="DAILY">Day</option>
+                                    <option value="WEEKLY">Week</option>
+                                    <option value="MONTHLY">Month</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description" class="col-sm-4 control-label">Job Description</label>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" type="input" id="description" name="description"
-                                          rows="5"> </textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="requirement" class="col-sm-4 control-label">Job Requirement</label>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" type="input" id="requirement" name="requirement"
-                                          rows="5"> </textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="hours" class="col-sm-4 control-label">Standard Hours</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="number" id="hours" name="hours"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -88,39 +75,22 @@
         var method;
 
         jQuery(document).ready(function ($) {
-            initJobCategoryList($("#jobCategory"), "Select a category");
-            initDepartmentList($("#department"), "Select a department");
+            $("#startDate").datepicker();
+            $("#endDate").datepicker();
+
             form.on('submit', function (e) {
                 e.preventDefault();
                 $('#job-profile-modal').modal('hide')
                 submitJobProfileForm(method, $(this));
             })
 
-            $('#job-profile-modal').on('show.bs.modal', function (event) {
+            $('#contract-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var action = button.data('action');
-                if (action == "create") { // create
-                    form[0].reset();
-                    form.find("select").val('').trigger('change')
-                    $("#field-id").hide();
+                if (action == create) {
 
-                    method = "post"
+                } else { // copy
 
-                } else { // edit
-                    var id = button.data('id')
-                    loadJobProfileForm(id);
-
-                    $(".modal-title").html("Edit");
-                    $("#create").html("Save");
-
-                    method = "put";
-                }
-
-                if (currentUser.role == "MANAGER") {
-                    $("#department").prop('disabled', true)
-                    $("#department").data('select2').trigger('select', {
-                        data: {"id": currentUser.department.id, "text": currentUser.department.name}
-                    });
                 }
             })
 
@@ -184,23 +154,6 @@
                 },
                 error: function () {
                     notify.update('message', "Error");
-                }
-            });
-        }
-        function initJobCategoryList($select, placeholder) {
-            var categories;
-            $.ajax({
-                type: 'get',
-                url: "/api/job_category/all",
-                success: function (data) {
-                    categories = $.map(data, function (obj) {
-                        return {id: obj.id, text: obj.name};
-                    })
-                    $select.html('').select2({data: [{id: '', text: ''}]});
-                    $select.select2({
-                        placeholder: placeholder,
-                        data: categories
-                    });
                 }
             });
         }

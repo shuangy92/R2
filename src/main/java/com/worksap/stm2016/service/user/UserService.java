@@ -74,7 +74,7 @@ public class UserService {
             }
         }
 
-        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, userRepository);
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
         return result;
     }
 

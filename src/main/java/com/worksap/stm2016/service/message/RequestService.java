@@ -63,7 +63,7 @@ public class RequestService {
             }
         }
 
-        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, requestRepository);
+        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, requestRepository);
         return result;
     }
 

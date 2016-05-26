@@ -63,7 +63,7 @@ public class JobApplicationService {
             }
         }
 
-        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
         return result;
     }
 

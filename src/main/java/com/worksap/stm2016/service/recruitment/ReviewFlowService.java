@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.filterAnd;
+import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
 
 @Service
@@ -56,7 +56,7 @@ public class ReviewFlowService {
             }
         }
 
-        JSONObject result = filterAnd( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
         return result;
     }
 

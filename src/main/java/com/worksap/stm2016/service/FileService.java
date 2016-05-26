@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.filterAnd;
+import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
@@ -54,7 +54,7 @@ public class FileService {
             }
         }
 
-        JSONObject result = filterAnd(sort, order, limit, offset, filter, specs, fileProfileRepository);
+        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, fileProfileRepository);
         return result;
     }
 
