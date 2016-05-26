@@ -79,7 +79,7 @@ public class UserService {
     }
 
     public Iterable<User> getByNameContaining(String name) {
-        return userRepository.findByNameContainingIgnoreCase(name);
+        return userRepository.findByNameContainingIgnoreCaseAndRole(name, Role.EMPLOYEE);
     }
 
     public User save(User user){

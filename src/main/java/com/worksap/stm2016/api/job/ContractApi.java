@@ -43,4 +43,9 @@ public class ContractApi {
 
         return contractService.getList(sort, order, limit, offset, filter);
     }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public Contract save(@RequestBody Contract contract){
+        return contractService.save(contract);
+    }
 }

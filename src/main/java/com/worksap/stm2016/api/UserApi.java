@@ -55,8 +55,12 @@ public class UserApi {
     }
 
     @RequestMapping(value = "/name", method = RequestMethod.GET)
-    public Iterable<User> getByNameContaining(@RequestParam(name = "name") String name) {
-        return userService.getByNameContaining(name);
+    public Iterable<User> getByNameContaining(@RequestParam(name = "name", required = false) String name) {
+        if (name != null) {
+            return userService.getByNameContaining(name);
+        } else {
+            return null;
+        }
     }
 
     @RequestMapping(value = "/department/{id}", method = RequestMethod.GET)

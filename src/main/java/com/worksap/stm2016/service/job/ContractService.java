@@ -3,8 +3,12 @@ package com.worksap.stm2016.service.job;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.PayRate;
 import com.worksap.stm2016.repository.job.ContractRepository;
+import com.worksap.stm2016.repository.user.UserProfileRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.util.DateUtil;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,6 +31,10 @@ public class ContractService {
     private static final Logger logger = LoggerFactory.getLogger(ContractService.class);
     @Autowired
     ContractRepository contractRepository;
+    @Autowired
+    UserProfileRepository userProfileRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public Contract get(Long id){
         return contractRepository.findOne(id);
@@ -75,6 +83,25 @@ public class ContractService {
         contract.setSalary(jobPost.getSalary());
         contract.setUser(jobApplication.getApplicant());
         return contractRepository.save(contract);
+    }
+
+    public Contract save(Contract contract){
+        contract = contractRepository.save(contract);
+
+        User user = contract.getUser();
+        user.setDepartment(contract.getJob().getDepartment());
+        userRepository.save(user);
+
+        UserProfile userProfile = userProfileRepository.findOne(contract.getUser().getId());
+        Contract oldContract = userProfile.getContract();
+        if (oldContract != null) {
+            oldContract.setActive(false);
+            contractRepository.save(oldContract);
+        }
+        userProfile.setContract(contract);
+        userProfileRepository.save(userProfile);
+
+        return contract;
     }
 
     public Contract update(Contract contract){

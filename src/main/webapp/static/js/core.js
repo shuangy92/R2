@@ -76,6 +76,28 @@ function initDepartmentList($select, placeholder) {
         }
     });
 }
+function initEmployeeSelect($select, placeholder) {
+    $select.select2({
+        ajax: {
+            url: "/api/user/name",
+            delay: 250,
+            data: function (params) {
+                return {
+                    name: params.term, // search term
+                };
+            },
+            processResults: function (data, params) {
+                var employees = $.map(data, function (obj) {
+                    return {id: obj.id, text: obj.name + ' (No.' + obj.id +', ' + obj.department.name + ', ' + obj.department.location + ')'};
+                })
+                return {
+                    results: employees,
+                };
+            },
+        },
+        placeholder: "Search"
+    });
+}
 
 function checkJobApplicationExistence(job_post_id) {
     var result;
