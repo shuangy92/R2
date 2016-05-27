@@ -1,14 +1,9 @@
 package com.worksap.stm2016.domain.user;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.Country;
-import com.worksap.stm2016.domain.job.Contract;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;

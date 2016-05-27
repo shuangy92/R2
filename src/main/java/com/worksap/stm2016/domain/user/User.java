@@ -2,21 +2,21 @@ package com.worksap.stm2016.domain.user;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "person")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,10 +27,10 @@ public class User implements Serializable {
     private Long id;
 
     @Email
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email",unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     private String passwordHash;
 
     @Transient
@@ -39,7 +39,7 @@ public class User implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -47,14 +47,40 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @Column(name = "active", nullable = false)
+    @Column(name = "active")
     private boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="contract_id")
+    @JsonBackReference
+    @OneToOne(mappedBy = "user")
     private Contract contract;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id.equals(user.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

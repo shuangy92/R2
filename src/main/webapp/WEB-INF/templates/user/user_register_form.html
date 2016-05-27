@@ -61,7 +61,9 @@
                 e.preventDefault();
                 var data = {};
                 $.each(form.serializeArray(), function (i, field) {
-                    data[field.name] = field.value;
+                    if (field.name != "passwordRepeated") {
+                        data[field.name] = field.value;
+                    }
                 });
                 data.role = "APPLICANT";
                 $.ajax({

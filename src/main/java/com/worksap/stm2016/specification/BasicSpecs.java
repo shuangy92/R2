@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -82,6 +83,15 @@ public class BasicSpecs {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder) {
                 return builder.notEqual(root.get(c_name), value);
+            }
+        };
+    }
+
+    public static <S, T> Specification<T> inValue(String c_name, Collection<S> list) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return root.get(c_name).in(list);
             }
         };
     }

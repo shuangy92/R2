@@ -1,8 +1,5 @@
 package com.worksap.stm2016;
 
-import com.worksap.stm2016.domain.Property;
-import com.worksap.stm2016.repository.PropertyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -11,8 +8,6 @@ import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 @EnableScheduling

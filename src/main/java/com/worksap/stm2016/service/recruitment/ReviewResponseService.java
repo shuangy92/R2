@@ -7,8 +7,6 @@ import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.ReviewStatus;
-import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.repository.message.NotificationRepository;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ReviewResponseService {

@@ -1,9 +1,14 @@
 package com.worksap.stm2016.service.recruitment;
 
-import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
+import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.service.job.ContractService;
+import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -14,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
 
@@ -24,6 +31,14 @@ public class JobApplicationService {
     private static final Logger logger = LoggerFactory.getLogger(JobApplicationService.class);
     @Autowired
     JobApplicationRepository jobApplicationRepository;
+    @Autowired
+    JobPostRepository jobPostRepository;
+    @Autowired
+    ContractService contractService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    ReviewResponseService reviewResponseService;
 
     public JobApplication get(Long id){
         return jobApplicationRepository.findOne(id);
@@ -40,7 +55,15 @@ public class JobApplicationService {
             JSONObject filterObj = (JSONObject) obj;
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
-                String search = (String) filterObj.get(key);
+                String search = "";
+                List<JobApplication.JobApplicationStatus> statusList = new ArrayList<>();
+                if (key.equals("statusList")) {
+                    for (String status : (List<String>) filterObj.get(key)) {
+                        statusList.add(JobApplication.JobApplicationStatus.valueOf(status));
+                    }
+                } else {
+                    search = (String) filterObj.get(key);
+                }
                 Specification spec;
                 if (key.equals("department")) {
                     spec = isValue("jobPost", "department", "name", search);
@@ -52,11 +75,9 @@ public class JobApplicationService {
                     spec = isValue("jobPost", "id", Long.parseLong(search));
                 } else if (key.equals("status")) {
                     spec = isValue(key, JobApplication.JobApplicationStatus.valueOf(search));
-                } else if (key.equals("notStatus")) {
-                    spec = isNotValue("status", JobApplication.JobApplicationStatus.valueOf(search));
-                } else if (key.equals("uid")) {
-                    spec = isValue("applicant", "id", Long.parseLong(search));
-                } else {
+                } else if (key.equals("statusList")) {
+                    spec = inValue("status", statusList);
+                } else { // key = uid
                     spec = isValue("applicant", "id", Long.parseLong(search));
                 }
                 specs.add(spec);
@@ -74,8 +95,41 @@ public class JobApplicationService {
         return jobApplicationRepository.save(application);
     }
 
-    public JobApplication update(JobApplication application){
-        return jobApplicationRepository.save(application);
+    public JobApplication update(JobApplication jobApplication){
+        JobPost jobPost = jobApplication.getJobPost();
+        switch (jobApplication.getStatus()) {
+            case PASSED:
+                jobPost.setVacancies(jobPost.getVacancies() - 1);
+                jobPostRepository.save(jobPost);
+
+                Contract contract = contractService.create(jobApplication);
+
+                User user = jobApplication.getApplicant();
+                user.setRole(Role.EMPLOYEE);
+                user.setDepartment(contract.getJob().getDepartment());
+                user.setContract(contract);
+                userService.update(user);
+                break;
+            case SUBMITTED:
+                if (jobPost.getReviewFlow() != null) {
+                    reviewResponseService.createResponseList(jobApplication);
+                }
+                break;
+            case OFFER_ACCEPTED:
+                Collection<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(jobApplication.getApplicant());
+                for (JobApplication otherApplications : jobApplications) {
+                    if (otherApplications != jobApplication) {
+                        otherApplications.setStatus(JobApplication.JobApplicationStatus.CLOSED);
+                        jobApplicationRepository.save(otherApplications);
+                    }
+                }
+                break;
+            case OFFER_DECLINED:
+                jobPost.setVacancies(jobPost.getVacancies() + 1);
+                jobPostRepository.save(jobPost);
+                break;
+        }
+        return jobApplicationRepository.save(jobApplication);
     }
 
     public void delete(Long id){

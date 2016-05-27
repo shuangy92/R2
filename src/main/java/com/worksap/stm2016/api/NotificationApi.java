@@ -2,19 +2,13 @@ package com.worksap.stm2016.api;
 
 
 import com.worksap.stm2016.domain.message.Notification;
-import com.worksap.stm2016.domain.message.Request;
-import com.worksap.stm2016.repository.message.RequestRepository;
 import com.worksap.stm2016.service.message.NotificationService;
-import com.worksap.stm2016.service.message.RequestService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /**
  * Created by Shuang on 4/25/2016.

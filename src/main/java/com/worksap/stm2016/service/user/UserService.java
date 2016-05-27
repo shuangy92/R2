@@ -1,7 +1,7 @@
 package com.worksap.stm2016.service.user;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.user.UserProfileRepository;

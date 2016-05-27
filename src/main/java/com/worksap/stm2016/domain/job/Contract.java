@@ -1,19 +1,20 @@
 package com.worksap.stm2016.domain.job;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "contract")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Contract implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +24,8 @@ public class Contract implements Serializable {
     @Column(name = "contract_id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
+    @JsonManagedReference
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -46,7 +48,32 @@ public class Contract implements Serializable {
     @Enumerated(EnumType.STRING)
     private PayRate payRate;
 
-    @Column(name = "active")
-    private Boolean active = true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Contract contract = (Contract) o;
+
+        return id != null ? id.equals(contract.id) : contract.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Contract{" +
+                "id=" + id +
+                ", user=" + user +
+                ", job=" + job +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", salary='" + salary + '\'' +
+                ", payRate=" + payRate +
+                '}';
+    }
 }

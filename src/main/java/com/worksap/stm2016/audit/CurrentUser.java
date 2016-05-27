@@ -1,7 +1,6 @@
 package com.worksap.stm2016.audit;
 
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import org.springframework.security.core.authority.AuthorityUtils;
 

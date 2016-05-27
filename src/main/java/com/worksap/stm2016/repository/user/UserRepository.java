@@ -1,7 +1,7 @@
 package com.worksap.stm2016.repository.user;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

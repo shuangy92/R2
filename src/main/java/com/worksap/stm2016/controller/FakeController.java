@@ -1,17 +1,17 @@
 package com.worksap.stm2016.controller;
 
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import com.worksap.stm2016.repository.job.JobRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,7 +2,6 @@ package com.worksap.stm2016.domain.recruitment;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.review.ReviewResponse;
-import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
@@ -64,6 +63,8 @@ public class JobApplication implements Serializable {
     }
 
     public enum JobApplicationStatus {
-        SAVED, SUBMITTED, REVIEWING, PASSED, FAILED, WITHDREW
+        SAVED, SUBMITTED, WITHDREW,
+        REVIEWING, PASSED, FAILED, CLOSED,
+        OFFER_SENT, OFFER_ACCEPTED, OFFER_DECLINED
     }
 }

@@ -3,6 +3,7 @@ package com.worksap.stm2016.service.message;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.review.ReviewResponse;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.message.NotificationRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
@@ -21,7 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.*;
+import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.orFilter;
 
 @Service
 public class NotificationService {
@@ -92,7 +94,7 @@ public class NotificationService {
         }
         return notificationRepository.save(notification);
     }
-    public Notification createContractNotification (Long managerId, Long expiringCount, Date from, Date to, Notification.NotificationType type) {
+    public Notification createContractNotification (User manager, Long expiringCount, Date from, Date to, Notification.NotificationType type) {
         Notification notification = new Notification();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         switch (type) {
@@ -100,7 +102,7 @@ public class NotificationService {
                 notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
                 notification.setType(type);
                 notification.setItemNote(df.format(from) + "-" + df.format(to));
-                notification.setUser(userRepository.findOne(managerId));
+                notification.setUser(manager);
                 break;
         }
         return notificationRepository.save(notification);

@@ -28,8 +28,8 @@ public class DepartmentApi {
     DepartmentService departmentService;
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public JSONObject get(@PathVariable("id") Long id){
-        return departmentService.getFull(id);
+    public Department get(@PathVariable("id") Long id){
+        return departmentService.get(id);
     }
 
     @RequestMapping(value="/all", method = RequestMethod.GET)

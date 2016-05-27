@@ -1,10 +1,10 @@
 package com.worksap.stm2016.domain.recruitment;
 
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.review.ReviewFlow;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
 import org.hibernate.annotations.Type;
@@ -62,6 +62,11 @@ public class JobPost implements Serializable {
     @Column(name = "vacancies")
     private Integer vacancies;
 
+    public void setVacancies (Integer vacancies) {
+        this.vacancies = vacancies;
+        this.open = vacancies > 0;
+    }
+
     @Column(name = "startDate")
     @Type(type="date")
     private Date startDate; // contract start date
@@ -86,6 +91,9 @@ public class JobPost implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @Column(name = "open")
+    private Boolean open = true;
 
     /* auditing */
     @OrderBy("name ASC")

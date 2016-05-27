@@ -157,7 +157,7 @@
                 }
             });
             $.ajax({
-                type: "post",
+                type: "put",
                 url: "/api/user/profile",
                 data: JSON.stringify(user_profile),
                 contentType: "application/json; charset=utf-8",
@@ -186,6 +186,22 @@
         function loadContractForm(uid) {
             $.ajax({
                 type: "GET",
+                url: "/api/user/contract/" + uid,
+                success: function (data) {
+                    if (data != null) {
+                        $.each(data, function (k, v) {
+                            var sel = $("#contract-form #" + k);
+                            if (sel.length) {
+                                sel.val(v);
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        function loadContactForm(uid) {
+            $.ajax({
+                type: "GET",
                 url: "/api/user/profile/" + uid,
                 success: function (data) {
                     user_profile = data;
@@ -198,16 +214,6 @@
                         });
                         $("#country").val(data.country.name);
 
-                        if (data.contract != null) {
-                            $.each(data.contract, function (k, v) {
-                                var sel = $("#contract-form #" + k);
-                                if (sel.length) {
-                                    sel.val(v);
-                                }
-                            });
-                            $("#departmentName").val(data.contract.job.department.name);
-                            $("#jobId").val(data.contract.job.id);
-                        }
                         $("#id").val(data.id);
                     }
                 }

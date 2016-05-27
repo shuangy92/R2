@@ -147,12 +147,15 @@
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (job) {
+                    notify.update('message', "The old contract has been transferred to job history");
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
                     $table.bootstrapTable('refresh');
                     if (method = "post") {
                         var options = $table.bootstrapTable('getOptions');
                         $table.bootstrapTable('selectPage', options.totalPages);
                     }
-                    notify.close();
                 },
                 error: function () {
                     notify.update('message', "Error");

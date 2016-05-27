@@ -45,21 +45,29 @@ public class JobPostService {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("department")) {
-                    spec = isValue(key, "name", search);
-                } else if (key.equals("location")) {
-                    spec = isValue("department", "location", search);
-                } else if (key.equals("author")) {
-                    spec = hasValue(key, "name", search);
-                } else if (key.equals("published")) {
-                    Boolean s = search.equals("true");
-                    spec = isValue(key, s);
-                } else if (key.equals("jobCategory")) {
-                    JobCategory jobCategory = jobCategoryRepository.findOneByName(search);
-                    spec = isValue("job", "jobCategory", jobCategory);
-                } else { // key = title
-                    spec = hasValue(key, search);
+                Specification spec = null;
+                switch (key) {
+                    case "department":
+                        spec = isValue(key, "name", search);
+                        break;
+                    case "location":
+                        spec = isValue("department", "location", search);
+                        break;
+                    case "author":
+                        spec = hasValue(key, "name", search);
+                        break;
+                    case "jobCategory":
+                        JobCategory jobCategory = jobCategoryRepository.findOneByName(search);
+                        spec = isValue("job", "jobCategory", jobCategory);
+                        break;
+                    case "published":
+                    case "open":
+                        Boolean s = search.equals("true");
+                        spec = isValue(key, s);
+                        break;
+                    case "title":
+                        spec = hasValue(key, search);
+                        break;
                 }
                 specs.add(spec);
             }

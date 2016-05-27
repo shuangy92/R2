@@ -47,12 +47,13 @@
                 title: 'Job Post ID',
                 sortable: true,
                 formatter: function (index, row, element) {
-                    return row.id;
+                    return row.jobPost.id;
                 }
             }, {
                 title: 'Job Title',
                 formatter: function (index, row, element) {
-                    return '<a href="/career/job_post/' + row.jobPost.id + '">' + row.jobPost.title + '</a>';
+                    var closedStr = row.jobPost.open ? "" : " (closed)";
+                    return '<a href="/career/job_post/' + row.jobPost.id + '">' + row.jobPost.title + closedStr + '</a>';
                 }
             }, {
                 title: 'Location',
@@ -73,6 +74,9 @@
             }, {
                 title: 'Action',
                 formatter: function (index, row, element) {
+                    if (row.jobPost.open == false) {
+                        return;
+                    }
                     var action_continue = '<a onclick="continueApplication(' + element + ')" style="cursor: pointer;">Continue Application</a>';
                     var action_withdraw = '<a onclick="withdrawApplication(' + element + ')" style="cursor: pointer;">Withdraw Application</a>';
                     var action_reapply = '<a onclick="continueApplication(' + element + ')" style="cursor: pointer;">Reapply</a>';

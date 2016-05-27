@@ -1,15 +1,14 @@
 package com.worksap.stm2016.service.job;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.worksap.stm2016.domain.JobHistory;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.PayRate;
+import com.worksap.stm2016.repository.JobHistoryRepository;
 import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
-import com.worksap.stm2016.repository.user.UserProfileRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.util.DateUtil;
 import org.json.simple.JSONObject;
@@ -34,19 +33,27 @@ public class ContractService {
     @Autowired
     ContractRepository contractRepository;
     @Autowired
-    UserProfileRepository userProfileRepository;
-    @Autowired
     UserRepository userRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    JobHistoryRepository jobHistoryRepository;
 
     public Contract get(Long id){
         return contractRepository.findOne(id);
     }
 
     public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+        return getListHelper(sort, order, limit, offset, filter, Contract.class);
+    }
 
-       ArrayList<Specification> specs = new ArrayList<>();
+    public JSONObject getJobHistoryList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+        return getListHelper(sort, order, limit, offset, filter, JobHistory.class);
+    }
+
+    private<T> JSONObject getListHelper(String sort, String order, Integer limit, Integer offset, String filter, Class<T> tClass) throws ParseException {
+
+        ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
             JSONParser parser = new JSONParser();
@@ -66,9 +73,6 @@ public class ContractService {
                     Date from = DateUtil.parseDate(search.split("-")[0], "MM/dd/yyyy");
                     Date to = DateUtil.parseDate(search.split("-")[1], "MM/dd/yyyy");
                     spec = betweenDates("endDate", from, to);
-                } else if (key.equals("active")) {
-                    Boolean active = search.equals("true");
-                    spec = isValue(key, active);
                 } else { // key = location
                     spec = isValue("job", "department", "location", search);
                 }
@@ -76,8 +80,11 @@ public class ContractService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
-        return result;
+        if (tClass == Contract.class) {
+            return andFilter( sort,  order,  limit,  offset,  filter,  specs, contractRepository);
+        } else {
+            return andFilter( sort,  order,  limit,  offset,  filter,  specs, jobHistoryRepository);
+        }
     }
 
     public Contract create(JobApplication jobApplication){
@@ -96,18 +103,17 @@ public class ContractService {
         contract = contractRepository.save(contract);
 
         User user = userRepository.findOne(contract.getUser().getId());
+        Contract oldContract = user.getContract();
+
         user.setDepartment(contract.getJob().getDepartment());
         user.setActive(true);
+        user.setContract(contract);
         userRepository.save(user);
 
-        UserProfile userProfile = userProfileRepository.findOne(contract.getUser().getId());
-        Contract oldContract = userProfile.getContract();
         if (oldContract != null) {
-            oldContract.setActive(false);
-            contractRepository.save(oldContract);
+            contractRepository.delete(oldContract);
+            jobHistoryRepository.save(new JobHistory(oldContract));
         }
-        userProfile.setContract(contract);
-        userProfileRepository.save(userProfile);
 
         return contract;
     }

@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <label for="manager" class="col-sm-4 control-label">Manager</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="manager" name="managerId">
+                                <select class="form-control" id="manager" name="manager">
                                     <option></option>
                                 </select>
                             </div>
@@ -92,6 +92,7 @@
 
     <script type="text/javascript" th:inline="javascript">
         var department;
+        var manager_select = $("#manager")
         jQuery(document).ready(function ($) {
             $('#department-edit-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
@@ -123,14 +124,8 @@
                             sel.val(v);
                         }
                     });
-                    var manager_select = $("#manager")
-                    initDepartmentMemberList(manager_select, "Select a manager");
 
-                    if (department.manager) {
-                        manager_select.data('select2').trigger('select', {
-                            data: {"id": department.manager.id, "text": department.manager.name}
-                        });
-                    }
+                    initDepartmentMemberList(manager_select, "Select a manager");
                 }
             });
         }
@@ -139,8 +134,8 @@
             var data = {};
             $.each(form.serializeArray(), function (i, field) {
                 switch (field.name) {
-                    case "managerId":
-                        data[field.name] = parseInt(field.value);
+                    case "manager":
+                        data[field.name] = {"id": field.value};
                         break;
                     default:
                         data[field.name] = field.value;
@@ -177,6 +172,11 @@
                         data: candidates,
                         placeholder: placeholder,
                     });
+                    if (department.manager) {
+                        manager_select.data('select2').trigger('select', {
+                            data: {"id": department.manager.id, "text": department.manager.name}
+                        });
+                    }
                 }
             });
         }

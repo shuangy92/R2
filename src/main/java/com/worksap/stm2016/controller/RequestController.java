@@ -3,9 +3,7 @@ package com.worksap.stm2016.controller;
 import com.worksap.stm2016.repository.message.RequestRepository;
 import com.worksap.stm2016.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,20 +30,18 @@ public class RequestController {
         return "request/request_list";
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/user/{id}/request", method = RequestMethod.GET)
-    public String getUserRequestListPage(@PathVariable Long id) {
+    @RequestMapping(value = "/user/request", method = RequestMethod.GET)
+    public String getUserRequestListPage() {
         return "request/user_request_list";
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/user/{id}/request/submit", method = RequestMethod.GET)
-    public String getRequestSubmitPage(@PathVariable Long id, Model model) {
+    @RequestMapping(value = "/user/request/submit", method = RequestMethod.GET)
+    public String getRequestSubmitPage() {
         return "request/request_form";
     }
 
     @RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
-    public String getRequestPage(@PathVariable Long id, Model model) {
+    public String getRequestPage(@PathVariable Long id) {
         return "request/request";
     }
 

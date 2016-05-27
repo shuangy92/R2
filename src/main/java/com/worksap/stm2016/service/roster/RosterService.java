@@ -1,7 +1,7 @@
 package com.worksap.stm2016.service.roster;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.roster.Roster;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.repository.roster.RosterRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

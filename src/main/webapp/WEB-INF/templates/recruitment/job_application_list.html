@@ -15,6 +15,19 @@
 <div layout:fragment="content">
     <div class="row">
         <h3>Job Application List</h3>
+        <form class="form-inline" role="form" id="status-checkboxes">
+            Application status:
+            <div class="checkbox"><label><input type="checkbox" name="all-status"/> ALL </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="SUBMITTED" checked="checked"/> SUBMITTED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="REVIEWING" checked="checked"/> REVIEWING </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="PASSED" checked="checked"/> PASSED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="FAILED"/> FAILED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_SENT" checked="checked"/> OFFER_SENT </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_ACCEPTED" checked="checked"/> OFFER_ACCEPTED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_DECLINED" checked="checked"/> OFFER_DECLINED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="WITHDREW"/> WITHDREW </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="CLOSED"/> CLOSED </label></div>
+        </form>
         <table id="table"
                data-toolbar="#toolbar"
                data-sortable="true"
@@ -36,11 +49,39 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var $table = $('#table');
+        var $status_checkboxes = $("#status-checkboxes");
         var url = "/api/job_application";
+        var status_list;
+        var all_status = false;
 
         jQuery(document).ready(function ($) {
             initTable();
+
+            var boxes = $status_checkboxes.find("input[name='status']");
+            var box_labels = $status_checkboxes.find(".status");
+            $status_checkboxes.on('change' , "input[name='all-status']" , function(){
+                if ($(this).is(":checked")) {
+                    all_status = true;
+                    boxes.prop('disabled', true);
+                    box_labels.addClass('disabled');
+                } else {
+                    all_status = false;
+                    boxes.prop('disabled', false);
+                    box_labels.removeClass('disabled');
+                }
+                $table.bootstrapTable('refresh');
+            });
+            $status_checkboxes.on('change' , "input[name='status']" , function(){
+                $table.bootstrapTable('refresh');
+            });
         });
+        function getStatusList() {
+            status_list = [];
+            $status_checkboxes.find("input[name='status']:checked").each(function() {
+                status_list.push($(this).attr('value'));
+            });
+            return status_list.length != 0 && !all_status;
+        }
 
         function initTable() {
             var columns = [{
@@ -107,7 +148,9 @@
                     for (var key in tmp) {
                         filter[key] = tmp[key];
                     }
-                    filter.notStatus = "SAVED";
+                    if (getStatusList()) {
+                        filter.statusList = status_list;
+                    }
                     data.filter = JSON.stringify(filter);
                     return data;
                 },

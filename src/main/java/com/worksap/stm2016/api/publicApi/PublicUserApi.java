@@ -4,13 +4,11 @@ import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.form.UserRegisterForm;
 import com.worksap.stm2016.service.user.UserProfileService;
 import com.worksap.stm2016.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

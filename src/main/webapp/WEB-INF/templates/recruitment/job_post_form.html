@@ -59,7 +59,7 @@
                 <label for="contractLength" class="control-label">Contract Length</label>
                 <div class="row">
                     <div class="col-sm-6">
-                        <input th:value="2" class="form-control" placeholder="Contract Length" type="number" min="0"
+                        <input class="form-control" placeholder="Contract Length" type="number" min="1"
                                id="contractLength" name="contractLength" required="required"/>
                     </div>
                     <div class="col-sm-6">
@@ -75,7 +75,7 @@
             </div>
             <div class="form-group required">
                 <label for="vacancies" class="control-label">Open Positions</label>
-                <input class="form-control" placeholder="# of vacancies" type="number" id="vacancies" name="vacancies"
+                <input class="form-control" placeholder="# of vacancies" type="number" min="1" id="vacancies" name="vacancies"
                        required="required"/>
             </div>
             <fieldset>
@@ -172,6 +172,9 @@
                             case "contractLength":
                                 data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
                                 break;
+                            case "jobId":
+                                data.job = request.job;
+                                break;
                             case "reviewFlowId":
                                 if (field.value) {
                                     data.reviewFlow = {id: field.value};
@@ -181,7 +184,6 @@
                                 data[field.name] = field.value;
                         }
                     });
-                    data.job = request.job;
                     data.department = request.department;
                     data.endDate = request.endDate;
 
@@ -241,9 +243,28 @@
                 });
             }
         }
+        function loadJobPostForm() {
+            $.ajax({
+                type: 'get',
+                url: '/api' + window.location.pathname,
+                success: function (data) {
+                    request = data;
+                    loadRequestData();
+                    if (request.published == false) {
+                        $("#publish").show();
+                    } else {
+                        $("#unpublish").show();
+                    }
+                    $("#jobTitle").val(request.title);
+                    $("#last-edited").html("Last edited by " + request.lastEditor.name + ", " + (new Date(request.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss")).show();
+                    $("#created").html("Created by " + request.author.name + ", " + (new Date(request.createdDate)).toString("yyyy/M/dd hh:mm:ss")).show();
+                    handleFormSubmission("put");
+                }
+            });
+        }
         jQuery(document).ready(function ($) {
             $("#startDate").datepicker();
-            $("#deadline").datepicker();
+            $("#deadline").datepicker({ minDate: new Date() });
 
             handleContractDate();
 
@@ -253,25 +274,7 @@
                 handleFormSubmission("post");
                 $("#publish").show();
             } else {
-                $.ajax({
-                    type: 'get',
-                    url: '/api' + window.location.pathname,
-                    success: function (data) {
-                        request = data;
-                        loadRequestData();
-                        if (request.published == false) {
-                            $("#publish").show();
-                        } else {
-                            $("#unpublish").show();
-                        }
-                        $("#jobTitle").val(request.title);
-                        $("#last-edited").html("Last edited by " + request.lastEditor.name + ", " + (new Date(request.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss"));
-                        $("#last-edited").show();
-                        $("#created").html("Created by " + request.author.name + ", " + (new Date(request.createdDate)).toString("yyyy/M/dd hh:mm:ss"));
-                        $("#created").show();
-                        handleFormSubmission("put");
-                    }
-                });
+                loadJobPostForm();
             }
         });
         //]]>

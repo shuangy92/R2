@@ -1,6 +1,5 @@
 package com.worksap.stm2016.service.user;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.repository.user.UserProfileRepository;
 import org.slf4j.Logger;

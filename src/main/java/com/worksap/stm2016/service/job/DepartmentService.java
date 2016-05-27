@@ -1,10 +1,10 @@
 package com.worksap.stm2016.service.job;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
-import com.worksap.stm2016.service.user.UserService;
+import com.worksap.stm2016.repository.user.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -31,13 +31,13 @@ public class DepartmentService {
     @Autowired
     DepartmentRepository departmentRepository;
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
 
     public Department get(Long id){
         return departmentRepository.findOne(id);
     }
 
-    public JSONObject getFull(Long id){
+    /*public JSONObject getFull(Long id){
         Department department = departmentRepository.findOne(id);
         JSONObject result = new JSONObject();
         result.put("id", department.getId());
@@ -48,7 +48,7 @@ public class DepartmentService {
 
         }
         return result;
-    }
+    }*/
 
     public Iterable<Department> getAll() {
         return departmentRepository.findAllByOrderByNameAsc();
@@ -86,17 +86,14 @@ public class DepartmentService {
     }
 
     public Department update(Department department) throws ParseException {
-        Long original = departmentRepository.findOne(department.getId()).getManagerId();
-        if (original != null) {
-            User manager = userService.get(original);
-            manager.setRole(Role.EMPLOYEE);
-            userService.save(manager);
+        User prevManager = departmentRepository.findOne(department.getId()).getManager();
+        if (prevManager != null) {
+            prevManager.setRole(Role.EMPLOYEE);
+            userRepository.save(prevManager);
         }
-        if (department.getManagerId() != null) {
-            User manager = userService.get(department.getManagerId());
-            manager.setRole(Role.MANAGER);
-            userService.save(manager);
-        }
+        User newManager = userRepository.findOne(department.getManager().getId());
+        newManager.setRole(Role.MANAGER);
+        userRepository.save(newManager);
 
         return departmentRepository.save(department);
     }

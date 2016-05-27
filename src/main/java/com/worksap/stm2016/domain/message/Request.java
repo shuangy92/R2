@@ -1,7 +1,7 @@
 package com.worksap.stm2016.domain.message;
 
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.RequestStatus;
 import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;

@@ -95,6 +95,14 @@
                 title: 'Location',
                 filterControl: 'select'
             }, {
+                field: 'open',
+                title: 'Open (?)',
+                sortable: true,
+                filterControl: 'select',
+                formatter: function (index, row, element) {
+                    return (index == true ? "Open" : "Closed");
+                }
+            }, {
                 field: 'published',
                 title: 'Published (?)',
                 sortable: true,

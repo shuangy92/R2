@@ -6,7 +6,6 @@ import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

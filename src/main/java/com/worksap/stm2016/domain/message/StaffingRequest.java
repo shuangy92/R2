@@ -1,7 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
 import com.worksap.stm2016.domain.job.Job;
-import com.worksap.stm2016.enums.RequestType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;

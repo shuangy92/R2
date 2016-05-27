@@ -33,7 +33,7 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var $table = $('#table');
-        var url = '/api/contract';
+        var url = '/api/contract/history';
         var from = $("#from"), to = $("#to");
 
         jQuery(document).ready(function ($) {
@@ -115,7 +115,6 @@
                     for (var key in tmp) {
                         filter[key] = tmp[key];
                     }
-                    filter.active = "false";
                     if (from.val() && to.val()) {
                         filter.date = $("#from").val() + "-" + $("#to").val()
                     }

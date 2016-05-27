@@ -6,8 +6,6 @@ import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
-import com.worksap.stm2016.form.UserRegisterForm;
-import com.worksap.stm2016.repository.user.UserProfileRepository;
 import com.worksap.stm2016.service.job.DepartmentService;
 import com.worksap.stm2016.service.user.UserProfileService;
 import com.worksap.stm2016.service.user.UserService;
@@ -77,20 +75,21 @@ public class UserApi {
         }
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-    public UserProfile getProfile(@PathVariable("id") Long id) {
-        return userProfileService.get(id);
+    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #uid)")
+    @RequestMapping(value = "/profile/{uid}", method = RequestMethod.GET)
+    public UserProfile getProfile(@PathVariable("uid") Long uid) {
+        return userProfileService.get(uid);
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile", method = RequestMethod.PUT)
     public UserProfile updateProfile(@RequestBody UserProfile userProfile) {
         return userProfileService.update(userProfile);
     }
 
-    @RequestMapping(value="/contract/uid", method = RequestMethod.GET)
+    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #uid)")
+    @RequestMapping(value="/contract/{uid}", method = RequestMethod.GET)
     public Contract getContract(@PathVariable("uid") Long uid){
-        return userProfileService.get(uid).getContract();
+        return userService.get(uid).getContract();
     }
 
     @RequestMapping(value = "/change_password", method = RequestMethod.POST)
