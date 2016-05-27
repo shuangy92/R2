@@ -57,7 +57,7 @@
                                 contentType: false,
                                 cache: false,
                                 success: function (data) {
-                                    $('form')[0].reset();
+                                    $('#file-upload-form')[0].reset();
                                     $('#table').bootstrapTable('refresh');
                                     notify.close();
                                 }
@@ -66,7 +66,7 @@
                             notify.close();
                         }
                     } else {
-                        $('form')[0].reset();
+                        $('#file-upload-form')[0].reset();
                         $('#table').bootstrapTable('refresh');
                         notify.close();
                     }

@@ -30,12 +30,12 @@ public class JobHistory implements Serializable {
     @JoinColumn(name = "contract_id")
     private Contract contract;
 
-    @Column(name = "startDate")
+    @Column(name = "real_start_date")
     @Type(type = "date")
-    private Date startDate;
+    private Date realStartDate;
 
-    @Column(name = "end_date")
+    @Column(name = "real_end_date")
     @Type(type = "date")
-    private Date endDate;
+    private Date realEndDate;
 
 }

@@ -5,9 +5,11 @@ import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.message.Notification;
+import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.repository.PropertyRepository;
 import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
+import com.worksap.stm2016.repository.user.UserProfileRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.service.message.NotificationService;
 import com.worksap.stm2016.util.DateUtil;
@@ -33,7 +35,7 @@ import static com.worksap.stm2016.specification.BasicSpecs.isValue;
  * Created by Shuang on 5/25/2016.
  */
 @Component
-//@RestController
+@RestController
 public class ScheduledTasks {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -42,6 +44,8 @@ public class ScheduledTasks {
     ContractRepository contractRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserProfileRepository userProfileRepository;
     @Autowired
     DepartmentRepository departmentRepository;
     @Autowired
@@ -76,15 +80,20 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(cron = "0 1 1 * * ?") // fire daily
+    //@Scheduled(cron = "0 1 1 * * ?") // fire daily
+    @RequestMapping(value = "/set", method = RequestMethod.GET)
     public void setExpiredContracts() {
         Collection<Contract> contracts = contractRepository.findByEndDate(DateUtil.addDays(-1));
         for (Contract contract : contracts) {
             contract.setActive(false);
             contract.getUser().setActive(false);
 
+            UserProfile userProfile = userProfileRepository.findOne(contract.getUser().getId());
+            userProfile.setContract(null);
+
             contractRepository.save(contract);
             userRepository.save(contract.getUser());
+            userProfileRepository.save(userProfile);
         }
     }
 

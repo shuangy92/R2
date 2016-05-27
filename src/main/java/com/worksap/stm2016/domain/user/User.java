@@ -2,6 +2,8 @@ package com.worksap.stm2016.domain.user;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.enums.UserStatus;
@@ -14,6 +16,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "person")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,4 +53,8 @@ public class User implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="contract_id")
+    private Contract contract;
 }

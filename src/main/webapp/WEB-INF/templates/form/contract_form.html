@@ -12,7 +12,7 @@
                     <h4 class="modal-title">Create a contract</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" class="form-horizontal" id="job-profile-form">
+                    <form role="form" class="form-horizontal" id="contract-form">
                         <div class="form-group required">
                             <label for="user" class="col-sm-4 control-label">Employee</label>
                             <div class="col-sm-8">
@@ -24,7 +24,7 @@
                         <div class="form-group required" id="field-id">
                             <label for="jobId" class="col-sm-4 control-label">Job Code <span><a href="/job_profile" target="_blank" title="Click to view the job list">?</a></span></label>
                             <div class="col-sm-8">
-                                <input class="form-control" id="jobId" name="jobId" type="number" required="required"/>
+                                <input class="form-control" id="jobId" name="jobId" type="number" onchange="checkJobCode()" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
@@ -71,8 +71,7 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var job;
-        var form = $("#job-profile-form");
-        var method;
+        var form = $("#contract-form");
 
         jQuery(document).ready(function ($) {
             $("#startDate").datepicker();
@@ -81,18 +80,14 @@
             form.on('submit', function (e) {
                 e.preventDefault();
                 $('#contract-modal').modal('hide')
-                submitContractForm(method, $(this));
+                submitContractForm($(this));
             })
             initEmployeeSelect($("#user"))
 
             $('#contract-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
-                var action = button.data('action');
-                if (action == create) {
-
-                } else { // copy
-
-                }
+                form[0].reset();
+                form.find("select").val('').trigger('change');
             })
 
         });
@@ -122,15 +117,15 @@
                 }
             });
         }
-        function submitContractForm(method) {
+        function submitContractForm() {
             var data = {};
-            $.each($('form').serializeArray(), function (i, field) {
+            $.each(form.serializeArray(), function (i, field) {
                 switch (field.name) {
                     case "user":
                         data[field.name] = {id: field.value};
                         break;
                     case "jobId":
-                        data.job = {id: field.value};
+                        data.job = job;
                         break;
                     case "startDate":
                     case "endDate":
@@ -162,6 +157,25 @@
                 error: function () {
                     notify.update('message', "Error");
                 }
+            });
+        }
+        function checkJobCode() {
+            $.ajax({
+                type: "get",
+                url: '/api/job/' + $("#jobId").val(),
+                success: function (data) {
+                    if (data == "") {
+                        $("#jobId").val("");
+                        $.notify({
+                            icon: 'fa fa-info-circle',
+                            message: "Please input a valid job code.",
+                        }, {
+                            delay: 500,
+                        })
+                    } else {
+                        job = data;
+                    }
+                },
             });
         }
         //]]>

@@ -29,10 +29,6 @@ public class UserProfile implements Serializable {
     @PrimaryKeyJoinColumn
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="contract_id")
-    private Contract contract;
-
     @Column(name = "id_number")
     private String idNumber;
 

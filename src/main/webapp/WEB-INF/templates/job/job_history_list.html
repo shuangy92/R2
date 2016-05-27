@@ -14,25 +14,7 @@
 
 <div layout:fragment="content">
     <div class="row">
-        <h3>Contract</h3>
-        <form class="form-inline" role="form" id="date-range-form">
-            <label>Contract expires between</label>
-            <div class="form-group required">
-                <input class="form-control" id="from" name="from" required="required"/>
-            </div>
-            -
-            <div class="form-group required">
-                <input class="form-control" id="to" name="to" required="required"/>
-            </div>
-            <div class="form-group required">
-                <button class="btn btn-default" type="submit">Search</button>
-            </div>
-        </form>
-        <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#contract-modal">
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>
-        </div>
+        <h3>Job History</h3>
         <table id="table"
                data-toolbar="#toolbar"
                data-sortable="true"
@@ -47,8 +29,6 @@
                smartDisplay="true">
         </table>
     </div>
-    <div th:replace="form/contract_form :: contract_form"></div>
-
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
@@ -70,10 +50,6 @@
         function initTable() {
             $table.bootstrapTable({
                 columns: [{
-                    field: 'id',
-                    title: 'ID',
-                    sortable: true,
-                }, {
                     field: 'user',
                     title: 'Employee',
                     sortable: true,
@@ -139,13 +115,9 @@
                     for (var key in tmp) {
                         filter[key] = tmp[key];
                     }
-                    filter.active = "true";
+                    filter.active = "false";
                     if (from.val() && to.val()) {
                         filter.date = $("#from").val() + "-" + $("#to").val()
-                    }
-                    if (currentUser.role == "MANAGER") {
-                        filter.department = currentUser.department.name;
-                        filter.loaction = currentUser.department.location;
                     }
                     data.filter = JSON.stringify(filter);
                     return data;
@@ -157,19 +129,11 @@
                     });
                     return res;
                 },
-                onLoadSuccess: function () {
-                    if (currentUser.role == "MANAGER") {
-                        $table.bootstrapTable('hideColumn', "department");
-                        $table.bootstrapTable('hideColumn', "location");
-                        $("#toolbar").hide();
-                    }
-                },
+                sortOrder: 'desc',
                 filterControl: true,
                 clickToSelect: true,
                 cookie: true,
-                cookieIdTable: 'contract',
-                cookiesEnabled: ['bs.table.sortOrder', 'bs.table.sortName', 'bs.table.pageNumber', 'bs.table.pageList', 'bs.table.searchText', 'bs.table.filterControl'],
-                showColumns: (currentUser.role == "ADMIN")
+                cookieIdTable: 'job_history',
             });
         }
 

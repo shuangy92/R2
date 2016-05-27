@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.job;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
@@ -7,6 +8,7 @@ import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.PayRate;
 import com.worksap.stm2016.repository.job.ContractRepository;
+import com.worksap.stm2016.repository.job.DepartmentRepository;
 import com.worksap.stm2016.repository.user.UserProfileRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.util.DateUtil;
@@ -35,6 +37,8 @@ public class ContractService {
     UserProfileRepository userProfileRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     public Contract get(Long id){
         return contractRepository.findOne(id);
@@ -62,6 +66,9 @@ public class ContractService {
                     Date from = DateUtil.parseDate(search.split("-")[0], "MM/dd/yyyy");
                     Date to = DateUtil.parseDate(search.split("-")[1], "MM/dd/yyyy");
                     spec = betweenDates("endDate", from, to);
+                } else if (key.equals("active")) {
+                    Boolean active = search.equals("true");
+                    spec = isValue(key, active);
                 } else { // key = location
                     spec = isValue("job", "department", "location", search);
                 }
@@ -88,8 +95,9 @@ public class ContractService {
     public Contract save(Contract contract){
         contract = contractRepository.save(contract);
 
-        User user = contract.getUser();
+        User user = userRepository.findOne(contract.getUser().getId());
         user.setDepartment(contract.getJob().getDepartment());
+        user.setActive(true);
         userRepository.save(user);
 
         UserProfile userProfile = userProfileRepository.findOne(contract.getUser().getId());

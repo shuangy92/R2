@@ -67,6 +67,9 @@ public class UserService {
                     spec = isValue(key, Long.parseLong(search));
                 } else if (key.equals("notRole")) {
                     spec = isNotValue("role", Role.valueOf(search));
+                } else if (key.equals("active")) {
+                    Boolean active = search.equals("true");
+                    spec = isValue(key, active);
                 } else { //key = name
                     spec = hasValue(key, search);
                 }

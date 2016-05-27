@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "contract")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Contract implements Serializable {
 
     private static final long serialVersionUID = 1L;

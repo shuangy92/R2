@@ -38,8 +38,9 @@ public class JobController {
     }
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/contract/expiring", method = RequestMethod.GET)
-    public String getContractListExpiringPage() {
-        return "job/contract_list_expiring";
+    @RequestMapping(value = "/job_history", method = RequestMethod.GET)
+    public String getJobHistoryListPage() {
+        return "job/job_history_list";
     }
+
 }
