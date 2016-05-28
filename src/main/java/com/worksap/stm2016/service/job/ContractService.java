@@ -1,12 +1,12 @@
 package com.worksap.stm2016.service.job;
 
-import com.worksap.stm2016.domain.JobHistory;
+import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
-import com.worksap.stm2016.repository.JobHistoryRepository;
+import com.worksap.stm2016.repository.job.JobHistoryRepository;
 import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
@@ -100,20 +100,20 @@ public class ContractService {
     }
 
     public Contract save(Contract contract){
-        contract = contractRepository.save(contract);
-
         User user = userRepository.findOne(contract.getUser().getId());
+
         Contract oldContract = user.getContract();
+        if (oldContract != null) {
+            contractRepository.delete(oldContract);
+            jobHistoryRepository.save(new JobHistory(oldContract));
+        }
+
+        contract = contractRepository.save(contract);
 
         user.setDepartment(contract.getJob().getDepartment());
         user.setActive(true);
         user.setContract(contract);
         userRepository.save(user);
-
-        if (oldContract != null) {
-            contractRepository.delete(oldContract);
-            jobHistoryRepository.save(new JobHistory(oldContract));
-        }
 
         return contract;
     }

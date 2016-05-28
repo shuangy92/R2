@@ -1,10 +1,13 @@
 package com.worksap.stm2016.api.job;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.service.job.DepartmentService;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
@@ -28,8 +32,12 @@ public class DepartmentApi {
     DepartmentService departmentService;
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public Department get(@PathVariable("id") Long id){
-        return departmentService.get(id);
+    public JSONObject get(@PathVariable("id") Long id) throws JsonProcessingException, ParseException {
+        ObjectMapper mapper = new ObjectMapper();
+        Department dept = departmentService.get(id);
+        JSONObject department = (JSONObject) (new JSONParser()).parse(mapper.writeValueAsString(dept));
+        department.put("manager", dept.getManager());
+        return department;
     }
 
     @RequestMapping(value="/all", method = RequestMethod.GET)

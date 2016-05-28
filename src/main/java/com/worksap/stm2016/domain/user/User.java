@@ -65,13 +65,16 @@ public class User implements Serializable {
 
         User user = (User) o;
 
-        return id.equals(user.id);
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        return email != null ? email.equals(user.email) : user.email == null;
 
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
     }
 
     @Override

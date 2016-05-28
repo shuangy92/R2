@@ -1,14 +1,10 @@
-/*
---
--- TOC entry 2771 (class 0 OID 68291)
--- Dependencies: 411
--- Data for Name: person; Type: TABLE DATA; Schema: ss1604c200_rd2; Owner: ss1604c200
---
-INSERT INTO department (location, name) VALUES ('shanghai', 'Dept1');
-INSERT INTO department (location, name) VALUES ('beijing', 'Dept2');
-INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'admin@gmail.com', 'admin', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'ADMIN', 'NORMAL', 1);
-INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'manager@gmail.com', 'manager', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'MANAGER', 'NORMAL', 1);
-INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'manager2@gmail.com', 'manager', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'MANAGER', 'NORMAL', 2);
+/*INSERT INTO department (location, name) VALUES ('shanghai', 'HR');
+INSERT INTO department (location, name) VALUES ('beijing', 'Sales');
+INSERT INTO department (location, name) VALUES ('beijing', 'IT');
+
+INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'admin@gmail.com', 'admin', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'ADMIN', 'NORMAL',1);
+INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'manager@gmail.com', 'manager', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'MANAGER', 'NORMAL',2);
+INSERT INTO person (active,email,name,password_hash,role,status,department_id) VALUES (true, 'manager2@gmail.com', 'manager2', '$2a$04$/A7Lyo5KnF7uyhk6QPMiPe3TRwYdbv9bqWZnbn7lejYI2dBWRBeTm', 'MANAGER', 'NORMAL',3);
 
 INSERT INTO job_category (name) VALUES ('Sale');
 INSERT INTO job_category (name) VALUES ('HR');
@@ -264,30 +260,4 @@ INSERT INTO country (code, name) VALUES ('ZR', 'Zaire');
 INSERT INTO country (code, name) VALUES ('ZM', 'Zambia');
 INSERT INTO country (code, name) VALUES ('ZW', 'Zimbabwe');
 
-
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (1, 'Description for job 1', 40, 'Requirement for job 1', 'Job Title No. 1', 2, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (2, 'Description for job 2', 40, 'Requirement for job 2', 'Job Title No. 2', 2, 2);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (3, 'Description for job 3', 40, 'Requirement for job 3', 'Job Title No. 3', 2, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (4, 'Description for job 4', 40, 'Requirement for job 4', 'Job Title No. 4', 2, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (5, 'Description for job 5', 40, 'Requirement for job 5', 'Job Title No. 5', 2, 2);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (6, 'Description for job 6', 40, 'Requirement for job 6', 'Job Title No. 6', 2, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (7, 'Description for job 7', 40, 'Requirement for job 7', 'Job Title No. 7', 2, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (8, 'Description for job 8', 40, 'Requirement for job 8', 'Job Title No. 8', 2, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (9, 'Description for job 9', 40, 'Requirement for job 9', 'Job Title No. 9', 2, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (10, 'Description for job 10', 40, 'Requirement for job 10', 'Job Title No. 10', 1, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (11, 'Description for job 11', 40, 'Requirement for job 11', 'Job Title No. 11', 1, 2);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (12, 'Description for job 12', 40, 'Requirement for job 12', 'Job Title No. 12', 1, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (13, 'Description for job 13', 40, 'Requirement for job 13', 'Job Title No. 13', 1, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (14, 'Description for job 14', 40, 'Requirement for job 14', 'Job Title No. 14', 1, 2);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (15, 'Description for job 15', 40, 'Requirement for job 15', 'Job Title No. 15', 1, 1);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (16, 'Description for job 16', 40, 'Requirement for job 16', 'Job Title No. 16', 1, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (17, 'Description for job 17', 40, 'Requirement for job 17', 'Job Title No. 17', 1, 4);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (18, 'Description for job 18', 40, 'Requirement for job 18', 'Job Title No. 18', 1, 3);
-INSERT INTO job (job_id, description, hours, requirement, title, department_id, job_category_id) VALUES (19, 'Description for job 19', 40, 'Requirement for job 19', 'Job Title No. 19', 1, 2);
-
-
-
-INSERT INTO job_post (job_post_id, contract_length, created_date, deadline, description, end_date, hours, last_modified_date, status, published, requirement, salary, start_date, title, vacancies, author_id, department_id, job_id, last_editor_id, review_flow_id) VALUES (1, NULL, '2016-05-23 11:22:27.555', NULL, NULL, NULL, NULL, '2016-05-23 11:22:27.555', NULL, true, NULL, NULL, NULL, 'aaa', NULL, 1, 1, 19, 1, NULL);
-INSERT INTO job_post (job_post_id, contract_length, created_date, deadline, description, end_date, hours, last_modified_date, status, published, requirement, salary, start_date, title, vacancies, author_id, department_id, job_id, last_editor_id, review_flow_id) VALUES (2, '2 week', '2016-05-23 12:39:02.37', '2016-05-11', 'Description for job 12', '2016-06-01', 40, '2016-05-24 12:39:19.584', 'HOURLY', true, 'Requirement for job 12', '', '2016-05-18', 'Job Title No. 12', 0, 1, 1, 12, 1, 1);
-INSERT INTO job_post (job_post_id, contract_length, created_date, deadline, description, end_date, hours, last_modified_date, status, published, requirement, salary, start_date, title, vacancies, author_id, department_id, job_id, last_editor_id, review_flow_id) VALUES (3, '4 week', '2016-05-23 17:03:08.141', NULL, 'Description for job 12', '2016-06-22', 40, '2016-05-24 12:39:26.798', 'HOURLY', true, 'Requirement for job 12', '', '2016-05-25', 'Sales Executive', 5, 1, 1, 12, 1, 1);
 */

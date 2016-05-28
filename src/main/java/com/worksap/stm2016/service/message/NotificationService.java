@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.message;
 
+import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.review.ReviewResponse;
@@ -94,17 +95,32 @@ public class NotificationService {
         }
         return notificationRepository.save(notification);
     }
-    public Notification createContractNotification (User manager, Long expiringCount, Date from, Date to, Notification.NotificationType type) {
+    public Notification createContractExpiringNotification (User manager, Long expiringCount, Date from, Date to) {
+        Notification notification = new Notification();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
+        notification.setType(Notification.NotificationType.CONTRACT_EXPIRING);
+        notification.setItemNote(df.format(from) + "-" + df.format(to));
+        notification.setUser(manager);
+        return notificationRepository.save(notification);
+    }
+    public Notification createContractNotification (Contract contract, Notification.NotificationType type) {
         Notification notification = new Notification();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         switch (type) {
-            case CONTRACT_EXPIRING:
-                notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
+            case CONTRACT_EXPIRING: //TODO
+                notification.setContent("Your contracts will expire on " + df.format(contract.getEndDate()));
                 notification.setType(type);
-                notification.setItemNote(df.format(from) + "-" + df.format(to));
-                notification.setUser(manager);
+                notification.setItemId(contract.getId());
+                notification.setUser(contract.getUser());
+                break;
+            case CONTRACT_EXPIRED:
+                notification.setContent(contract.getUser().getName() + "'s contract has expired");
+                notification.setType(type);
+                notification.setUser(contract.getJob().getDepartment().getManager());
                 break;
         }
         return notificationRepository.save(notification);
     }
+
 }

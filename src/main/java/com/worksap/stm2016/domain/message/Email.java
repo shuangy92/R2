@@ -32,7 +32,7 @@ public class Email implements Serializable {
     @Column(name = "to_name")
     private String toName;*/
 
-    @Column(name = "subject")
+    @Column(name = "subject", columnDefinition = "text")
     private String subject;
 
     @Column(name = "body")

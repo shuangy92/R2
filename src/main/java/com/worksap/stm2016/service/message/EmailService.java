@@ -1,4 +1,4 @@
-package com.worksap.stm2016.service;
+package com.worksap.stm2016.service.message;
 
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.message.Email;

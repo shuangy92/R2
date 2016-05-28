@@ -37,18 +37,6 @@ public class DepartmentService {
         return departmentRepository.findOne(id);
     }
 
-    /*public JSONObject getFull(Long id){
-        Department department = departmentRepository.findOne(id);
-        JSONObject result = new JSONObject();
-        result.put("id", department.getId());
-        result.put("name", department.getName());
-        result.put("location", department.getLocation());
-        if (department.getManagerId() != null) {
-            result.put("manager", userService.get(department.getManagerId()));
-
-        }
-        return result;
-    }*/
 
     public Iterable<Department> getAll() {
         return departmentRepository.findAllByOrderByNameAsc();
@@ -91,10 +79,11 @@ public class DepartmentService {
             prevManager.setRole(Role.EMPLOYEE);
             userRepository.save(prevManager);
         }
-        User newManager = userRepository.findOne(department.getManager().getId());
-        newManager.setRole(Role.MANAGER);
-        userRepository.save(newManager);
-
+        if (department.getManager() != null) {
+            User newManager = userRepository.findOne(department.getManager().getId());
+            newManager.setRole(Role.MANAGER);
+            userRepository.save(newManager);
+        }
         return departmentRepository.save(department);
     }
 

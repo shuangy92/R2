@@ -1,15 +1,17 @@
 package com.worksap.stm2016;
 
-import com.worksap.stm2016.domain.JobHistory;
+import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.Property;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobPost;
-import com.worksap.stm2016.repository.JobHistoryRepository;
+import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.repository.job.JobHistoryRepository;
 import com.worksap.stm2016.repository.PropertyRepository;
 import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.service.message.NotificationService;
 import com.worksap.stm2016.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,8 @@ public class ScheduledTasks {
     NotificationService notificationService;
     @Autowired
     JobPostRepository jobPostRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Scheduled(cron = "0 0 1 * * ?") // fire monthly
     @RequestMapping(value = "/checkExpiringContracts", method = RequestMethod.GET)
@@ -65,7 +69,7 @@ public class ScheduledTasks {
         for (HashMap.Entry<Department, Integer> entry : departmentExpContractsCount.entrySet()) {
             Department department = entry.getKey();
             Integer expiringCount = entry.getValue();
-            notificationService.createContractNotification(department.getManager(), Long.valueOf(expiringCount), from, to, Notification.NotificationType.CONTRACT_EXPIRING);
+            notificationService.createContractExpiringNotification(department.getManager(), Long.valueOf(expiringCount), from, to);
         }
     }
 
@@ -74,6 +78,10 @@ public class ScheduledTasks {
     public void setExpiredContracts() {
         Collection<Contract> contracts = contractRepository.findByEndDate(DateUtil.addDays(-1));
         for (Contract contract : contracts) {
+            notificationService.createContractNotification(contract, Notification.NotificationType.CONTRACT_EXPIRED);
+            contract.getUser().setRole(Role.FORMER_EMPLOYEE);
+            userRepository.save(contract.getUser());
+
             jobHistoryRepository.save(new JobHistory(contract));
             contractRepository.delete(contract);
         }

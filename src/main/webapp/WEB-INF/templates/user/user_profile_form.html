@@ -25,27 +25,27 @@
                         <input class="form-control" id="email" name="email" required="required"/>
                     </div>
                 </div>
-            </form>
-        </div>
-        <hr/>
-        <div class="contract-info">
-            <form class="form-horizontal" role="form" id="contract-form">
                 <div class="form-group">
                     <label for="id" class="col-sm-4 control-label">Emp No.</label>
                     <div class="col-sm-8">
                         <input class="form-control" id="id" name="id" required="required"/>
                     </div>
                 </div>
+            </form>
+        </div>
+        <hr/>
+        <div class="contract-info">
+            <form class="form-horizontal" role="form" id="contract-form">
                 <div class="form-group">
                     <label for="name" class="col-sm-4 control-label">Department</label>
                     <div class="col-sm-8">
-                        <input class="form-control" id="departmentName" name="departmentName" required="required"/>
+                        <input class="form-control" id="department" name="department" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="jobId" class="col-sm-4 control-label">Job Code</label>
+                    <label for="job" class="col-sm-4 control-label">Job Code</label>
                     <div class="col-sm-8">
-                        <input class="form-control" id="jobId" name="jobId" required="required"/>
+                        <input class="form-control" id="job" name="job" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -137,6 +137,7 @@
             }
             loadBasicForm(uid);
             loadContractForm(uid);
+            loadContactForm(uid);
 
             $('#contact-form').on('submit', function (e) {
                 e.preventDefault();
@@ -195,6 +196,8 @@
                                 sel.val(v);
                             }
                         });
+                        $("#contract-form #department").val(data.job.department.name);
+                        $("#contract-form #job").val(data.job.title + ' (ID: ' + data.job.id + ')');
                     }
                 }
             })
@@ -212,9 +215,7 @@
                                 sel.val(v);
                             }
                         });
-                        $("#country").val(data.country.name);
-
-                        $("#id").val(data.id);
+                        $("#contact-form #country").val(data.country.name);
                     }
                 }
             })

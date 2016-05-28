@@ -56,7 +56,7 @@ public class FakeController {
             if (i < 10) {
                 job.setDepartment(department);
             } else {
-                department = departmentRepository.findOne(Long.valueOf(1));
+                department = departmentRepository.findOne(Long.valueOf(3));
                 job.setDepartment(department);
             }
             Random rand = new Random();

@@ -1,6 +1,8 @@
 package com.worksap.stm2016.domain.job;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,7 @@ public class Department implements Serializable {
     @Column(name = "department_id", nullable = false, updatable = false)
     private Long id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
     @JoinColumn(name = "manager_id")
     private User manager;

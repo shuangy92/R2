@@ -48,7 +48,7 @@ public class Notification implements Serializable {
     private NotificationType type;
 
     public enum NotificationType {
-        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING
+        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING, CONTRACT_EXPIRED
     }
 
     /* auditing */

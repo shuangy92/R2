@@ -135,7 +135,9 @@
             $.each(form.serializeArray(), function (i, field) {
                 switch (field.name) {
                     case "manager":
-                        data[field.name] = {"id": field.value};
+                        if (field.value) {
+                            data[field.name] = {"id": field.value};
+                        }
                         break;
                     default:
                         data[field.name] = field.value;

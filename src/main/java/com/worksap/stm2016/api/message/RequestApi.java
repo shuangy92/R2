@@ -1,4 +1,4 @@
-package com.worksap.stm2016.api;
+package com.worksap.stm2016.api.message;
 
 
 import com.worksap.stm2016.domain.message.Request;
