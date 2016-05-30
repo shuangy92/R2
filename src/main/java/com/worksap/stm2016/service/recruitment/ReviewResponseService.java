@@ -43,8 +43,14 @@ public class ReviewResponseService {
     public ReviewResponse updateResponseOfJobApplication(Long jobApplicationId, ReviewResponse reviewResponse){
         boolean finishRun = true;
         JobApplication jobApplication = jobApplicationRepository.findOne(jobApplicationId);
+        reviewResponse.setJobApplication(jobApplication);
+        reviewResponse = reviewResponseRepository.save(reviewResponse);
+
         for (ReviewResponse response: jobApplication.getResponses()) {
-            if (response.getReviewRun() == reviewResponse.getReviewRun()) {
+            logger.debug("{}", response.getReviewRun());
+            logger.debug("{}", reviewResponse.getReviewRun());
+
+            if (response.getReviewRun().getId() == reviewResponse.getReviewRun().getId()) {
                 if (response.getStatus() == ReviewStatus.REVIEWING) {
                     finishRun = false;
                 }
@@ -62,7 +68,7 @@ public class ReviewResponseService {
             }
         }
         reviewResponse.setJobApplication(jobApplication);
-        return reviewResponseRepository.save(reviewResponse);
+        return reviewResponse;
     }
 
     public void delete(Long id){

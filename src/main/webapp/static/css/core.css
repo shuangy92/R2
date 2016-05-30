@@ -174,16 +174,6 @@
     }
 }
 
-/**/
-#weekpicker {
-    width: 164px;
-}
-
-/* panel */
-.login-panel {
-    margin-top: 25%;
-}
-
 /** request */
 .btn-request {
     display: block;

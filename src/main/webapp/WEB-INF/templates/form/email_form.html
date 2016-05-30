@@ -5,7 +5,7 @@
 <div th:fragment="email_form">
     <script type="text/javascript" th:src="@{/static/js/ckeditor/ckeditor.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/jquery.insert-at-caret.min.js}"></script>
-    <div class="modal fade" id="emailModel" role="dialog">
+    <div class="modal fade" id="email-modal" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -28,11 +28,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="to" class="col-sm-2 control-label">Template <a href="file_template" title="Click to view the file template list" target="_blank">?</a></label>
+                            <label for="attachment" class="col-sm-2 control-label">Attachment <a href="#" title="Click to view user document list" target="_blank">?</a></label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="fileTemplate" name="fileTemplate">
-                                    <option></option>
-                                </select>
+                                <select class="form-control" id="attachment" name="attachment"  multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileTemplate" class="col-sm-2 control-label">Template <a href="file_template" title="Click to view the file template list" target="_blank">?</a></label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="fileTemplate" name="fileTemplate"><option></option></select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,6 +47,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10 col-sm-offset-2">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#preview-modal"><i class="fa fa-eye"></i></button>
                                 <button type="submit" class="btn btn-success">Send</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
@@ -52,17 +57,29 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="preview-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="file-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script type="text/javascript" th:inline="javascript">
         var recipient;
+        var job_application_id;
+        var applicant_id;
+        var parsed_body;
 
         var email_editor = CKEDITOR.replace( 'body' );
         var email_form = $("#email-form");
         var email_file_template_select = email_form.find("#fileTemplate")
 
         jQuery(document).ready(function ($) {
-            initFileTemplateList(email_file_template_select, "Select a template");
+            initFileTemplateList(email_file_template_select, "Template");
 
             email_file_template_select.on("select2:select", function (e) {
                 loadFileTemplateForm(email_file_template_select.val(), email_editor);
@@ -70,19 +87,18 @@
 
             email_form.submit(function (e) {
                 e.preventDefault();
-                $('#emailModel').modal('hide')
+                $('#email-modal').modal('hide')
                 submitEmailForm();
             })
 
-            $('#emailModel').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-                var toUid = button.data('touid') // Extract info from data-* attributes
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            $('#email-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                applicant_id = button.data('touid')
+                job_application_id = button.data('id')
 
                 $.ajax({
                     type: "get",
-                    url: "/api/user/" + toUid,
+                    url: "/api/user/" + applicant_id,
                     async: false,
                     success: function (data) {
                         recipient = data;
@@ -92,53 +108,46 @@
                 modal.find('.modal-title').text('New email to ' + recipient.name);
                 modal.find('.modal-body #toName').val(recipient.name);
                 modal.find('.modal-body #to').val(recipient.name + ' (' + recipient.email + ')');
+                modal.find('label,[for="attachment"] a').prop('href', '/job_application/' + job_application_id);
+
+                initAttachmentList(email_form.find("#attachment"), "Attachments")
+            })
+            $('#preview-modal').on('show.bs.modal', function (event) {
+                loadFilePreview($(this).find("#file-preview"), email_editor);
             })
         });
 
         function submitEmailForm() {
-            data = {};
-            data.from = currentUser;
-            data.to = recipient;
-
-            data.subject = $("#subject").val();
-            data.body = $("#body").val();
+            email = {};
+            email.from = currentUser;
+            email.to = recipient;
+            email.subject = $("#subject").val();
+            email.body = loadFilePreview(null, email_editor);
+            email.attachments = email_form.find("#attachment").val();
 
             $.ajax({
                 type: "post",
                 url: "/api/email",
-                data: JSON.stringify(data),
+                data: JSON.stringify(email),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     console.log(data);
                 }
             });
         }
-
-        function initFileTemplateList($select, placeholder) {
+        function initAttachmentList($select, placeholder) {
             $.ajax({
                 type: 'get',
-                url: "/api/file_template/all/",
+                url: "/api/file/" + applicant_id + "/" + "DOCUMENT",
                 success: function (data) {
-                    var file_templates = $.map(data, function (obj) {
-                        return {id: obj.id, text: obj.title + ' (by ' + obj.author.name + ')'};
+                    var documents = $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
                     })
                     $select.html('').select2({data: [{id: '', text: ''}]});
                     $select.select2({
-                        data: file_templates,
+                        data: documents,
                         placeholder: placeholder,
                     });
-
-                }
-            });
-        }
-        function loadFileTemplateForm(id, $editor) {
-            $.ajax({
-                type: "get",
-                url: "/api/file_template/" + id,
-                async: false,
-                success: function (data) {
-                    file_template = data;
-                    $editor.setData(data.content);
                 }
             });
         }

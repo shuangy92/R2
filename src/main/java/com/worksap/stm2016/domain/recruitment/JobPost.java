@@ -7,6 +7,8 @@ import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,7 +20,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "job_post")
@@ -116,4 +119,40 @@ public class JobPost implements Serializable {
     @LastModifiedDate
     private Date lastModifiedDate;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JobPost jobPost = (JobPost) o;
+
+        return id != null ? id.equals(jobPost.id) : jobPost.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "JobPost{" +
+                "id=" + id +
+                ", job=" + job +
+                ", salary='" + salary + '\'' +
+                ", payRate=" + payRate +
+                ", deadline=" + deadline +
+                ", published=" + published +
+                ", title='" + title + '\'' +
+                ", vacancies=" + vacancies +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", contractLength='" + contractLength + '\'' +
+                ", description='" + description + '\'' +
+                ", requirement='" + requirement + '\'' +
+                ", hours=" + hours +
+                ", open=" + open +
+                '}';
+    }
 }

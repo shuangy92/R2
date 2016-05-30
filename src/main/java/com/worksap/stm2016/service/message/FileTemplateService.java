@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,4 +68,14 @@ public class FileTemplateService {
         return fileTemplateRepository.save(fileTemplate);
     }
 
+    public Long deleteList(ArrayList<Long> ids){
+        for (Long id: ids) {
+            try {
+                fileTemplateRepository.delete(id);
+            } catch (Exception e) {
+                return id;
+            }
+        }
+        return Long.valueOf(0);
+    }
 }

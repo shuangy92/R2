@@ -8,30 +8,30 @@
     <nav class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li><a class="all" th:href="@{/dashboard}"> Dashboard</a></li>
-                <li><a class="admin manager" th:href="@{/user/request}"> My Requests</a></li>
-                <li><a class="admin" th:href="@{/user}"> Employee List</a></li>
-                <li><a class="admin" th:href="@{/request}"> Employee Request List</a></li>
-                <li>
-                    <a class="admin" href="#"> Recruitment<span class="fa arrow"></span></a>
+                <li class="all" ><a th:href="@{/dashboard}"> Dashboard</a></li>
+                <li class="manager" ><a th:href="@{/user/request}"> My Requests</a></li>
+                <li class="admin" ><a th:href="@{/user}"> Employee List</a></li>
+                <li class="admin" ><a th:href="@{/request}"> Employee Request List</a></li>
+                <li class="admin" >
+                    <a href="#"> Recruitment<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a class="admin manager" th:href="@{/job_post}"> Job Post List</a></li>
-                        <li><a class="admin manager" th:href="@{/job_application}"> Application List</a></li>
-                        <li><a class="admin manager" th:href="@{/review_flow}"> Review Flow List</a></li>
+                        <li class="admin manager" ><a th:href="@{/job_post}"> Job Post List</a></li>
+                        <li class="admin manager" ><a th:href="@{/job_application}"> Application List</a></li>
+                        <li class="admin manager" ><a th:href="@{/review_flow}"> Review Flow List</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a class="admin manager" href="#"> Management<span class="fa arrow"></span></a>
+                <li class="admin manager employee" >
+                    <a href="#"> Management<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="#" class="admin" th:href="@{/department}"> Department List</a></li>
-                        <li><a href="#" class="admin" th:href="@{/job_category}"> Job Category List</a></li>
-                        <li><a href="#" class="admin manager" th:href="@{/job_profile}"> Job List</a></li>
-                        <li><a href="#" class="admin manager" th:href="@{/contract}"> Contract List</a></li>
-                        <li><a href="#" class="admin manager" th:href="@{/job_history}"> Job History List</a></li>
-                        <li><a href="#" class="admin manager" th:href="@{/file_template}"> File Template List</a></li>
+                        <li class="admin" ><a th:href="@{/department}"> Department List</a></li>
+                        <li class="admin" ><a th:href="@{/job_category}"> Job Category List</a></li>
+                        <li class="admin manager"><a th:href="@{/job_profile}"> Job List</a></li>
+                        <li class="admin manager"><a th:href="@{/contract}"> Contract List</a></li>
+                        <li class="admin manager"><a th:href="@{/job_history}"> Job History List</a></li>
+                        <li class="admin manager employee"><a  th:href="@{/file_template}"> File Template List</a></li>
                     </ul>
                 </li>
-                <li><a class="admin" th:href="@{/setting}"> Setting</a></li>
+                <li class="admin"><a th:href="@{/setting}"> Setting</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </nav>
@@ -42,7 +42,7 @@
 
         jQuery(document).ready(function ($) {
 
-            $("#side-menu a").hide();
+            $("#side-menu li").hide();
             $(".all").show();
             switch (currentUser.role) {
                 case 'ADMIN':
@@ -51,6 +51,9 @@
                     break;
                 case 'MANAGER':
                     $(".manager").show();
+                    break;
+                case 'EMPLOYEE':
+                    $(".employee").show();
                     break;
             }
         });

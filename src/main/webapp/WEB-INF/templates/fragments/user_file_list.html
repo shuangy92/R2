@@ -28,6 +28,7 @@
         <div th:replace="form/file_upload_form :: file_upload_form"></div>
     </div>
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var $file_table = $('#file-table');
         jQuery(document).ready(function ($) {
             if (editable) {
@@ -45,7 +46,7 @@
                 }, {
                     title: 'Action',
                     formatter: function (index, row, element) {
-                        if (editable) {
+                        if (currentUser.role == "APPLICANT" && row.type == "APPLICATION" || currentUser.role != "APPLICANT" && row.type == "DOCUMENT") {
                             return '<a href="/files/' + row.id + '" target="_blank">View</a> / <a onclick="deleteFile(' + row.id + ')" style="cursor: pointer;">Delete</a>';
                         } else {
                             return '<a href="/files/' + row.id + '" target="_blank">View</a>';
@@ -83,7 +84,7 @@
                 },
             });
         }
-
+        //]]>
     </script>
 </div>
 </body>

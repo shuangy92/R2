@@ -15,7 +15,7 @@
     <p id="last-edited" style="display: none;"></p>
     <form role="form">
         <div class="col-sm-5">
-            <div class="form-group required">F
+            <div class="form-group required">
                 <label for="jobTitle" class="control-label">Title</label>
                 <input class="form-control" placeholder="Title" id="jobTitle" name="title"
                        required="required"/>
@@ -99,11 +99,11 @@
                     <input class="form-control" placeholder="Salary / Salary Range / Negotiable" type="input"
                            id="salary" name="salary" required="required"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="reviewFlowId" class="control-label">Review Flow ID</label>
                     <a href="/review_flow" target="_blank" title="Click to view the review flow list">?</a>
                     <input class="form-control" placeholder="Review Flow ID" type="number" id="reviewFlowId"
-                           name="reviewFlowId"/>
+                           name="reviewFlowId" required="required"/>
                 </div>
                 <button type="submit" class="btn btn-default" id="save">Save</button>
                 <button type="submit" class="btn btn-success" id="publish" style="display: none;">Publish</button>

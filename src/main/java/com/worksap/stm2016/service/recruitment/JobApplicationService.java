@@ -98,19 +98,7 @@ public class JobApplicationService {
     public JobApplication update(JobApplication jobApplication){
         JobPost jobPost = jobApplication.getJobPost();
         switch (jobApplication.getStatus()) {
-            case PASSED:
-                jobPost.setVacancies(jobPost.getVacancies() - 1);
-                jobPostRepository.save(jobPost);
-
-                Contract contract = contractService.create(jobApplication);
-
-                User user = jobApplication.getApplicant();
-                user.setRole(Role.EMPLOYEE);
-                user.setDepartment(contract.getJob().getDepartment());
-                user.setContract(contract);
-                userService.update(user);
-                break;
-            case SUBMITTED:
+            case REVIEWING:
                 if (jobPost.getReviewFlow() != null) {
                     reviewResponseService.createResponseList(jobApplication);
                 }
@@ -123,10 +111,14 @@ public class JobApplicationService {
                         jobApplicationRepository.save(otherApplications);
                     }
                 }
-                break;
-            case OFFER_DECLINED:
-                jobPost.setVacancies(jobPost.getVacancies() + 1);
-                jobPostRepository.save(jobPost);
+
+                Contract contract = contractService.create(jobApplication);
+
+                User user = jobApplication.getApplicant();
+                user.setRole(Role.EMPLOYEE);
+                user.setDepartment(contract.getJob().getDepartment());
+                user.setContract(contract);
+                userService.update(user);
                 break;
         }
         return jobApplicationRepository.save(jobApplication);

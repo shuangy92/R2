@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "job_application")
@@ -66,5 +69,31 @@ public class JobApplication implements Serializable {
         SAVED, SUBMITTED, WITHDREW,
         REVIEWING, PASSED, FAILED, CLOSED,
         OFFER_SENT, OFFER_ACCEPTED, OFFER_DECLINED
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JobApplication that = (JobApplication) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "JobApplication{" +
+                "id=" + id +
+                ", status=" + status +
+                ", applicant=" + applicant +
+                ", applyDate=" + applyDate +
+                '}';
     }
 }

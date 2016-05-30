@@ -30,8 +30,14 @@ public class FileProfile implements Serializable {
     private User user;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private FileType type;
 
     @Column(name = "info")
     private String info;
+
+    public enum FileType {
+        DOCUMENT, APPLICATION
+    }
+
 }

@@ -12,7 +12,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Generate an offer</h4>
+                    <h4 class="modal-title" id="exampleModalLabel">Create a document</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" id="file-generate-form">
@@ -33,13 +33,14 @@
                             <button class="btn btn-default" name=" $[end_date] " onclick="insertVariable(this.name);return false;">End date</button>
                             <button class="btn btn-default" name=" $[salary] " onclick="insertVariable(this.name);return false;">Salary</button>
                             <button class="btn btn-default" name=" $[pay_rate] " onclick="insertVariable(this.name);return false;">Pay rate</button>
+                            <button class="btn btn-default" name=" $[my_name] " onclick="insertVariable(this.name);return false;">My name</button>
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" id="content" required="required"></textarea>
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#file-preview-modal"><i class="fa fa-eye"></i></button>
-                            <button type="submit" class="btn btn-success">Generate and save</button>
+                            <button type="submit" class="btn btn-success">Create and save</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
@@ -69,7 +70,7 @@
 
 
         jQuery(document).ready(function ($) {
-            initFileTemplateList(generate_file_template_select, "Select a template");
+            initFileTemplateList(generate_file_template_select, "Template");
 
             generate_file_template_select.on("select2:select", function (e) {
                 loadFileTemplateForm(generate_file_template_select.val(), file_generate_editor);
@@ -85,7 +86,7 @@
                 job_application_id = button.data('id') // Extract info from data-* attributes
             })
             $('#file-preview-modal').on('show.bs.modal', function (event) {
-                loadFilePreview($(this).find("#file-preview"));
+                loadFilePreview($(this).find("#file-preview"), file_generate_editor);
             })
         });
 
@@ -101,7 +102,7 @@
             });
             $.ajax({
                 type: "post",
-                url: "/api/file/offer",
+                url: "/api/file/generate",
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
@@ -109,12 +110,15 @@
                         if (confirm(res.detail)) {
                             data.overwrite = true;
                             $.ajax({
-                                url: "/api/file/offer",
+                                url: "/api/file/generate",
                                 type: "post",
                                 data: JSON.stringify(data),
                                 contentType: "application/json; charset=utf-8",
                                 success: function (data) {
-                                    notify.close();
+                                    notify.update('message', data.detail);
+                                    setTimeout(function () {
+                                        notify.close();
+                                    }, 1000);
                                     $('#file-generate-modal').modal('hide')
                                 }
                             });
@@ -122,24 +126,12 @@
                             notify.close();
                         }
                     } else {
-                        notify.close();
+                        notify.update('message', res.detail);
+                        setTimeout(function () {
+                            notify.close();
+                        }, 1000);
                         $('#file-generate-modal').modal('hide')
                     }
-                }
-            });
-        }
-
-        function loadFilePreview($e) {
-            data = {};
-            data.id = job_application_id;
-            data.html = file_generate_editor.getData();
-            $.ajax({
-                type: 'post',
-                url: "/api/file_template/preview/offer",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    $e.html(data);
                 }
             });
         }
@@ -151,35 +143,6 @@
             file_generate_editor.insertText(v);
         };
 
-
-        function initFileTemplateList($select, placeholder) {
-            $.ajax({
-                type: 'get',
-                url: "/api/file_template/all/",
-                success: function (data) {
-                    var file_templates = $.map(data, function (obj) {
-                        return {id: obj.id, text: obj.title + ' (by ' + obj.author.name + ')'};
-                    })
-                    $select.html('').select2({data: [{id: '', text: ''}]});
-                    $select.select2({
-                        data: file_templates,
-                        placeholder: placeholder,
-                    });
-
-                }
-            });
-        }
-        function loadFileTemplateForm(id, $editor) {
-            $.ajax({
-                type: "get",
-                url: "/api/file_template/" + id,
-                async: false,
-                success: function (data) {
-                    file_template = data;
-                    $editor.setData(data.content);
-                }
-            });
-        }
         //]]>
     </script>
 </div>

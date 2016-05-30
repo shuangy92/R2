@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,12 +19,12 @@ public class Email implements Serializable {
     @Column(name = "email_id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "from_id", referencedColumnName = "user_id")
+    //@ManyToOne
+    //@JoinColumn(name = "from_id", referencedColumnName = "user_id")
     private User from;
 
-    @ManyToOne
-    @JoinColumn(name = "to_id", referencedColumnName = "user_id")
+    //@ManyToOne
+    //@JoinColumn(name = "to_id", referencedColumnName = "user_id")
     private User to;
 
     /*@Column(name = "to")
@@ -32,9 +33,13 @@ public class Email implements Serializable {
     @Column(name = "to_name")
     private String toName;*/
 
-    @Column(name = "subject", columnDefinition = "text")
+    //@Column(name = "subject", columnDefinition = "text")
     private String subject;
 
-    @Column(name = "body")
+    //@Column(name = "body")
     private String body;
+
+    //@Column(name = "attachments")
+    @Transient
+    private List<Long> attachments;
 }

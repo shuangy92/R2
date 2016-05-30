@@ -1,8 +1,13 @@
 package com.worksap.stm2016.service.message;
 
 import com.worksap.stm2016.api.util.JsonResponse;
+import com.worksap.stm2016.domain.FileProfile;
 import com.worksap.stm2016.domain.message.Email;
+import com.worksap.stm2016.repository.FileProfileRepository;
+import com.worksap.stm2016.service.FileService;
+import com.worksap.stm2016.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,8 @@ import java.io.UnsupportedEncodingException;
 public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private FileProfileRepository fileProfileRepository;
 
     public JsonResponse send(Email email) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mail = javaMailSender.createMimeMessage();
@@ -28,6 +35,13 @@ public class EmailService {
         // helper.setReplyTo(replyTo);
         helper.setSubject(email.getSubject());
         helper.setText(email.getBody(), true);
+
+        if (email.getAttachments() != null) {
+            for (Long id : email.getAttachments()) {
+                FileSystemResource file = new FileSystemResource(fileProfileRepository.findOne(id).getPath());
+                helper.addAttachment(file.getFilename(), file);
+            }
+        }
 
         javaMailSender.send(mail);
         return new JsonResponse(JsonResponse.ResponseStatus.OK, "Email sent");

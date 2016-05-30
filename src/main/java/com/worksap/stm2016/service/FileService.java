@@ -1,6 +1,7 @@
 package com.worksap.stm2016.service;
 
 import com.worksap.stm2016.domain.FileProfile;
+import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.repository.FileProfileRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
@@ -46,16 +48,23 @@ public class FileService {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec;
-                //if (key.equals("user")) {
-                spec = isValue("user", "id", Long.parseLong(search));
-                //}
+                Specification spec = null;
+                switch (key) {
+                    case "uid":
+                        spec = isValue("user", "id", Long.parseLong(search));
+                        break;
+                    case "type":
+                        spec = isValue(key, FileProfile.FileType.valueOf(search));
+                }
                 specs.add(spec);
             }
         }
 
         JSONObject result = andFilter(sort, order, limit, offset, filter, specs, fileProfileRepository);
         return result;
+    }
+    public Collection<FileProfile> getAllByUserAndType(User user, FileProfile.FileType type) {
+        return fileProfileRepository.findAllByUserAndType(user, type);
     }
 
     public FileProfile save(FileProfile fileProfile) {

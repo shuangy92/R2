@@ -13,6 +13,12 @@
 <body>
 
 <div layout:fragment="content">
+    <style>
+        .btn.application {
+            margin: 0 10px;
+        }
+    </style>
+
     <div class="row">
         <h3>Job Application List</h3>
         <form class="form-inline" role="form" id="status-checkboxes">
@@ -163,26 +169,39 @@
                     return res;
                 },
                 detailFormatter: function (index, row, element) {
-                    var result;
-                    if (row.status != 'PASSED' && row.status != 'FAILED') {
-                        result =
-
-                                '<button type="button" class="btn btn-success btn-request approve" onclick="handleApplicationStatus(\'PASSED\',' + index + ')">Approve</button>' +
-                                '<button type="button" class="btn btn-danger btn-request decline" onclick="handleApplicationStatus(\'FAILED\',' + index + ')">Decline</button>';
-                    } else {
-                        result =
-                                '<button class="btn btn-primary" data-toggle="modal" data-target="#emailModel" data-touid="' + row.applicant.id + '">Send Email</a>' +
-                                '<button class="btn btn-primary" data-toggle="modal" data-target="#file-generate-modal" data-id="' + row.id + '">Generate Offer</a>';
-
-                    }
+                    var result =
+                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#email-modal" data-id=' + row.id + ' data-touid="' + row.applicant.id + '">Send Email</a>' +
+                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#file-generate-modal" data-id=' + row.id + '>Generate Document</a>' +
+                            '<button class="btn btn-primary application" id="REVIEWING" disabled="disabled" onclick="handleApplicationStatusChange(\'REVIEWING\',' + index + ')"">Start Review</a>' +
+                            '<button class="btn btn-success application" id="PASSED" disabled="disabled" onclick="handleApplicationStatusChange(\'PASSED\',' + index + ')">Pass</button>' +
+                            '<button class="btn btn-danger application" id="FAILED" disabled="disabled" onclick="handleApplicationStatusChange(\'FAILED\',' + index + ')">Fail</button>' +
+                            '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
+                            '<button class="btn btn-success application" id="OFFER_ACCEPTED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_ACCEPTED\',' + index + ')">Offer Accepted</button>' +
+                            '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>';
                     return result;
+                },
+                onExpandRow: function(index, row, $detail) {
+                    switch (row.status) {
+                        case "SUBMITTED":
+                            $detail.find("#REVIEWING").prop( "disabled", false );
+                            break;
+                        case "REVIEWING":
+                            $detail.find("#PASSED, #FAILED").prop( "disabled", false );
+                            break;
+                        case "PASSED":
+                            $detail.find("#OFFER_SENT").prop( "disabled", false );
+                            break;
+                        case "OFFER_SENT":
+                            $detail.find("#OFFER_ACCEPTED, #OFFER_DECLINED").prop( "disabled", false );
+                            break;
+                    }
                 },
                 filterControl: true,
                 cookie: true,
                 cookieIdTable: 'applicant_application',
             });
         }
-        function handleApplicationStatus(status, index) {
+        function handleApplicationStatusChange(status, index) {
             var notify = $.notify({
                 icon: 'fa fa-info-circle',
                 message: "Waiting...",
@@ -197,12 +216,12 @@
                 data: JSON.stringify(application),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    notify.update('message', data);
+                    notify.update('message', 'Done');
                     setTimeout(function () {
                         notify.close();
                     }, 1000);
-                    $('#table').bootstrapTable('updateRow', {index: index, row: application});
-                    $('#table').bootstrapTable('expandRow', index);
+                    $table.bootstrapTable('updateRow', {index: index, row: application});
+                    $table.bootstrapTable('expandRow', index);
                 }
             });
         }

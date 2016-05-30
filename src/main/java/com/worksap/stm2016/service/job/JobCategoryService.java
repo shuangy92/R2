@@ -67,7 +67,6 @@ public class JobCategoryService {
         jobCategoryRepository.save(jobCategory);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
     public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
             try {

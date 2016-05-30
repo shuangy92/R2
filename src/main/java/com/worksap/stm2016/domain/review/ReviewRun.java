@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "review_run")
 public class ReviewRun implements Comparable<ReviewRun> {
@@ -44,8 +47,31 @@ public class ReviewRun implements Comparable<ReviewRun> {
     private ReviewStatus status = ReviewStatus.REVIEWING;
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReviewRun reviewRun = (ReviewRun) o;
+
+        return id != null ? id.equals(reviewRun.id) : reviewRun.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
-        return "";
+        return "ReviewRun{" +
+                "id=" + id +
+                ", runNumber=" + runNumber +
+                ", task='" + task + '\'' +
+                ", deadline=" + deadline +
+                ", reviewFlow=" + reviewFlow +
+                ", status=" + status +
+                '}';
     }
 
     @Override

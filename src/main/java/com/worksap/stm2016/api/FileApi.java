@@ -7,17 +7,20 @@ import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.service.FileService;
 import com.worksap.stm2016.service.recruitment.JobApplicationService;
+import com.worksap.stm2016.service.user.UserService;
 import com.worksap.stm2016.util.FileUtil;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -32,6 +35,8 @@ public class FileApi {
     FileService fileService;
     @Autowired
     JobApplicationService jobApplicationService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
@@ -41,6 +46,11 @@ public class FileApi {
                               @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return fileService.getList(sort, order, limit, offset, filter);
+    }
+
+    @RequestMapping(value = "{uid}/{type}", method = RequestMethod.GET)
+    public Collection<FileProfile> getAllByUserAndType(@PathVariable Long uid, @PathVariable FileProfile.FileType type) {
+        return fileService.getAllByUserAndType(userService.get(uid), type);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -79,7 +89,7 @@ public class FileApi {
                 fileProfile.setPath(absPath.toString());
                 fileProfile.setName(name);
                 fileProfile.setUser(user);
-                fileProfile.setType(type);
+                fileProfile.setType(FileProfile.FileType.APPLICATION);
                 fileProfile.setInfo(info);
                 fileService.save(fileProfile);
 
@@ -105,11 +115,11 @@ public class FileApi {
         }
     }
 
-    @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public JsonResponse saveOffer(@RequestBody JSONObject obj) throws FileNotFoundException {
+    @RequestMapping(value = "generate", method = RequestMethod.POST)
+    public JsonResponse saveOffer(@RequestBody JSONObject obj, Authentication authentication) throws FileNotFoundException {
         JobApplication jobApplication = jobApplicationService.get(Long.valueOf((Integer) obj.get("id")));
         String html = (String) obj.get("html");
-        html = FileUtil.parseHtmlWithJobApplication(html, jobApplication);
+        html = FileUtil.parseHtmlWithJobApplication(html, jobApplication, authentication);
 
         String filename = (String) obj.get("name") + ".pdf";
         String directory = "/files/user/" + jobApplication.getApplicant().getId().toString();
@@ -128,9 +138,10 @@ public class FileApi {
                 fileProfile.setPath(absPath.toString());
                 fileProfile.setName(filename);
                 fileProfile.setUser(jobApplication.getApplicant());
+                fileProfile.setType(FileProfile.FileType.DOCUMENT);
                 fileService.save(fileProfile);
 
-                return new JsonResponse(ResponseStatus.OK, "File uploaded");
+                return new JsonResponse(ResponseStatus.OK, "File generated");
             }
         } else {
             if ((Boolean) obj.get("overwrite")) {

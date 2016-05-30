@@ -83,7 +83,8 @@
                         type: "put",
                         url: "/api/notification/",
                         data: JSON.stringify(row),
-                        contentType: "application/json; charset=utf-8"
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
                     });
 
                     switch (row.type) {

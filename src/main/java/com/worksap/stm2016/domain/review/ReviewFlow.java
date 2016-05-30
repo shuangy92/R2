@@ -3,6 +3,8 @@ package com.worksap.stm2016.domain.review;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "review_flow")
@@ -46,11 +49,6 @@ public class ReviewFlow implements Serializable {
         }
     }
 
-    @Override
-    public String toString() {
-        return "";
-    }
-
     /* auditing */
     @OrderBy("name ASC")
     @ManyToOne
@@ -62,4 +60,29 @@ public class ReviewFlow implements Serializable {
     @LastModifiedDate
     private Date lastModifiedDate;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReviewFlow that = (ReviewFlow) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ReviewFlow{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                ", lastModifiedDate=" + lastModifiedDate +
+                '}';
+    }
 }

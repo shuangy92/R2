@@ -35,7 +35,6 @@ public class UserApi {
     DepartmentService departmentService;
 
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public User get(@PathVariable("id") Long id) {
         return userService.get(id);
@@ -75,7 +74,6 @@ public class UserApi {
         }
     }
 
-    @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #uid)")
     @RequestMapping(value = "/profile/{uid}", method = RequestMethod.GET)
     public UserProfile getProfile(@PathVariable("uid") Long uid) {
         return userProfileService.get(uid);

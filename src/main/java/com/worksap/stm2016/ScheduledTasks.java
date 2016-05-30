@@ -74,8 +74,8 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 1 1 * * ?") // fire daily
-    @RequestMapping(value = "/setExpiredContracts", method = RequestMethod.GET)
-    public void setExpiredContracts() {
+    @RequestMapping(value = "/checkExpiredContracts", method = RequestMethod.GET)
+    public void checkExpiredContracts() {
         Collection<Contract> contracts = contractRepository.findByEndDate(DateUtil.addDays(-1));
         for (Contract contract : contracts) {
             notificationService.createContractNotification(contract, Notification.NotificationType.CONTRACT_EXPIRED);
@@ -88,8 +88,8 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 1 1 * * ?") // fire daily
-    @RequestMapping(value = "/setExpiredJobPosts", method = RequestMethod.GET)
-    public void setExpiredJobPosts() {
+    @RequestMapping(value = "/checkExpiredJobPosts", method = RequestMethod.GET)
+    public void checkExpiredJobPosts() {
         Collection<JobPost> jobPosts = jobPostRepository.findByDeadline(DateUtil.addDays(-1));
         for (JobPost jobPost : jobPosts) {
             jobPost.setOpen(false);

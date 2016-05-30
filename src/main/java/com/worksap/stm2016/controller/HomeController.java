@@ -36,6 +36,7 @@ public class HomeController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER') or hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard() {
         return "notification_list";

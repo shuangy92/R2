@@ -98,7 +98,52 @@ function initEmployeeSelect($select, placeholder) {
         placeholder: "Search"
     });
 }
+function initFileTemplateList($select, placeholder) {
+    $.ajax({
+        type: 'get',
+        url: "/api/file_template/all/",
+        success: function (data) {
+            var file_templates = $.map(data, function (obj) {
+                return {id: obj.id, text: obj.title + ' (by ' + obj.author.name + ')'};
+            })
+            $select.html('').select2({data: [{id: '', text: ''}]});
+            $select.select2({
+                data: file_templates,
+                placeholder: placeholder,
+            });
 
+        }
+    });
+}
+function loadFileTemplateForm(id, $editor) {
+    $.ajax({
+        type: "get",
+        url: "/api/file_template/" + id,
+        success: function (data) {
+            $editor.setData(data.content);
+        }
+    });
+}
+function loadFilePreview($e, $editor) {
+    var parsed_html;
+    data = {};
+    data.id = job_application_id;
+    data.html = $editor.getData();
+    $.ajax({
+        type: 'post',
+        url: "/api/file_template/preview",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data) {
+            if ($e) {
+                $e.html(data);
+            }
+            parsed_html = data;
+        }
+    });
+    return parsed_html;
+}
 
 function checkJobApplicationExistence(job_post_id) {
     var result;

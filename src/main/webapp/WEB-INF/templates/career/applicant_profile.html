@@ -14,13 +14,13 @@
             text-align: left;
         }
     </style>
-    <h3>Applicant Profile</h3>
+    <h3 id="title-label">Applicant Profile <span><a class="fa fa-envelope-o" id="btn-email" data-toggle="modal" data-target="#email-modal" style="cursor: pointer; text-decoration: none"></a></span></h3>
     <div>
         <dl class="dl-horizontal">
             <dt>Name:</dt>
             <dd id="name"></dd>
             <dt>email:</dt>
-            <dd id="sendDate"></dd>
+            <dd id="email"></dd>
         </dl>
         <hr/>
         <dl class="dl-horizontal">
@@ -39,6 +39,7 @@
         <h4>Documents</h4>
         <div th:replace="fragments/user_file_list :: user_file_list"></div>
     </div>
+    <div th:replace="form/email_form :: email_form"></div>
 </div>
 <div th:fragment="applicant_profile_script">
     <script type="text/javascript" th:inline="javascript">
@@ -63,6 +64,9 @@
                         });
                         $("#country").html(data.country.name);
                     }
+                    var job_application_id = window.location.pathname.split("/")[2];
+                    var title_label = 'Applicant Profile <span><a class="fa fa-envelope-o" id="btn-email" data-toggle="modal" data-target="#email-modal" data-id="' + job_application_id + '" data-touid="' + data.id +'" style="cursor: pointer; text-decoration: none"></a></span>'
+                    $("#title-label").html(title_label);
                 }
             });
         }
