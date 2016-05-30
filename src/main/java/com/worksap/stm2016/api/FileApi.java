@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api;
 
+import com.itextpdf.text.DocumentException;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.domain.FileProfile;
@@ -116,7 +117,7 @@ public class FileApi {
     }
 
     @RequestMapping(value = "generate", method = RequestMethod.POST)
-    public JsonResponse saveOffer(@RequestBody JSONObject obj, Authentication authentication) throws FileNotFoundException {
+    public JsonResponse saveOffer(@RequestBody JSONObject obj, Authentication authentication) throws IOException, DocumentException {
         JobApplication jobApplication = jobApplicationService.get(Long.valueOf((Integer) obj.get("id")));
         String html = (String) obj.get("html");
         html = FileUtil.parseHtmlWithJobApplication(html, jobApplication, authentication);

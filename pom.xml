@@ -91,6 +91,16 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf.tool</groupId>
+            <artifactId>xmlworker</artifactId>
+            <version>5.4.1</version>
+        </dependency>
 
     </dependencies>
 
@@ -127,6 +137,7 @@
             <id>central-mirror</id>
             <url>http://172.26.131.142:8081/content/repositories/central/</url>
         </repository>
+
     </repositories>
     <pluginRepositories>
         <pluginRepository>
