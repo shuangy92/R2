@@ -58,7 +58,7 @@
                                 cache: false,
                                 success: function (data) {
                                     $('#file-upload-form')[0].reset();
-                                    $('#table').bootstrapTable('refresh');
+                                    $file_table.bootstrapTable('refresh');
                                     notify.close();
                                 }
                             });
@@ -67,7 +67,7 @@
                         }
                     } else {
                         $('#file-upload-form')[0].reset();
-                        $('#table').bootstrapTable('refresh');
+                        $file_table.bootstrapTable('refresh');
                         notify.close();
                     }
                 }

@@ -44,6 +44,7 @@
         </table>
     </div>
     <div th:replace="form/email_form :: email_form"></div>
+    <div th:replace="form/file_generate_form :: file_generate_form"></div>
     <div th:replace="career/career_job_post :: job_post_modal"></div>
 
     <script type="text/javascript" th:inline="javascript">
@@ -162,26 +163,19 @@
                     return res;
                 },
                 detailFormatter: function (index, row, element) {
-                    var left, right;
+                    var result;
                     if (row.status != 'PASSED' && row.status != 'FAILED') {
-                        left =
-                                '<div class="col-md-8">' +
-                                '</div>';
+                        result =
 
-                        right = '<div class="col-md-4">' +
                                 '<button type="button" class="btn btn-success btn-request approve" onclick="handleApplicationStatus(\'PASSED\',' + index + ')">Approve</button>' +
-                                '<button type="button" class="btn btn-danger btn-request decline" onclick="handleApplicationStatus(\'FAILED\',' + index + ')">Decline</button>' +
-                                '</div>';
+                                '<button type="button" class="btn btn-danger btn-request decline" onclick="handleApplicationStatus(\'FAILED\',' + index + ')">Decline</button>';
                     } else {
-                        left =
-                                '<div class="col-md-8">' +
-                                '</div>';
-                        right =
-                                '<div class="col-md-4">' +
-                                '<button type="button" class="btn btn-primary btn-request" data-toggle="modal" data-target="#emailModel" data-touid="' + row.applicant.id + '">Send Email</a>' +
-                                '</div>';
+                        result =
+                                '<button class="btn btn-primary" data-toggle="modal" data-target="#emailModel" data-touid="' + row.applicant.id + '">Send Email</a>' +
+                                '<button class="btn btn-primary" data-toggle="modal" data-target="#file-generate-modal" data-id="' + row.id + '">Generate Offer</a>';
+
                     }
-                    return left + right;
+                    return result;
                 },
                 filterControl: true,
                 cookie: true,

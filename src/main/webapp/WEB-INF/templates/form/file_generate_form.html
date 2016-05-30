@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="file_generate_form">
+    <script type="text/javascript" th:src="@{/static/js/ckeditor/ckeditor.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.insert-at-caret.min.js}"></script>
+
+    <div class="modal fade" id="file-generate-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Generate an offer</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="file-generate-form">
+                        <div class="form-group">
+                            <input class="form-control" id="name" name="name" placeholder="File Name" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="fileTemplate" name="fileTemplate">
+                                <option></option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <button class="btn btn-default" name=" $[applicant_name] " onclick="insertVariable(this.name);return false;">Applicant name</button>
+                            <button class="btn btn-default" name=" $[job_title] " onclick="insertVariable(this.name);return false;">Job title</button>
+                            <button class="btn btn-default" name=" $[department] " onclick="insertVariable(this.name);return false;">Department</button>
+                            <button class="btn btn-default" name=" $[location] " onclick="insertVariable(this.name);return false;">Location</button>
+                            <button class="btn btn-default" name=" $[start_date] " onclick="insertVariable(this.name);return false;">Start date</button>
+                            <button class="btn btn-default" name=" $[end_date] " onclick="insertVariable(this.name);return false;">End date</button>
+                            <button class="btn btn-default" name=" $[salary] " onclick="insertVariable(this.name);return false;">Salary</button>
+                            <button class="btn btn-default" name=" $[pay_rate] " onclick="insertVariable(this.name);return false;">Pay rate</button>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" id="content" required="required"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#file-preview-modal"><i class="fa fa-eye"></i></button>
+                            <button type="submit" class="btn btn-success">Generate and save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="file-preview-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="file-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var job_application_id;
+
+        var file_generate_editor = CKEDITOR.replace( 'content' );
+        var file_generate_form = $("#file-generate-form");
+        var generate_file_template_select = file_generate_form.find("#fileTemplate")
+
+
+        jQuery(document).ready(function ($) {
+            initFileTemplateList(generate_file_template_select, "Select a template");
+
+            generate_file_template_select.on("select2:select", function (e) {
+                loadFileTemplateForm(generate_file_template_select.val(), file_generate_editor);
+            });
+
+            file_generate_form.submit(function (e) {
+                e.preventDefault();
+                submitFileGenerateForm();
+            })
+
+            $('#file-generate-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                job_application_id = button.data('id') // Extract info from data-* attributes
+            })
+            $('#file-preview-modal').on('show.bs.modal', function (event) {
+                loadFilePreview($(this).find("#file-preview"));
+            })
+        });
+
+
+        function submitFileGenerateForm() {
+            data = {};
+            data.id = job_application_id;
+            data.name = file_generate_form.find("#name").val();
+            data.html = file_generate_editor.getData();
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+            $.ajax({
+                type: "post",
+                url: "/api/file/offer",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.response == "ERROR") {
+                        if (confirm(res.detail)) {
+                            data.overwrite = true;
+                            $.ajax({
+                                url: "/api/file/offer",
+                                type: "post",
+                                data: JSON.stringify(data),
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    notify.close();
+                                    $('#file-generate-modal').modal('hide')
+                                }
+                            });
+                        } else {
+                            notify.close();
+                        }
+                    } else {
+                        notify.close();
+                        $('#file-generate-modal').modal('hide')
+                    }
+                }
+            });
+        }
+
+        function loadFilePreview($e) {
+            data = {};
+            data.id = job_application_id;
+            data.html = file_generate_editor.getData();
+            $.ajax({
+                type: 'post',
+                url: "/api/file_template/preview/offer",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $e.html(data);
+                }
+            });
+        }
+
+        function insertVariable(v) {
+            $("#content").insertAtCaret(v);
+        }
+        $.fn.insertAtCaret = function (v) {
+            file_generate_editor.insertText(v);
+        };
+
+
+        function initFileTemplateList($select, placeholder) {
+            $.ajax({
+                type: 'get',
+                url: "/api/file_template/all/",
+                success: function (data) {
+                    var file_templates = $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.title + ' (by ' + obj.author.name + ')'};
+                    })
+                    $select.html('').select2({data: [{id: '', text: ''}]});
+                    $select.select2({
+                        data: file_templates,
+                        placeholder: placeholder,
+                    });
+
+                }
+            });
+        }
+        function loadFileTemplateForm(id, $editor) {
+            $.ajax({
+                type: "get",
+                url: "/api/file_template/" + id,
+                async: false,
+                success: function (data) {
+                    file_template = data;
+                    $editor.setData(data.content);
+                }
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>

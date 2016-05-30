@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/user/account_setting", method = RequestMethod.GET)
+    @RequestMapping(value = "/account_setting", method = RequestMethod.GET)
     public String getAccountSettingPage() {
-        return "account_setting";
+        return "user/account_setting";
     }
 }

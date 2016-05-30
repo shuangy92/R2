@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"/>
-</head>
 <body>
 <div th:fragment="file_template_form">
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+    <script type="text/javascript" th:src="@{/static/js/ckeditor/ckeditor.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.insert-at-caret.min.js}"></script>
 
     <div class="modal fade" id="file-template-modal" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
@@ -18,32 +15,26 @@
                     <h4 class="modal-title" id="exampleModalLabel">Create a file template</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="email-form" class="form-horizontal">
+                    <form role="form" id="file-template-form">
                         <div class="form-group required">
-                            <label for="subject" class="col-sm-2 control-label">Subject</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="subject" placeholder="subject"
-                                       required="required" size="60"/>
-                            </div>
+                            <input type="text" class="form-control" id="title" placeholder="Title" maxlength="100" required="required"/>
                         </div>
                         <div class="form-group required">
-                            <label for="to" class="col-sm-2 control-label">To</label>
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control" id="to" placeholder="johnsmith@example.com"
-                                       required="required" readonly="readonly"/>
-                            </div>
+                            <button class="btn btn-default" name=" $[applicant_name] " onclick="insertVariable(this.name);return false;">Applicant name</button>
+                            <button class="btn btn-default" name=" $[job_title] " onclick="insertVariable(this.name);return false;">Job title</button>
+                            <button class="btn btn-default" name=" $[department] " onclick="insertVariable(this.name);return false;">Department</button>
+                            <button class="btn btn-default" name=" $[location] " onclick="insertVariable(this.name);return false;">Location</button>
+                            <button class="btn btn-default" name=" $[start_date] " onclick="insertVariable(this.name);return false;">Start date</button>
+                            <button class="btn btn-default" name=" $[end_date] " onclick="insertVariable(this.name);return false;">End date</button>
+                            <button class="btn btn-default" name=" $[salary] " onclick="insertVariable(this.name);return false;">Salary</button>
+                            <button class="btn btn-default" name=" $[pay_rate] " onclick="insertVariable(this.name);return false;">Pay rate</button>
                         </div>
                         <div class="form-group">
-                            <label for="body" class="col-sm-2 control-label">Body</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="body" required="required"></textarea>
-                            </div>
+                            <textarea class="form-control" id="content" required="required"></textarea>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-2">
-                                <button type="submit" class="btn btn-success">Send</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            </div>
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -53,58 +44,78 @@
 
 
     <script type="text/javascript" th:inline="javascript">
-        var recipient;
+        //<![CDATA[
+        var file_template_editor = CKEDITOR.replace( 'content' );
+        $.fn.insertAtCaret = function (v) {
+            file_template_editor.insertText(v);
+        };
+
+        var file_template_form = $("#file-template-form");
+        var file_template;
+
+        function insertVariable(v) {
+            $("#content").insertAtCaret(v);
+        }
         jQuery(document).ready(function ($) {
-            CKEDITOR.replace( 'body' );
 
-
-            $("#email-form").submit(function (e) {
+            file_template_form.submit(function (e) {
                 e.preventDefault();
-                $('#emailModel').modal('hide')
-                submitEmailForm();
+                $('#file-template-modal').modal('hide')
+                submitFileTemplateForm();
             })
 
-            $('#emailModel').on('show.bs.modal', function (event) {
+            $('#file-template-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget) // Button that triggered the modal
-                var toUid = button.data('touid') // Extract info from data-* attributes
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var id = button.data('id') // Extract info from data-* attributes
 
-                $.ajax({
-                    type: "get",
-                    url: "/api/user/" + toUid,
-                    async: false,
-                    success: function (data) {
-                        recipient = data;
-                    }
-                });
-                var modal = $(this);
-                modal.find('.modal-title').text('New email to ' + recipient.name);
-                modal.find('.modal-body #toName').val(recipient.name);
-                modal.find('.modal-body #to').val(recipient.name + ' (' + recipient.email + ')');
+                if (id) {
+                    loadFileTemplateForm(id);
+                    $(this).find('.modal-title').text('Edit');
+                } else {
+                    file_template = null;
+                    file_template_form.find("#title").val("");
+                    file_template_editor.setData("");
+                    $(this).find('.modal-title').text('Create a file template');
+                }
             })
         });
 
-        function submitEmailForm() {
-            data = {};
-            data.from = currentUser;
-            data.to = recipient;
-
-            data.subject = $("#subject").val();
-            data.body = $("#body").val();
-
+        function loadFileTemplateForm(id) {
             $.ajax({
-                type: "post",
-                url: "/api/email",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
+                type: "get",
+                url: "/api/file_template/" + id,
+                async: false,
                 success: function (data) {
-                    console.log(data);
+                    file_template = data;
+                    file_template_form.find("#title").val(data.title);
+                    file_template_editor.setData(data.content);
                 }
             });
         }
 
+        function submitFileTemplateForm() {
+            if (!file_template) {
+                file_template = {};
+            }
+            file_template.title = file_template_form.find("#title").val();
+            file_template.content = file_template_editor.getData();
 
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+            $.ajax({
+                type: "post",
+                url: "/api/file_template",
+                data: JSON.stringify(file_template),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $table.bootstrapTable('refresh');
+                    notify.close();
+                }
+            });
+        }
+        //]]>
     </script>
 </div>
 </body>

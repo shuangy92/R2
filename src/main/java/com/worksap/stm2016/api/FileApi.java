@@ -3,8 +3,11 @@ package com.worksap.stm2016.api;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.domain.FileProfile;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.service.FileService;
+import com.worksap.stm2016.service.recruitment.JobApplicationService;
+import com.worksap.stm2016.util.FileUtil;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -13,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 
 /**
@@ -30,6 +30,8 @@ public class FileApi {
 
     @Autowired
     FileService fileService;
+    @Autowired
+    JobApplicationService jobApplicationService;
 
     @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
@@ -58,7 +60,6 @@ public class FileApi {
         } else {
             directory += type;
         }
-
         String relPath = Paths.get(directory, filename).toString();
 
         // Save the file locally
@@ -85,7 +86,7 @@ public class FileApi {
                 return new JsonResponse(ResponseStatus.OK, "File uploaded");
             }
         } else {
-            if (overwrite == true) {
+            if (overwrite) {
                 absPath.getParentFile().mkdirs();
 
                 BufferedOutputStream stream = null;
@@ -97,6 +98,46 @@ public class FileApi {
                 fileProfile.setName(name);
                 fileProfile.setInfo(info);
                 fileService.save(fileProfile);
+                return new JsonResponse(ResponseStatus.OK, "File overwritten");
+            } else {
+                return null;
+            }
+        }
+    }
+
+    @RequestMapping(value = "offer", method = RequestMethod.POST)
+    public JsonResponse saveOffer(@RequestBody JSONObject obj) throws FileNotFoundException {
+        JobApplication jobApplication = jobApplicationService.get(Long.valueOf((Integer) obj.get("id")));
+        String html = (String) obj.get("html");
+        html = FileUtil.parseHtmlWithJobApplication(html, jobApplication);
+
+        String filename = (String) obj.get("name") + ".pdf";
+        String directory = "/files/user/" + jobApplication.getApplicant().getId().toString();
+        String relPath = Paths.get(directory, filename).toString();
+        File absPath = new File(new File(".").getAbsolutePath() + relPath);
+
+        if (obj.get("overwrite") == null) {
+            if (absPath.exists()) {
+                return new JsonResponse(ResponseStatus.ERROR, "This is a duplicate file name.  Would you like to override the existing file?  If no, please rename the file.");
+            } else {
+                absPath.getParentFile().mkdirs();
+
+                FileUtil.htmlToPdfFile(absPath.toString(), html);
+
+                FileProfile fileProfile = new FileProfile();
+                fileProfile.setPath(absPath.toString());
+                fileProfile.setName(filename);
+                fileProfile.setUser(jobApplication.getApplicant());
+                fileService.save(fileProfile);
+
+                return new JsonResponse(ResponseStatus.OK, "File uploaded");
+            }
+        } else {
+            if ((Boolean) obj.get("overwrite")) {
+                absPath.getParentFile().mkdirs();
+
+                FileUtil.htmlToPdfFile(absPath.toString(), html);
+
                 return new JsonResponse(ResponseStatus.OK, "File overwritten");
             } else {
                 return null;

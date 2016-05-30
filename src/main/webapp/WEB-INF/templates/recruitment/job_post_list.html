@@ -39,6 +39,7 @@
         </table>
     </div>
     <div th:replace="fragments/common :: deletion"></div>
+    <div th:replace="career/career_job_post :: job_post_modal"></div>
 
     <script type="text/javascript" th:inline="javascript">
         var url = '/api/job_post';
@@ -83,7 +84,9 @@
                 sortable: true,
                 filterControl: 'input',
                 formatter: function (index, row, element) {
-                    return '<a href="/job_post/' + row.id + '">' + index + '</a>';
+                    return '<a href="/job_post/' + row.id + '">' + index + ' </a>' +
+                        '<a data-toggle="modal" data-target="#job-post-modal"  data-id="' + row.id + '" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+
                 }
 
             }, {

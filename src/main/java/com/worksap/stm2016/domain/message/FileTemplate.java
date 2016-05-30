@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
@@ -25,10 +26,11 @@ public class FileTemplate implements Serializable {
     @Column(name = "file_template_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "title", columnDefinition = "text")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "content", columnDefinition = "text")
     private String content;
 
     /* auditing */

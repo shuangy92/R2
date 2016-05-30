@@ -99,6 +99,7 @@ function initEmployeeSelect($select, placeholder) {
     });
 }
 
+
 function checkJobApplicationExistence(job_post_id) {
     var result;
     $.ajax({

@@ -1,17 +1,19 @@
 package com.worksap.stm2016.api.message;
 
-import com.worksap.stm2016.domain.message.Email;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksap.stm2016.domain.message.FileTemplate;
-import com.worksap.stm2016.domain.message.Notification;
-import com.worksap.stm2016.service.message.EmailService;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.service.message.FileTemplateService;
+import com.worksap.stm2016.service.recruitment.JobApplicationService;
+import com.worksap.stm2016.util.FileUtil;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
+import java.io.FileNotFoundException;
 
 /**
  * Created by Shuang on 4/27/2016.
@@ -21,13 +23,24 @@ import java.io.UnsupportedEncodingException;
 public class FileTemplateApi {
     @Autowired
     private FileTemplateService fileTemplateService;
+    @Autowired
+    private JobApplicationService jobApplicationService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public FileTemplate get(@PathVariable("id") Long id) {
-        return fileTemplateService.get(id);
+    public JSONObject get(@PathVariable("id") Long id) throws JsonProcessingException, ParseException {
+        ObjectMapper mapper = new ObjectMapper();
+        FileTemplate ft = fileTemplateService.get(id);
+        JSONObject fileTemplate = (JSONObject) (new JSONParser()).parse(mapper.writeValueAsString(ft));
+        fileTemplate.put("content", ft.getContent());
+        return fileTemplate;
     }
 
-    /*@RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public Iterable<FileTemplate> getAll() throws JsonProcessingException, ParseException {
+        return fileTemplateService.getAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
     public JSONObject getList(@RequestParam(name = "sort") String sort,
                               @RequestParam(name = "order") String order,
                               @RequestParam(name = "limit") Integer limit,
@@ -35,7 +48,7 @@ public class FileTemplateApi {
                               @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return fileTemplateService.getList(sort, order, limit, offset, filter);
-    }*/
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public FileTemplate save(@RequestBody FileTemplate fileTemplate) {
@@ -45,5 +58,12 @@ public class FileTemplateApi {
     @RequestMapping(method = RequestMethod.PUT)
     public FileTemplate update(@RequestBody FileTemplate fileTemplate) {
         return fileTemplateService.update(fileTemplate);
+    }
+
+    @RequestMapping(value = "preview/offer", method = RequestMethod.POST)
+    public String previewOffer(@RequestBody JSONObject obj) {
+        JobApplication jobApplication = jobApplicationService.get(Long.valueOf((Integer) obj.get("id")));
+        String html = (String) obj.get("html");
+        return FileUtil.parseHtmlWithJobApplication(html, jobApplication);
     }
 }
