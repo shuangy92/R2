@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Setting</title>
 </head>
@@ -15,14 +15,14 @@
             <legend class="the-legend">Notification</legend>
             <div class="form-group">
                 Get contract expiring notification
-                <input type="number" min="0" max="365" id="contractNotifyDaysBefore" name="contractNotifyDaysBefore" required="required" style="width: 80px; text-align: center"/>
+                <input type="number" min="0" max="365" v-model="notification.contractNotifyDaysBefore" lazy="lazy" required="required" style="width: 80px; text-align: center"/>
                 (A) days in advance.
             </div>
             <div class="form-group">
                 Set contract expiring notification range for
-                <input type="number" min="0" max="365" id="contractNotifyDayLength" name="contractNotifyDayLength" required="required" style="width: 80px; text-align: center"/>
+                <input type="number" min="0" max="365" v-model="notification.contractNotifyDayLength" lazy="lazy" required="required" style="width: 80px; text-align: center"/>
                 (B) days.
-                <span id="helpBlock" class="help-block">You will get notification of contracts that expires between (current day + A days) and (current day + A + B days) at the beginning of every month</span>
+                <span class="help-block">You will get notification of contracts that expires between (current day + A days) and (current day + A + B days) at the beginning of every month</span>
             </div>
             <div class="form-group">
                 <button id="notification" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
@@ -31,8 +31,7 @@
         <fieldset class="well the-fieldset">
             <legend class="the-legend">Talent</legend>
             <div class="form-group">
-                <input type="checkbox" id="checkbox" v-model="isAutoAddFormerEmployee" lazy="lazy" />
-                <label for="checkbox">Auto add employees to talent bank when contract expires.</label>
+                <div class="checkbox"><label><input type="checkbox" v-model="talent.autoAddFormerEmployee" v-bind:true-value="1" v-bind:false-value="0" lazy="lazy"/> Auto add employees to talent bank when contract expires. </label></div>
             </div>
             <div class="form-group">
                 <button id="talent" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
@@ -43,10 +42,16 @@
 
     <script type="text/javascript" th:inline="javascript">
         var vm = new Vue({
-            el: 'setting-form',
+            el: '#setting-form',
             data: {
-                isAutoAddFormerEmployee: false,
-            }
+                notification: {
+                    contractNotifyDaysBefore: null,
+                    contractNotifyDayLength: null,
+                },
+                talent: {
+                    autoAddFormerEmployee: null
+                },
+            },
         })
         jQuery(document).ready(function ($) {
             loadSettingForm();
@@ -63,22 +68,27 @@
                 url: '/api/property/',
                 success: function (data) {
                     $.each(data, function (i, v) {
-                        var sel = $("#setting-form #" + v.name);
-                        if (sel.length) {
-                            sel.val(v.value);
-                        }
+                       switch (v.name) {
+                           case 'contractNotifyDaysBefore':
+                           case 'contractNotifyDayLength':
+                               vm.notification[v.name] = v.value;
+                               break;
+                           case 'autoAddFormerEmployee':
+                               vm.talent.autoAddFormerEmployee = v.value;
+                               break;
+                       }
                     });
                 }
             });
-        }
-        /*function submitSettingForm(form) {
+        }function submitSettingForm(id) {
             var property_list = [];
-            $.each(form.serializeArray(), function (i, field) {
+
+            $.each(vm[id], function (k, v) {
                 var property = {}
-                property.name = field.name;
-                property.value = field.value;
+                property.name = k;
+                property.value = v;
                 property_list.push(property)
-            });
+            })
 
             $.ajax({
                 type: 'put',
@@ -86,15 +96,15 @@
                 data: JSON.stringify(property_list),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-
+                    $.notify({
+                        icon: 'fa fa-info-circle',
+                        message: "Saved",
+                    }, {
+                        delay: 100
+                    });
                 }
             });
-        }*/
-
-        function submitSettingForm(id) {
-            console.log(id)
         }
-
 
     </script>
 </div>

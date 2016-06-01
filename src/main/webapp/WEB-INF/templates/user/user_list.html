@@ -2,20 +2,28 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Employee List</title>
 
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js}"></script>
 </head>
 <body>
 
 <div layout:fragment="content">
-    <h1>Employee List</h1>
-
+    <h3>User List</h3>
+    <form class="form-inline" role="form" id="role-checkboxes">
+        User role:
+        <div class="checkbox"><label><input type="checkbox" v-model="allRoles"/> ALL </label></div>
+        <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="ADMIN" v-bind:disabled="allRoles" checked="checked"/> HR </label></div>
+        <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="MANAGER" v-bind:disabled="allRoles" checked="checked"/> Manager </label></div>
+        <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="EMPLOYEE" v-bind:disabled="allRoles" checked="checked"/> Employee </label></div>
+        <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="FORMER_EMPLOYEE" v-bind:disabled="allRoles"/> Former Employee </label></div>
+        <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="APPLICANT" v-bind:disabled="allRoles"/> Applicant </label></div>
+    </form>
     <table id="table"
            data-toolbar="#toolbar"
            data-sortable="true"
@@ -33,8 +41,24 @@
     </table>
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var $table = $('#table');
+        var $roles_checkboxes = $("#role-checkboxes");
+        var vm = new Vue({
+            el: '#role-checkboxes',
+            data: {
+                roles: [],
+                allRoles: false
+            },
+        })
+
+        jQuery(document).ready(function ($) {
+            $roles_checkboxes.on('change', 'input', function(){
+                $table.bootstrapTable('refresh');
+            });
+            initTable();
+        })
         function initTable() {
-            var $table = $('#table');
             $table.bootstrapTable({
                 columns: [{
                     field: 'id',
@@ -58,7 +82,7 @@
                     field: 'department',
                     title: 'Department',
                     sortable: true,
-                    filterControl: 'select'
+                    filterControl: 'select',
                 }, {
                     field: 'location',
                     title: 'Location',
@@ -83,15 +107,16 @@
                     for (var key in tmp) {
                         filter[key] = tmp[key];
                     }
-                    filter.notRole = "APPLICANT";
-                    filter.active = "true";
+                    if (!vm.allRoles && vm.roles.length != 0) {
+                        filter.roleList = vm.roles;
+                    }
                     data.filter = JSON.stringify(filter);
                     return data;
                 },
                 responseHandler: function (res) {
                     $.each(res.rows, function (i, v) {
-                        res.rows[i].location = res.rows[i].department.location;
-                        res.rows[i].department = res.rows[i].department.name;
+                        res.rows[i].location = res.rows[i].department ? res.rows[i].department.location : null;
+                        res.rows[i].department = res.rows[i].department ? res.rows[i].department.name : null;
                     });
                     return res;
                 },
@@ -135,10 +160,7 @@
                 cookieIdTable: 'user',
             });
         }
-
-        jQuery(document).ready(function ($) {
-            initTable();
-        })
+        //]]>
     </script>
 </div>
 </body>

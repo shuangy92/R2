@@ -31,7 +31,6 @@ public class JobApplication implements Serializable {
     @Column(name = "job_application_id", nullable = false, updatable = false)
     private Long id;
 
-    //@JsonBackReference(value="jobPost-applications")
     @ManyToOne
     @JoinColumn(name = "job_post_id")
     private JobPost jobPost;

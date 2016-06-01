@@ -112,7 +112,6 @@
             }, {
                 field: 'title',
                 title: 'Job Post',
-                sortable: true,
                 filterControl: 'input',
                 formatter: function (index, row, element) {
                     return '<a href="/job_post/' + row.jobPost.id + '">' + row.jobPost.title + ' </a>' +
@@ -121,12 +120,10 @@
             }, {
                 field: 'location',
                 title: 'Location',
-                sortable: true,
                 filterControl: 'select'
             }, {
                 field: 'department',
                 title: 'Department',
-                sortable: true,
                 filterControl: 'select'
             }, {
                 field: 'status',

@@ -22,6 +22,7 @@ public class Property implements Serializable {
     private Integer value;
 
     public enum PropertyName {
-        contractNotifyDaysBefore, contractNotifyDayLength
+        contractNotifyDaysBefore, contractNotifyDayLength,
+        autoAddFormerEmployee
     }
 }

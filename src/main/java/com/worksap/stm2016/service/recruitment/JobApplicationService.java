@@ -63,30 +63,34 @@ public class JobApplicationService {
             JSONObject filterObj = (JSONObject) obj;
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
-                String search = "";
-                List<JobApplication.JobApplicationStatus> statusList = new ArrayList<>();
-                if (key.equals("statusList")) {
-                    for (String status : (List<String>) filterObj.get(key)) {
-                        statusList.add(JobApplication.JobApplicationStatus.valueOf(status));
-                    }
-                } else {
-                    search = (String) filterObj.get(key);
-                }
-                Specification spec;
-                if (key.equals("department")) {
-                    spec = isValue("jobPost", "department", "name", search);
-                } else if (key.equals("location")) {
-                    spec = isValue("jobPost", "department", "location", search);
-                } else if (key.equals("title")) {
-                    spec = hasValue("jobPost", "title", search);
-                } else if (key.equals("jobPostId")) {
-                    spec = isValue("jobPost", "id", Long.parseLong(search));
-                } else if (key.equals("status")) {
-                    spec = isValue(key, JobApplication.JobApplicationStatus.valueOf(search));
-                } else if (key.equals("statusList")) {
-                    spec = inValue("status", statusList);
-                } else { // key = uid
-                    spec = isValue("applicant", "id", Long.parseLong(search));
+                String search = key.equals("statusList") ? "" : (String) filterObj.get(key);
+                Specification spec = null;
+                switch (key) {
+                    case "statusList":
+                        List<JobApplication.JobApplicationStatus> statusList = new ArrayList<>();
+                        for (String status : (List<String>) filterObj.get(key)) {
+                            statusList.add(JobApplication.JobApplicationStatus.valueOf(status));
+                        }
+                        spec = inValue("status", statusList);
+                        break;
+                    case "status":
+                        spec = isValue(key, JobApplication.JobApplicationStatus.valueOf(search));
+                        break;
+                    case "department":
+                        spec = isValue("jobPost", "department", "name", search);
+                        break;
+                    case "location":
+                        spec = isValue("jobPost", "department", "location", search);
+                        break;
+                    case "title":
+                        spec = hasValue("jobPost", "title", search);
+                        break;
+                    case "jobPostId":
+                        spec = isValue("jobPost", "id", Long.parseLong(search));
+                        break;
+                    case "uid":
+                        spec = isValue("applicant", "id", Long.parseLong(search));
+                        break;
                 }
                 specs.add(spec);
             }

@@ -24,6 +24,7 @@ public class Department implements Serializable {
     private Long id;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OrderBy("name ASC")
     @OneToOne
     @JoinColumn(name = "manager_id")
     private User manager;

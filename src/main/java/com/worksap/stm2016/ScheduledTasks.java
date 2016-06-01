@@ -80,10 +80,15 @@ public class ScheduledTasks {
         for (Contract contract : contracts) {
             notificationService.createContractNotification(contract, Notification.NotificationType.CONTRACT_EXPIRED);
             contract.getUser().setRole(Role.FORMER_EMPLOYEE);
+            if (propertyRepository.findOne(Property.PropertyName.autoAddFormerEmployee).getValue() == 1) {
+                contract.getUser().setTalent(true);
+            }
             userRepository.save(contract.getUser());
 
             jobHistoryRepository.save(new JobHistory(contract));
             contractRepository.delete(contract);
+
+
         }
     }
 

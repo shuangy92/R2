@@ -35,10 +35,12 @@ public class JobHistory implements Serializable {
     @Column(name = "job_history_id", nullable = false, updatable = false)
     private Long id;
 
+    @OrderBy("name ASC")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OrderBy("title ASC")
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;

@@ -1,6 +1,7 @@
 package com.worksap.stm2016.service.user;
 
 import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.Role;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
 
@@ -53,25 +55,34 @@ public class UserService {
             JSONObject filterObj = (JSONObject) obj;
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
-                String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("role")) {
-                    spec = isValue(key, Role.valueOf(search));
-                } else if (key.equals("department")) {
-                    spec = isValue(key, "name", search);
-                } else if (key.equals("departmentId")) {
-                    spec = isValue("department", "id", Long.parseLong(search));
-                } else if (key.equals("location")) {
-                    spec = isValue("department", "location", search);
-                } else if (key.equals("id")) {
-                    spec = isValue(key, Long.parseLong(search));
-                } else if (key.equals("notRole")) {
-                    spec = isNotValue("role", Role.valueOf(search));
-                } else if (key.equals("active")) {
-                    Boolean active = search.equals("true");
-                    spec = isValue(key, active);
-                } else { //key = name
-                    spec = hasValue(key, search);
+                String search = key.equals("roleList") ? "" : (String) filterObj.get(key);
+                Specification spec = null;
+                switch (key) {
+                    case "roleList":
+                        List<Role> roleList = new ArrayList<>();
+                        for (String status : (List<String>) filterObj.get(key)) {
+                            roleList.add(Role.valueOf(status));
+                        }
+                        spec = inValue("role", roleList);
+                        break;
+                    case "role":
+                        spec = isValue(key, Role.valueOf(search));
+                        break;
+                    case "name":
+                        spec = hasValue(key, search);
+                        break;
+                    case "department":
+                        spec = isValue(key, "name", search);
+                        break;
+                    case "departmentId":
+                        spec = isValue("department", "id", Long.parseLong(search));
+                        break;
+                    case "location":
+                        spec = isValue("department", "location", search);
+                        break;
+                    case "id":
+                        spec = isValue(key, Long.parseLong(search));
+                        break;
                 }
                 specs.add(spec);
             }

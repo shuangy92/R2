@@ -111,7 +111,7 @@ public class ContractService {
         contract = contractRepository.save(contract);
 
         user.setDepartment(contract.getJob().getDepartment());
-        user.setActive(true);
+        //user.setActive(true);
         user.setContract(contract);
         userRepository.save(user);
 

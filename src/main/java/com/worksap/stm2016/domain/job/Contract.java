@@ -25,10 +25,12 @@ public class Contract implements Serializable {
     private Long id;
 
     @JsonManagedReference
+    @OrderBy("name ASC")
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OrderBy("title ASC")
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
