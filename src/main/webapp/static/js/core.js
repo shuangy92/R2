@@ -145,18 +145,7 @@ function loadFilePreview($e, $editor) {
     return parsed_html;
 }
 
-function checkJobApplicationExistence(job_post_id) {
-    var result;
-    $.ajax({
-        url: "/api/job_application/check/" + job_post_id,
-        type: "GET",
-        async: false,
-        success: function (data) {
-            result = (data != "");
-        }
-    });
-    return result;
-}
+
 
 function logout(data) {
     localStorage.clear();

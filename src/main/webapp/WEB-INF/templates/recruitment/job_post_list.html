@@ -13,12 +13,15 @@
 <body>
 
 <div layout:fragment="content">
+    <style>
+        .detail-view .th-inner {
+            font-weight: normal;
+            font-style: italic;
+        }
+    </style>
     <div class="row">
         <h3>Job Post List</h3>
         <div id="toolbar" class="btn-group">
-            <!--<button type="button" class="btn btn-default" id="btn-add-row">
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>-->
             <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
@@ -33,6 +36,7 @@
                data-pagination="true"
                data-side-pagination="server"
                data-page-list="[10, 25, 50, 100, ALL]"
+               data-detail-view="true"
                data-minimum-count-columns="1"
                data-id-field="id"
                smartDisplay="true">
@@ -88,7 +92,6 @@
                         '<a data-toggle="modal" data-target="#job-post-modal"  data-id="' + row.id + '" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a>';
 
                 }
-
             }, {
                 field: 'department',
                 title: 'Department',
@@ -133,7 +136,26 @@
                     data.filter = p.filter;
                     return data;
                 },
-                detailFormatter: function (index, row, element) {
+                onExpandRow: function(index, row, $detail) { // one row is one reviewRun
+                    var titles = ['TOTAL', 'SUBMITTED', 'REVIEWING', 'PASSED', 'FAILED', 'OFFER_SENT', 'OFFER_ACCEPTED', 'OFFER_DECLINED', 'WITHDREW', 'CLOSED'];
+                    var statusCount = getStatistics(row.id);
+                    var columns = [];
+                    var singleRow = {}
+                    var total = 0;
+                    $.each(titles, function( i, v ) {
+                        columns.push({field: v, title: v});
+                        var count = statusCount[v];
+                        if (count) {
+                            singleRow[v] = count;
+                            total += statusCount[v];
+                        }
+                    });
+                    singleRow.TOTAL = total;
+
+                    $detail.html('<table></table>').find('table').bootstrapTable({
+                        columns: columns,
+                        data: [singleRow],
+                    });
                 },
                 responseHandler: function (res) {
                     $.each(res.rows, function (i, v) {
@@ -151,6 +173,19 @@
                 cookieIdTable: 'job_post',
                 clickToSelect: true,
             });
+        }
+
+        function getStatistics(id) {
+            var statistics;
+            $.ajax({
+                url: "/api/job_post/statistics/" + id,
+                type: "get",
+                async: false,
+                success: function (data) {
+                    statistics = data;
+                }
+            });
+            return statistics;
         }
     </script>
 </div>

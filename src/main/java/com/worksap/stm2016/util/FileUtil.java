@@ -2,28 +2,16 @@ package com.worksap.stm2016.util;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-//import com.pdfcrowd.Client;
-//import com.pdfcrowd.PdfcrowdError;
 import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import org.springframework.security.core.Authentication;
 
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 
 public class FileUtil {
     public static void htmlToPdfFile(String path, String html) throws IOException, DocumentException {
-       // try
-        //{
-
         try {
             OutputStream file = new FileOutputStream(new File(path));
             Document document = new Document();
@@ -36,21 +24,6 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-            /*FileOutputStream fileStream;
-            Client client = new Client("peps", "882a43faa3800c66a7e731709e99295b");
-
-            fileStream = new FileOutputStream(path);
-            client.convertHtml(html, fileStream);
-            fileStream.close();*/
-        //}
-       /* catch(PdfcrowdError why) {
-            System.err.println(why.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static String parseHtmlWithJobApplication(String html, JobApplication jobApplication, Authentication authentication) {

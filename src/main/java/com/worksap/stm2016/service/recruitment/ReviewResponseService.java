@@ -26,8 +26,6 @@ public class ReviewResponseService {
     @Autowired
     ReviewResponseRepository reviewResponseRepository;
     @Autowired
-    ReviewFlowRepository reviewFlowRepository;
-    @Autowired
     NotificationService notificationService;
     @Autowired
     JobApplicationRepository jobApplicationRepository;
@@ -47,9 +45,6 @@ public class ReviewResponseService {
         reviewResponse = reviewResponseRepository.save(reviewResponse);
 
         for (ReviewResponse response: jobApplication.getResponses()) {
-            logger.debug("{}", response.getReviewRun());
-            logger.debug("{}", reviewResponse.getReviewRun());
-
             if (response.getReviewRun().getId() == reviewResponse.getReviewRun().getId()) {
                 if (response.getStatus() == ReviewStatus.REVIEWING) {
                     finishRun = false;
@@ -84,23 +79,5 @@ public class ReviewResponseService {
             }
         }
         return Long.valueOf(0);
-    }
-
-    public JobApplication createResponseList(JobApplication jobApplication){
-        ReviewFlow reviewFlow = reviewFlowRepository.findOne(jobApplication.getJobPost().getReviewFlow().getId());
-        for (ReviewRun reviewRun: reviewFlow.getRuns()) {
-            for (User reviewer: reviewRun.getReviewers()) {
-                ReviewResponse response = new ReviewResponse();
-                response.setJobApplication(jobApplication);
-                response.setReviewRun(reviewRun);
-                response.setReviewer(reviewer);
-                response = reviewResponseRepository.save(response);
-                jobApplication.addResponse(response);
-
-                /* Review notification for reviewers */
-                notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_START);
-            }
-        }
-        return jobApplicationRepository.save(jobApplication);
     }
 }

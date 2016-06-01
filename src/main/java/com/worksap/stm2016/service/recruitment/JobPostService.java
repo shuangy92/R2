@@ -1,8 +1,11 @@
 package com.worksap.stm2016.service.recruitment;
 
+import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
+import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,8 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
 
@@ -28,6 +30,8 @@ public class JobPostService {
     JobCategoryRepository jobCategoryRepository;
     @Autowired
     ReviewFlowService reviewFlowService;
+    @Autowired
+    JobApplicationRepository jobApplicationRepository;
 
     public JobPost get(Long id){
         return jobPostRepository.findOne(id);
@@ -98,5 +102,20 @@ public class JobPostService {
             }
         }
         return Long.valueOf(0);
+    }
+
+    public Map<JobApplication.JobApplicationStatus, Integer> getStatistics(JobPost jobPost) {
+        Map<JobApplication.JobApplicationStatus, Integer> statusCount = new HashMap<>();
+        Collection<JobApplication> jobApplications = jobApplicationRepository.findByJobPost(jobPost);
+        for (JobApplication jobApplication : jobApplications) {
+            JobApplication.JobApplicationStatus status = jobApplication.getStatus();
+            if (statusCount.containsKey(status)) {
+                int count = statusCount.get(status);
+                statusCount.put(status, count + 1);
+            } else {
+                statusCount.put(status, 1);
+            }
+        }
+        return statusCount;
     }
 }

@@ -13,26 +13,41 @@
     <form role="form" class="" id="setting-form">
         <fieldset class="well the-fieldset">
             <legend class="the-legend">Notification</legend>
-        <div class="form-group">
-            Get contract expiring notification
-            <input type="number" min="0" max="365" id="contractNotifyDaysBefore" name="contractNotifyDaysBefore" required="required" style="width: 80px; text-align: center"/>
-            (A) days in advance.
-         </div>
-        <div class="form-group">
-            Set contract expiring notification range for
-            <input type="number" min="0" max="365" id="contractNotifyDayLength" name="contractNotifyDayLength" required="required" style="width: 80px; text-align: center"/>
-            (B) days.
-            <span id="helpBlock" class="help-block">You will get notification of contracts that expires between (current day + A days) and (current day + A + B days) at the beginning of every month</span>
-        </div>
+            <div class="form-group">
+                Get contract expiring notification
+                <input type="number" min="0" max="365" id="contractNotifyDaysBefore" name="contractNotifyDaysBefore" required="required" style="width: 80px; text-align: center"/>
+                (A) days in advance.
+            </div>
+            <div class="form-group">
+                Set contract expiring notification range for
+                <input type="number" min="0" max="365" id="contractNotifyDayLength" name="contractNotifyDayLength" required="required" style="width: 80px; text-align: center"/>
+                (B) days.
+                <span id="helpBlock" class="help-block">You will get notification of contracts that expires between (current day + A days) and (current day + A + B days) at the beginning of every month</span>
+            </div>
+            <div class="form-group">
+                <button id="notification" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
+            </div>
         </fieldset>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Save</button>
-        </div>
+        <fieldset class="well the-fieldset">
+            <legend class="the-legend">Talent</legend>
+            <div class="form-group">
+                <input type="checkbox" id="checkbox" v-model="isAutoAddFormerEmployee" lazy="lazy" />
+                <label for="checkbox">Auto add employees to talent bank when contract expires.</label>
+            </div>
+            <div class="form-group">
+                <button id="talent" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
+            </div>
+        </fieldset>
     </form>
 
 
     <script type="text/javascript" th:inline="javascript">
-
+        var vm = new Vue({
+            el: 'setting-form',
+            data: {
+                isAutoAddFormerEmployee: false,
+            }
+        })
         jQuery(document).ready(function ($) {
             loadSettingForm();
             $('#setting-form').on('submit', function (e) {
@@ -56,7 +71,7 @@
                 }
             });
         }
-        function submitSettingForm(form) {
+        /*function submitSettingForm(form) {
             var property_list = [];
             $.each(form.serializeArray(), function (i, field) {
                 var property = {}
@@ -74,6 +89,10 @@
 
                 }
             });
+        }*/
+
+        function submitSettingForm(id) {
+            console.log(id)
         }
 
 

@@ -33,7 +33,7 @@ public class ReviewFlow implements Serializable {
     private String title;
 
     @JsonManagedReference(value="flow-runs")
-    @OneToMany(mappedBy="reviewFlow", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy="reviewFlow", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewRun> runs = new ArrayList<>();
 
     public void addRun(ReviewRun reviewRun) {
@@ -45,6 +45,7 @@ public class ReviewFlow implements Serializable {
     }
     public void removeRun(ReviewRun reviewRun) {
         if (reviewRun != null) {
+            reviewRun.setReviewFlow(null);
             runs.remove(reviewRun);
         }
     }

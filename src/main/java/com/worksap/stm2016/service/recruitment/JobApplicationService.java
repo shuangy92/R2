@@ -1,13 +1,21 @@
 package com.worksap.stm2016.service.recruitment;
 
 import com.worksap.stm2016.domain.job.Contract;
+import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.review.ReviewFlow;
+import com.worksap.stm2016.domain.review.ReviewResponse;
+import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
+import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
+import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
+import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.service.job.ContractService;
+import com.worksap.stm2016.service.message.NotificationService;
 import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,13 +40,13 @@ public class JobApplicationService {
     @Autowired
     JobApplicationRepository jobApplicationRepository;
     @Autowired
-    JobPostRepository jobPostRepository;
-    @Autowired
     ContractService contractService;
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
     @Autowired
-    ReviewResponseService reviewResponseService;
+    ReviewResponseRepository reviewResponseRepository;
+    @Autowired
+    NotificationService notificationService;
 
     public JobApplication get(Long id){
         return jobApplicationRepository.findOne(id);
@@ -100,7 +108,7 @@ public class JobApplicationService {
         switch (jobApplication.getStatus()) {
             case REVIEWING:
                 if (jobPost.getReviewFlow() != null) {
-                    reviewResponseService.createResponseList(jobApplication);
+                    this.createResponseList(jobApplication);
                 }
                 break;
             case OFFER_ACCEPTED:
@@ -112,13 +120,13 @@ public class JobApplicationService {
                     }
                 }
 
-                Contract contract = contractService.create(jobApplication);
+                Contract contract = contractService.createFromJobApplication(jobApplication);
 
                 User user = jobApplication.getApplicant();
                 user.setRole(Role.EMPLOYEE);
                 user.setDepartment(contract.getJob().getDepartment());
                 user.setContract(contract);
-                userService.update(user);
+                userRepository.save(user);
                 break;
         }
         return jobApplicationRepository.save(jobApplication);
@@ -141,5 +149,21 @@ public class JobApplicationService {
             }
         }
         return Long.valueOf(0);
+    }
+
+    public JobApplication createResponseList(JobApplication jobApplication){
+        ReviewFlow reviewFlow = jobApplication.getJobPost().getReviewFlow();
+        for (ReviewRun reviewRun: reviewFlow.getRuns()) {
+            for (User reviewer: reviewRun.getReviewers()) {
+                ReviewResponse response = new ReviewResponse();
+                response.setReviewRun(reviewRun);
+                response.setReviewer(reviewer);
+                jobApplication.addResponse(response);
+
+                /* Review notification for reviewers */
+                notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_START);
+            }
+        }
+        return jobApplicationRepository.save(jobApplication);
     }
 }

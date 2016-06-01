@@ -1,5 +1,6 @@
 package com.worksap.stm2016.domain.recruitment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.user.User;
@@ -30,6 +31,7 @@ public class JobApplication implements Serializable {
     @Column(name = "job_application_id", nullable = false, updatable = false)
     private Long id;
 
+    //@JsonBackReference(value="jobPost-applications")
     @ManyToOne
     @JoinColumn(name = "job_post_id")
     private JobPost jobPost;
@@ -50,7 +52,7 @@ public class JobApplication implements Serializable {
     private Date applyDate;
 
     @JsonManagedReference(value="application-responses")
-    @OneToMany(mappedBy="jobApplication", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy="jobApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewResponse> responses = new ArrayList<>();
 
     public void addResponse(ReviewResponse reviewResponse) {
@@ -61,6 +63,7 @@ public class JobApplication implements Serializable {
     }
     public void removeResponse(ReviewResponse reviewResponse) {
         if (reviewResponse != null) {
+            reviewResponse.setJobApplication(null);
             responses.remove(reviewResponse);
         }
     }

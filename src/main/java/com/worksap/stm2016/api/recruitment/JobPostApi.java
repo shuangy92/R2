@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
@@ -58,5 +59,13 @@ public class JobPostApi {
     public JsonResponse deleteList(@RequestBody ArrayList<Long> ids){
         Long result = jobPostService.deleteList(ids);
         return deletionResponse(null, result);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value="/statistics/{id}", method = RequestMethod.GET)
+    public Map getStatis(@PathVariable Long id){
+        JobPost jobPost = new JobPost();
+        jobPost.setId(id);
+        return jobPostService.getStatistics(jobPost);
     }
 }

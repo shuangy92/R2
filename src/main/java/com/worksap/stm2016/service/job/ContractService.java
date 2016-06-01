@@ -87,7 +87,7 @@ public class ContractService {
         }
     }
 
-    public Contract create(JobApplication jobApplication){
+    public Contract createFromJobApplication(JobApplication jobApplication){
         JobPost jobPost = jobApplication.getJobPost();
         Contract contract = new Contract();
         contract.setJob(jobPost.getJob());

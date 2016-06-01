@@ -16,4 +16,5 @@ public interface JobApplicationRepository extends PagingAndSortingRepository<Job
 
     JobApplication findOneByJobPostAndApplicant(JobPost jobPost, User applicant);
     Collection<JobApplication> findByApplicant(User applicant);
+    Collection<JobApplication> findByJobPost(JobPost jobPost);
 }

@@ -9,44 +9,49 @@
 <body>
 
 <div th:fragment="job_post_html">
-    <h3 id="title"></h3>
-    <hr/>
-    <div class="row">
-        <div class="col-md-4">Department: <span id="departmentName"></span></div>
-        <div class="col-md-4">Location: <span id="location"></span></div>
-        <div class="col-md-4">Open Positions: <span id="vacancies"></span></div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">Job Code: <span id="jobId"></span></div>
-        <div class="col-md-4">Job Category: <span id="jobCategory"></span></div>
-        <div class="col-md-4">Updated: <span id="updated"></span></div>
-    </div>
-    <hr/>
+    <div id="job-post">
+        <template v-if="jobPost">
+            <h3 id="title"></h3>
+            <hr/>
+            <div class="row">
+                <div class="col-md-4">Department: {{ jobPost.job.department.name }}</div>
+                <div class="col-md-4">Location: {{ jobPost.job.department.location }}</div>
+                <div class="col-md-4">Open Positions: {{ jobPost.vacancies }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Job Code: {{ jobPost.job.id }}</div>
+                <div class="col-md-4">Job Category: {{ jobPost.job.jobCategory.name}}</div>
+                <div class="col-md-4">Updated: {{updated}}</div>
+            </div>
+            <hr/>
 
-    <div>
-        <label for="description">Job Description:</label>
-        <p id="description"></p>
-    </div>
-    <div>
-        <label for="requirement">Job Requirement:</label>
-        <p id="requirement"></p>
-    </div>
-    <div>
-        <label for="deadline">Deadline for Application:</label>
-        <p id="deadline"></p>
-    </div>
-    <hr/>
+            <div>
+                <label for="description">Job Description:</label>
+                <p id="description">{{ jobPost.description }}</p>
+            </div>
+            <div>
+                <label for="requirement">Job Requirement:</label>
+                <p id="requirement">{{ jobPost.requirement }}</p>
+            </div>
+            <div>
+                <label for="deadline">Deadline for Application:</label>
+                <p v-if="jobPost.deadline" id="deadline">{{ jobPost.deadline }}</p>
+            </div>
+            <hr/>
 
-    <label>About Contract</label>
-    <div class="row">
-        <div class="col-md-4">Standard Hours: <span id="hours"></span></div>
-        <div class="col-md-4">Pay Rate: <span id="payRate"></span></div>
-        <div class="col-md-4">Salary: <span id="salary"></span></div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">Contract Starting Date: <span id="startDate"></span></div>
-        <div class="col-md-4">Contract Ending Date: <span id="endDate"></span></div>
-        <div class="col-md-4">Contract Length: <span id="contractLength"></span></div>
+            <label>About Contract</label>
+            <div class="row">
+                <div class="col-md-4">Standard Hours: {{ jobPost.hours }}</div>
+                <div class="col-md-4">Pay Rate: {{ jobPost.payRate }}</div>
+                <div class="col-md-4">Salary: {{ jobPost.salary }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Contract Starting Date: {{ jobPost.startDate }}</div>
+                <div class="col-md-4">Contract Ending Date: {{ jobPost.endDate }}</div>
+                <div class="col-md-4">Contract Length: {{ jobPost.contractLength }}</div>
+            </div>
+
+        </template>
     </div>
 </div>
 
@@ -75,32 +80,27 @@
 <div th:fragment="job_post_script">
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        var job_post;
+        var jobPostVM = new Vue({
+            el: '#job-post',
+            data: {
+                jobPost: null,
+                updated: null,
+            },
+        })
+
+        //var jobPostVM.jobPost;
+
         function loadJobPost(id) {
             $.ajax({
                 type: 'get',
                 url: '/api/public/job_post/' + id,
                 success: function (data) {
-                    job_post = data;
-                    $.each(data, function (k, v) {
-                        var sel = $("#" + k);
-                        if (sel.length) {
-                            if (v) {
-                                sel.html(v);
-                            } else {
-                                sel.html("N/A")
-                            }
-                        }
-                    });
-                    $("#jobId").html(data.job.id);
-                    $("#departmentName").html(data.department.name);
-                    $("#location").html(data.department.location);
-                    $("#jobCategory").html(data.job.jobCategory.name);
-                    $("#updated").html((new Date(data.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss"));
+                    jobPostVM.updted = (new Date(data.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss");
+                    jobPostVM.jobPost = data;
                     if (checkJobApplicationExistence(data.id) && currentUser != null) {
-                        $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()" disabled="disabled">Apply</button>');
+                        $("#apply-btn").html('<button class="btn btn-success" onclick="applyJob()" disabled="disabled">Apply</button>')
                     } else {
-                        $("#apply-btn").html('<button class="btn btn-success" id="apply" onclick="applyJob()">Apply</button>');
+                        $("#apply-btn").html('<button class="btn btn-success" onclick="applyJob()">Apply</button>')
                     }
                 }
             });
@@ -115,10 +115,22 @@
                 if (currentUser.role != "APPLICANT") {
                     alert("You are already an employee");
                 } else {
-                    localStorage.setItem("job_post", JSON.stringify(job_post));
+                    localStorage.setItem("job_post", JSON.stringify(jobPostVM.jobPost));
                     window.location.href = "/career/applicant_profile_submit"
                 }
             }
+        }
+        function checkJobApplicationExistence(job_post_id) {
+            var result;
+            $.ajax({
+                url: "/api/job_application/check/" + job_post_id,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    result = (data != "");
+                }
+            });
+            return result;
         }
         //]]>
     </script>
@@ -126,10 +138,10 @@
 
 <!--/* Content of this page will be decorated by the elements of layout.html (task/layout) */-->
 <div layout:fragment="content">
-
     <div th:replace="career/career_job_post :: job_post_html"></div>
     <br/>
     <div id="apply-btn"></div>
+
     <div th:replace="career/career_job_post :: job_post_script"></div>
     <script type="text/javascript" th:inline="javascript">
         jQuery(document).ready(function ($) {

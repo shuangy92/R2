@@ -57,10 +57,6 @@ public class ReviewFlowApi {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public ReviewFlow save(@RequestBody ReviewFlow reviewFlow){
-        List<ReviewRun> runs = reviewFlow.getRuns();
-        for (short i = 0; i < runs.size(); i++) {
-            reviewRunService.save(runs.get(i));
-        }
         return reviewFlowService.save(reviewFlow);
     }
 
@@ -78,10 +74,9 @@ public class ReviewFlowApi {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/run", method = RequestMethod.POST)
     public ReviewFlow saveRun(@RequestBody ReviewRun reviewRun){
-        reviewRun = reviewRunService.save(reviewRun);
         ReviewFlow reviewFlow = reviewRun.getReviewFlow();
         reviewFlow.addRun(reviewRun);
-        reviewFlow =  reviewFlowService.save(reviewFlow);
+        reviewFlow = reviewFlowService.save(reviewFlow);
         return reviewFlow;
     }
 

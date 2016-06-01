@@ -47,8 +47,8 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @Column(name = "active")
-    private boolean active = true;
+    @Column(name = "isTalent")
+    private boolean isTalent = false;
 
     @ManyToOne
     @JoinColumn(name = "department_id")

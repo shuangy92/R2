@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain.recruitment;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.review.ReviewFlow;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
