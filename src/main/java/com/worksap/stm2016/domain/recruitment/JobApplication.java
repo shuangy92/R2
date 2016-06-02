@@ -70,7 +70,8 @@ public class JobApplication implements Serializable {
     public enum JobApplicationStatus {
         SAVED, SUBMITTED, WITHDREW,
         REVIEWING, PASSED, FAILED, CLOSED,
-        OFFER_SENT, OFFER_ACCEPTED, OFFER_DECLINED
+        OFFER_SENT, OFFER_ACCEPTED, OFFER_DECLINED,
+        CONTRACTED
     }
 
     @Override

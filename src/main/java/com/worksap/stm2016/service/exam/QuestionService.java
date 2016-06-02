@@ -1,9 +1,9 @@
 package com.worksap.stm2016.service.exam;
 
-import com.worksap.stm2016.domain.job.Department;
+import com.worksap.stm2016.domain.exam.Question;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
-import com.worksap.stm2016.repository.job.DepartmentRepository;
+import com.worksap.stm2016.repository.exam.QuestionRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,20 +29,14 @@ public class QuestionService {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     @Autowired
-    DepartmentRepository departmentRepository;
-    @Autowired
-    UserRepository userRepository;
+    QuestionRepository questionRepository;
 
-    public Department get(Long id){
-        return departmentRepository.findOne(id);
-    }
-
-
-    public Iterable<Department> getAll() {
-        return departmentRepository.findAllByOrderByNameAsc();
+    public Question get(Long id){
+        return questionRepository.findOne(id);
     }
 
     public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+
         ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
@@ -55,43 +49,36 @@ public class QuestionService {
                 Specification spec;
                 if (key.equals("id")) {
                     spec = isValue(key, Long.parseLong(search));
-                } else if (key.equals("manager")) {
-                    spec = hasValue(key, "name", search);
-                } else if (key.equals("name")) {
+                } else if (key.equals("department")) {
+                    spec = isValue(key, "name", search);
+                } else if (key.equals("location")) {
+                    spec = isValue("department", "location", search);
+                } else if (key.equals("title")){
                     spec = hasValue(key, search);
-                } else { // key = location
+                } else { // key = jobCategory
                     spec = isValue(key, search);
                 }
                 specs.add(spec);
             }
         }
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, departmentRepository);
+
+        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, questionRepository);
         return result;
     }
 
-    public Department save(Department department) throws ParseException {
-        return departmentRepository.save(department);
+    public Question save(Question question)  {
+        return questionRepository.save(question);
     }
 
-    public Department update(Department department) throws ParseException {
-        User prevManager = departmentRepository.findOne(department.getId()).getManager();
-        if (prevManager != null) {
-            prevManager.setRole(Role.EMPLOYEE);
-            userRepository.save(prevManager);
-        }
-        if (department.getManager() != null) {
-            User newManager = userRepository.findOne(department.getManager().getId());
-            newManager.setRole(Role.MANAGER);
-            userRepository.save(newManager);
-        }
-        return departmentRepository.save(department);
+    public Question update(Question question)  {
+        return questionRepository.save(question);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
             try {
-                departmentRepository.delete(id);
+                questionRepository.delete(id);
             } catch (Exception e) {
                 return id;
             }

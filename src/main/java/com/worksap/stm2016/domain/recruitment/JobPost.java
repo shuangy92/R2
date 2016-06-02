@@ -71,6 +71,9 @@ public class JobPost implements Serializable {
         this.vacancies = vacancies;
         this.open = vacancies > 0;
     }
+    public void decreaseVacancies () {
+        --this.vacancies;
+    }
 
     @Column(name = "startDate")
     @Type(type="date")

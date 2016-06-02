@@ -38,7 +38,7 @@
                style="word-wrap: break-word">
         </table>
 
-        <div v-if="myRunStatus == 1" role="form">
+        <div v-if="myRunStatus == 1 &amp;&amp; !responseSubmitted" role="form">
             <div class="form-group">
                 <label for="response" class="control-label">Your comment for run {{ myRun.runNumber }}: {{ myRun.task }}</label>
                 <textarea class="form-control" id="response" rows="5"></textarea>
@@ -64,6 +64,7 @@
                 myRunStatus: 0,
                 hasRun: false,
                 notice: null,
+                responseSubmitted: false
             },
         })
 
@@ -136,7 +137,7 @@
                             title: 'Reviewer',
                             width:"15%",
                             formatter: function (index, row, element) {
-                                if (vm.myRunStatus == 1 && index.id == vm.myResponse.reviewer.id) {
+                                if (vm.myRunStatus == 1 && index.id == vm.myResponse.reviewer.id && row.reviewRun.id == vm.myRun.id) {
                                     return '<b>' + index.name + '</b>';
                                 }
                                 return index.name;
@@ -212,7 +213,7 @@
                     result = false;
                 }
             });
-            vm.myRunStatus = 1;
+            vm.myRunStatus = result ? 1 : 0;
             return;
         }
         function submitResponse(status) {
@@ -225,7 +226,7 @@
                 data: JSON.stringify(vm.myResponse),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $("#form").hide();
+                    vm.responseSubmitted = true;
                     $table.bootstrapTable('refresh');
                 }
             });

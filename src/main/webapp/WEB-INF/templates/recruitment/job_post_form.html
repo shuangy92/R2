@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label for="vacancies" class="control-label">Job Code</label>
                 <a href="/job_profile" target="_blank" title="Click to view the job list">?</a>
-                <input class="form-control" id="jobId" name="jobId" required="required"
+                <input class="form-control" id="jobId" name="jobId" type="number" min="0" onchange="checkJobCode()" required="required"
                        readonly="readonly"/>
             </div>
             <div class="form-group">
@@ -117,6 +117,27 @@
         //<![CDATA[
         var request;
         var reviewFlow;
+        var job;
+
+        jQuery(document).ready(function ($) {
+            $("#startDate").datepicker();
+            $("#deadline").datepicker({ minDate: new Date() });
+
+            handleContractDate();
+
+            if (window.location.pathname == "/job_post/create") {
+                request = JSON.parse(localStorage.getItem("request"));
+                if (request) {
+                    loadRequestData();
+                } else {
+                    $("#jobId").prop('readonly', false)
+                }
+                handleFormSubmission("post");
+                $("#publish").show();
+            } else {
+                loadJobPostForm();
+            }
+        });
 
         function handleContractDate() {
             $("#startDate, #contractLength, input[name='contractLengthUnit']").change(function () {
@@ -167,13 +188,18 @@
                         switch (field.name) {
                             case "startDate":
                             case "deadline":
+                            case "endDate":
                                 data[field.name] = Date.parse(field.value);
                                 break;
                             case "contractLength":
                                 data[field.name] = field.value + " " + $("input[name='contractLengthUnit']:checked").val();
                                 break;
                             case "jobId":
-                                data.job = request.job;
+                                if (request) {
+                                    data.job = request.job;
+                                } else {
+                                    data.job = job;
+                                }
                                 break;
                             case "reviewFlowId":
                                 if (field.value) {
@@ -184,8 +210,11 @@
                                 data[field.name] = field.value;
                         }
                     });
-                    data.department = request.department;
-                    data.endDate = request.endDate;
+                    if (request) {
+                        data.department = request.department;
+                    } else {
+                        data.department = job.department;
+                    }
 
                     if (method == "put") {
                         data.author = request.author;
@@ -262,21 +291,32 @@
                 }
             });
         }
-        jQuery(document).ready(function ($) {
-            $("#startDate").datepicker();
-            $("#deadline").datepicker({ minDate: new Date() });
 
-            handleContractDate();
-
-            if (window.location.pathname == "/job_post/create") {
-                request = JSON.parse(localStorage.getItem("request"));
-                loadRequestData();
-                handleFormSubmission("post");
-                $("#publish").show();
-            } else {
-                loadJobPostForm();
-            }
-        });
+        function checkJobCode() {
+            $.ajax({
+                type: "get",
+                url: '/api/job/' + $("#jobId").val(),
+                success: function (data) {
+                    if (data == "") {
+                        $("#jobId").val("");
+                        $.notify({
+                            icon: 'fa fa-info-circle',
+                            message: "Please input a valid job code.",
+                        }, {
+                            delay: 500,
+                        })
+                    }  else {
+                        job = data;
+                        $("#jobTitle").val(data.title);
+                        $("#description").val(data.description);
+                        $("#requirement").val(data.requirement);
+                        $("#hours").val(data.hours);
+                        $("#departmentName").val(data.department.name);
+                        $("#jobCategory").val(data.jobCategory.name);
+                    }
+                },
+            });
+        }
         //]]>
     </script>
 </div>

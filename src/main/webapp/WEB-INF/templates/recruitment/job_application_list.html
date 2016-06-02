@@ -22,7 +22,7 @@
     <div class="row">
         <h3>Job Application List</h3>
         <form class="form-inline" role="form" id="status-checkboxes">
-            Application status:
+            Status:
             <div class="checkbox"><label><input type="checkbox" name="all-status"/> ALL </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="SUBMITTED" checked="checked"/> SUBMITTED </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="REVIEWING" checked="checked"/> REVIEWING </label></div>
@@ -31,6 +31,7 @@
             <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_SENT" checked="checked"/> OFFER_SENT </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_ACCEPTED" checked="checked"/> OFFER_ACCEPTED </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_DECLINED" checked="checked"/> OFFER_DECLINED </label></div>
+            <div class="checkbox status"><label><input type="checkbox" name="status" value="CONTRACTED" checked="checked"/> CONTRACTED </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="WITHDREW"/> WITHDREW </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="CLOSED"/> CLOSED </label></div>
         </form>
@@ -52,6 +53,7 @@
     <div th:replace="form/email_form :: email_form"></div>
     <div th:replace="form/file_generate_form :: file_generate_form"></div>
     <div th:replace="career/career_job_post :: job_post_modal"></div>
+    <div th:replace="form/contract_form :: contract_form"></div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
@@ -174,7 +176,8 @@
                             '<button class="btn btn-danger application" id="FAILED" disabled="disabled" onclick="handleApplicationStatusChange(\'FAILED\',' + index + ')">Fail</button>' +
                             '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
                             '<button class="btn btn-success application" id="OFFER_ACCEPTED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_ACCEPTED\',' + index + ')">Offer Accepted</button>' +
-                            '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>';
+                            '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>' +
+                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#contract-modal" data-action="create" data-index=' + index + '>Contract</a>';
                     return result;
                 },
                 onExpandRow: function(index, row, $detail) {
@@ -199,17 +202,18 @@
             });
         }
         function handleApplicationStatusChange(status, index) {
-            var notify = $.notify({
-                icon: 'fa fa-info-circle',
-                message: "Waiting...",
-            });
-            var application = $('#table').bootstrapTable('getData', true)[index];
+            var application = $table.bootstrapTable('getData', true)[index];
             application.status = status;
 
-            var url = "/api/job_application/";
+            if (status != 'CONTRACTED') {
+                var notify = $.notify({
+                    icon: 'fa fa-info-circle',
+                    message: "Waiting...",
+                });
+            }
             $.ajax({
                 type: "PUT",
-                url: url,
+                url: "/api/job_application/",
                 data: JSON.stringify(application),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {

@@ -1,6 +1,7 @@
 package com.worksap.stm2016.domain.exam;
 
 
+import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,10 +28,10 @@ public class Answer implements Serializable {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "answer")
     private String answer;
-    
-    public enum QuestionType {
-        MULTIPLE_CHOICE, SHORT_ANSWER
-    }
 }

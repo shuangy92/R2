@@ -4,20 +4,19 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Job List</title>
+    <title>Department</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
-
 </head>
 <body>
 
 <div layout:fragment="content">
     <div class="row">
-        <h3>Job List</h3>
+        <h3>Contract</h3>
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#job-modal" data-action="create">
+            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#question-modal">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
             <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
@@ -29,61 +28,59 @@
                data-sortable="true"
                data-show-refresh="true"
                data-show-toggle="true"
-               data-show-columns="true"
                data-show-export="true"
                data-pagination="true"
                data-side-pagination="server"
                data-page-list="[10, 25, 50, 100]"
-               data-detail-view="true"
                data-minimum-count-columns="1"
                data-id-field="id"
                smartDisplay="true">
         </table>
     </div>
-    <div th:replace="form/job_profile :: job_profile_form"></div>
+    <div th:replace="form/question_form :: question_form"></div>
     <div th:replace="fragments/common :: deletion"></div>
 
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var $table = $('#table');
-        var url = '/api/job';
+        var url = '/api/question';
+        var from = $("#from"), to = $("#to");
 
         jQuery(document).ready(function ($) {
+            from.datepicker().val(getUrlParameter("from"));
+            to.datepicker().val(getUrlParameter("to"));
+
             initTable();
+            $('#date-range-form').on('submit', function (e) {
+                e.preventDefault();
+                $table.bootstrapTable('refresh');
+            })
         });
 
         function initTable() {
             $table.bootstrapTable({
                 columns: [{
-                    field: 'state',
-                    checkbox: true
-                }, {
                     field: 'id',
-                    title: 'Job Code',
+                    title: 'ID',
                     sortable: true,
-                    filterControl: 'input'
                 }, {
-                    field: 'title',
-                    title: 'Job Title',
+                    field: 'question',
+                    title: 'Question',
                     sortable: true,
                     filterControl: 'input',
-                    formatter: function (index, row, element) {
-                        return '<a data-toggle="modal" data-target="#job-modal" data-action="edit"  data-id="' + row.id + '" style="cursor: pointer;">' + index + '</a>';
-                    }
                 }, {
-                    field: 'department',
-                    title: 'Department',
+                    field: 'answer',
+                    title: 'Answer',
+                }, {
+                    field: 'type',
+                    title: 'Type',
                     sortable: true,
                     filterControl: 'select',
                 }, {
-                    field: 'location',
-                    title: 'Location',
-                    //sortable: true,
-                    filterControl: 'select'
-                }, {
-                    field: 'jobCategory',
+                    field: 'category',
                     title: 'Category',
                     sortable: true,
-                    filterControl: 'select'
+                    filterControl: 'select',
                 }],
                 url: url,
                 contentType: "application/x-www-form-urlencoded",
@@ -93,45 +90,51 @@
                     if (p.sort) {
                         data.sort = p.sort;
                     } else {
-                        data.sort = "id";
+                        data.sort = "endDate";
                     }
+
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    if (from.val() && to.val()) {
+                        filter.date = $("#from").val() + "-" + $("#to").val()
+                    }
+                    if (currentUser.role == "MANAGER") {
+                        filter.department = currentUser.department.name;
+                        filter.loaction = currentUser.department.location;
+                    }
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
                 responseHandler: function (res) {
                     $.each(res.rows, function (i, v) {
-                        res.rows[i].location = res.rows[i].department.location;
-                        res.rows[i].department = res.rows[i].department.name;
-                        res.rows[i].jobCategory = res.rows[i].jobCategory.name;
+                        res.rows[i].location = res.rows[i].job.department.location;
+                        res.rows[i].department = res.rows[i].job.department.name;
                     });
                     return res;
                 },
-                detailFormatter: function (index, row, element) {
-                    var result =
-                            '<div class="row">' +
-                            '<div class="col-md-10 col-md-offset-1">' +
-                            '<dl>' +
-                            '<dt>Job Description</dt>' + '<dd>' + row.description + '</dd>' +
-                            '</dl>' +
-                            '<dt>Job Requirement</dt>' + '<dd>' + row.requirement + '</dd>' +
-                            '</div>' +
-                            '</div>';
-                    return result;
-                },
-                onPostBody: function () {
-                    $(".filterControl input").attr('placeholder', 'Search');
+                onLoadSuccess: function () {
+                    if (currentUser.role == "MANAGER") {
+                        $table.bootstrapTable('hideColumn', "department");
+                        $table.bootstrapTable('hideColumn', "location");
+                        $("#toolbar").hide();
+                    }
                 },
                 filterControl: true,
-                cookie: true,
-                cookieIdTable: 'job',
                 clickToSelect: true,
+                cookie: true,
+                cookieIdTable: 'contract',
+                cookiesEnabled: ['bs.table.sortOrder', 'bs.table.sortName', 'bs.table.pageNumber', 'bs.table.pageList', 'bs.table.searchText', 'bs.table.filterControl'],
+                showColumns: (currentUser.role == "ADMIN")
             });
-
         }
 
+        //]]>
     </script>
 </div>
 </body>

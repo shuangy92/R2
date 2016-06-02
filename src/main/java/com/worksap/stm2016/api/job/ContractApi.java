@@ -49,4 +49,9 @@ public class ContractApi {
     public Contract save(@RequestBody Contract contract){
         return contractService.save(contract);
     }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public Contract update(@RequestBody Contract contract){
+        return contractService.update(contract);
+    }
 }

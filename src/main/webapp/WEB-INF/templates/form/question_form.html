@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<body>
+<div th:fragment="question_form">
+    <div class="modal fade" id="question-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create a question</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#multipleChoice">Multiple Choice</a></li>
+                            <li><a href="#shortAnswer">Short Answer</a></li>
+                        </ul>
+                        <div id="multipleChoice">
+                            <div role="form" class="form-horizontal" id="password-change-form">
+                                <div class="form-group required">
+                                    <label for="question" class="col-sm-2 control-label">Question</label>
+                                    <div class="col-sm-10">
+                                        <textarea  v-model="multipleChoice.question" class="form-control" id="question" required="required" placeholder="Question"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group required">
+                                    <label for="question" class="col-sm-2 control-label">Options</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="newOption" v-on:keyup.enter="addOption" class="form-control" placeholder="Enter a new option"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-10">
+                                        <div class="list-group">
+                                            <button v-for="option in multipleChoice.options" v-on:click="setAnswerOption($index)" class="list-group-item" style="word-wrap: break-word">
+                                                <span class="col-md-9">{{ option }}</span>
+                                                <span class="col-md-2"><span v-if="multipleChoice.options[$index] == answer">Answer </span></span>
+                                                <a v-on:click="removeOption($index)" class="col-md-1">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <button type="submit" class="btn btn-primary" name="MULTIPLE_CHOICE" onclick="submitQuestionForm(this.name)">Create</button>
+                                    </div>
+                                </div>
+                                <div class="alert alert-danger" v-if="alert">{{ alert }}</div>
+                            </div>
+                        </div>
+                        <div id="shortAnswer">
+                            <form role="form" class="form-horizontal" id="email-change-form">
+                                <div class="form-group required">
+                                    <label for="question" class="col-sm-2 control-label">Question</label>
+                                    <div class="col-sm-10">
+                                        <textarea v-model="shortAnswer.question" class="form-control" id="question" required="required" placeholder="Question"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="question" class="col-sm-2 control-label">Answer</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="shortAnswer.answer" class="form-control" placeholder="Standard Answer" maxlength="225"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <button type="submit" class="btn btn-primary" name="SHORT_ANSWER" onclick="submitQuestionForm(this.name)">Create</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var job;
+        var form = $("#question-form");
+
+        var vm = new Vue({
+            el: '#multipleChoice',
+            data: {
+                multipleChoice: {
+                    question: '',
+                    options: [],
+                    answer: null,
+                    type: 'MULTIPLE_CHOICE'
+                },
+                shortAnswer: {
+                    question: '',
+                    answer: null,
+                    type: 'SHORT_ANSWER'
+                },
+                newOption: '',
+                options: [],
+                alert: null
+            },
+            methods: {
+                addOption: function () {
+                    var text = this.newOption.trim()
+                    if (text) {
+                        this.multipleChoice.options.push( text )
+                        this.newOption = ''
+                    }
+                },
+                removeOption: function (index) {
+                    this.multipleChoice.options.splice(index, 1)
+                },
+                setAnswerOption: function (index) {
+                    this.multipleChoice.answer = this.multipleChoice.options[index];
+                }
+            }
+        })
+
+        jQuery(document).ready(function ($) {
+            $("#tabs").tabs();
+
+            form.on('submit', function (e) {
+                e.preventDefault();
+                $('#question-modal').modal('hide')
+                submitContractForm($(this));
+            })
+            initEmployeeSelect($("#user"))
+
+            $('#question-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                //form[0].reset();
+                //form.find("select").val('').trigger('change');
+            })
+
+        });
+        function loadJobProfileForm(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/job/' + id,
+                success: function (data) {
+                    job = data;
+                    $.each(job, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            sel.val(v);
+                        }
+                    });
+
+                    if (job.jobCategory) {
+                        $("#jobCategory").data('select2').trigger('select', {
+                            data: {"id": job.jobCategory.id, "text": job.jobCategory.name}
+                        });
+                    }
+                    if (job.department) {
+                        $("#department").data('select2').trigger('select', {
+                            data: {"id": job.department.id, "text": job.department.name}
+                        });
+                    }
+                }
+            });
+        }
+        function submitQuestionForm(type) {
+            var data = {};
+            switch (type) {
+                case 'MULTIPLE_CHOICE':
+                    if (vm.question == null) {
+                        vm.alert = "Please enter the question."; return;
+                    }
+                    if (vm.answer == null) {
+                        vm.alert = "Please select an answer."; return;
+                    }
+                    if (vm.options.length < 2) {
+                        vm.alert = "The number of options should at least to be 2."; return;
+                    }
+                    data = vm.multipleChoice;
+                    break;
+                case 'SHORT_ANSWER':
+                    if (vm.question == null) {
+                        vm.alert = "Please enter the question."; return;
+                    }
+                    data = vm.shortAnswer;
+                    break;
+            }
+
+            var notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Saving...",
+            });
+
+            $.ajax({
+                type: "post",
+                url: '/api/question',
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (job) {
+                    notify.update('message', "The old question has been transferred to job history");
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
+                    $table.bootstrapTable('refresh');
+                    if (method = "post") {
+                        var options = $table.bootstrapTable('getOptions');
+                        $table.bootstrapTable('selectPage', options.totalPages);
+                    }
+                },
+                error: function () {
+                    notify.update('message', "Error");
+                }
+            });
+        }
+        function checkJobCode() {
+            $.ajax({
+                type: "get",
+                url: '/api/job/' + $("#jobId").val(),
+                success: function (data) {
+                    if (data == "") {
+                        $("#jobId").val("");
+                        $.notify({
+                            icon: 'fa fa-info-circle',
+                            message: "Please input a valid job code.",
+                        }, {
+                            delay: 500,
+                        })
+                    } else {
+                        job = data;
+                    }
+                },
+            });
+        }
+        $('.list-group').on('click' , "button" , function(){
+            $(this).parent().find('button').removeClass('active');
+            $(this).addClass('active');
+        });
+        //]]>
+    </script>
+</div>
+</body>
+</html>
+
+
+

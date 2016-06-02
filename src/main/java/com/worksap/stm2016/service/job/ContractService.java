@@ -87,18 +87,6 @@ public class ContractService {
         }
     }
 
-    public Contract createFromJobApplication(JobApplication jobApplication){
-        JobPost jobPost = jobApplication.getJobPost();
-        Contract contract = new Contract();
-        contract.setJob(jobPost.getJob());
-        contract.setStartDate(jobPost.getStartDate());
-        contract.setEndDate(jobPost.getEndDate());
-        contract.setPayRate(jobPost.getPayRate());
-        contract.setSalary(jobPost.getSalary());
-        contract.setUser(jobApplication.getApplicant());
-        return contractRepository.save(contract);
-    }
-
     public Contract save(Contract contract){
         User user = userRepository.findOne(contract.getUser().getId());
 

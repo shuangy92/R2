@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="job_profile_form">
-    <div class="modal fade" id="job-profile-modal" role="dialog">
+    <div class="modal fade" id="job-modal" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -21,9 +21,7 @@
                             </div>
                         </div>
                         <div class="form-group required" id="field-id">
-                            <label for="id" class="col-sm-4 control-label">Job Code <span><a href="/job_profile"
-                                                                                             target="_blank"
-                                                                                             title="Click to view the job list">?</a></span></label>
+                            <label for="id" class="col-sm-4 control-label">Job Code <span><a href="/job_profile" target="_blank" title="Click to view the job list">?</a></span></label>
                             <div class="col-sm-8">
                                 <input class="form-control" id="id" name="id" required="required"
                                        readonly="readonly"/>
@@ -59,8 +57,7 @@
                         <div class="form-group">
                             <label for="requirement" class="col-sm-4 control-label">Job Requirement</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control" id="requirement" name="requirement"
-                                          rows="5"> </textarea>
+                                <textarea class="form-control" id="requirement" name="requirement" rows="5"> </textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -92,11 +89,11 @@
             initDepartmentList($("#department"), "Select a department");
             form.on('submit', function (e) {
                 e.preventDefault();
-                $('#job-profile-modal').modal('hide')
+                $('#job-modal').modal('hide')
                 submitJobProfileForm(method, $(this));
             })
 
-            $('#job-profile-modal').on('show.bs.modal', function (event) {
+            $('#job-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var action = button.data('action');
                 if (action == "create") { // create
@@ -204,6 +201,55 @@
                 }
             });
         }
+        //]]>
+    </script>
+</div>
+
+
+<div th:fragment="job_profile_html">
+    <div class="modal fade" id="job-html-modal" role="dialog">
+        <div v-if="job" class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <dl class="dl-horizontal">
+                        <dt>Title:</dt>
+                        <dd>{{ job.title }}</dd>
+                        <dt>Job Code:</dt>
+                        <dd>{{ job.id }}</dd>
+                        <dt>Department:</dt>
+                        <dd>{{ job.department.name }}</dd>
+                        <dt>Category:</dt>
+                        <dd>{{ job.jobCategory.name }}</dd>
+                        <dt>Description:</dt>
+                        <dd>{{ job.description }}</dd>
+                        <dt>Requirement:</dt>
+                        <dd>{{ job.requirement }}</dd>
+                        <dt>Standard Hours:</dt>
+                        <dd>{{ job.hours }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var jobVM = new Vue({
+            el: '#job-html-modal',
+            data: {
+                job: null,
+                action: 'create'
+            },
+        })
+
+        jQuery(document).ready(function ($) {
+            $('#job-html-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var index = button.data('index')
+                var job = $table.bootstrapTable('getData', true)[index].job;
+                jobVM.job = job;
+            })
+        });
         //]]>
     </script>
 </div>

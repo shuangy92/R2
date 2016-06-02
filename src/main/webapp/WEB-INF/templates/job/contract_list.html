@@ -28,11 +28,7 @@
                 <button class="btn btn-default" type="submit">Search</button>
             </div>
         </form>
-        <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#contract-modal">
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>
-        </div>
+
         <table id="table"
                data-toolbar="#toolbar"
                data-sortable="true"
@@ -48,7 +44,7 @@
         </table>
     </div>
     <div th:replace="form/contract_form :: contract_form"></div>
-
+    <div th:replace="form/job_profile :: job_profile_html"></div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
@@ -86,7 +82,7 @@
                     title: 'Job',
                     sortable: true,
                     formatter: function (index, row, element) {
-                        return index.title + " (ID:" + index.id + ")";
+                        return '<a data-toggle="modal" data-target="#job-html-modal"  data-index=' + element + ' style="cursor: pointer">' +index.title + '</a>';
                     }
                 }, {
                     field: 'salary',
@@ -119,6 +115,12 @@
                     field: 'location',
                     title: 'Location',
                     filterControl: 'select'
+                }, {
+                    title: 'Action',
+                    formatter: function (index, row, element) {
+                        return '<a data-toggle="modal" data-target="#contract-modal" data-action="edit" data-index=' + element + ' style="cursor: pointer">Edit</a> / ' +
+                            '<a data-toggle="modal" data-target="#contract-modal" data-action="extend" data-index=' + element + ' style="cursor: pointer">Extend</a>';
+                    }
                 }],
                 url: url,
                 contentType: "application/x-www-form-urlencoded",

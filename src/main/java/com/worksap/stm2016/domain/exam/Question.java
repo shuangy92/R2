@@ -8,7 +8,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,11 +23,12 @@ public class Question implements Serializable {
     @Column(name = "question_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "question")
+    @Column(name = "question", columnDefinition = "text")
     private String question;
 
     @Column(name = "options")
-    private List<String> options = new ArrayList<>();
+    @ElementCollection
+    private Set<String> options = new HashSet<>();
 
     public void addOption(String option) {
         if (option != null) {

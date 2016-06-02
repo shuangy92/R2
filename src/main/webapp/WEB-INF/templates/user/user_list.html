@@ -24,6 +24,14 @@
         <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="FORMER_EMPLOYEE" v-bind:disabled="allRoles"/> Former Employee </label></div>
         <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="APPLICANT" v-bind:disabled="allRoles"/> Applicant </label></div>
     </form>
+    <div id="toolbar" class="btn-group">
+        <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#employee-create-modal">
+            <i class="glyphicon glyphicon-plus"></i>
+        </button>
+        <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
+            <i class="glyphicon glyphicon-trash"></i>
+        </button>
+    </div>
     <table id="table"
            data-toolbar="#toolbar"
            data-sortable="true"
@@ -39,6 +47,8 @@
            data-id-field="id"
            smartDisplay="true">
     </table>
+    <div th:replace="form/employee_form :: employee_create_form"></div>
+    <div th:replace="fragments/common :: deletion"></div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[

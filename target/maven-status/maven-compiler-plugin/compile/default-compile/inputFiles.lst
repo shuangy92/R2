@@ -1,6 +1,7 @@
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\WebConfig.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\job\JobCategory.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\recruitment\JobPost.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\exam\QuestionCategoryRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\user\CurrentUserControllerAdvice.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\review\ReviewRun.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\roster\RosterService.java
@@ -10,6 +11,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\message\
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\job\JobHistory.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\roster\ShiftRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\job\ContractService.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\exam\QuestionRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\audit\CurrentUser.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\AuditingConfig.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\job\DepartmentService.java
@@ -18,6 +20,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\RequestStatus
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\roster\TimeSlot.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\message\FileTemplateApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\job\JobCategoryApi.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\exam\QuestionCategory.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\job\Contract.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\roster\RosterController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\form\UserCreateForm.java
@@ -37,6 +40,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\Othe
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\message\EmailRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\job\Department.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\Country.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\exam\QuestionApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\job\JobService.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\MathUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserService.java
@@ -53,6 +57,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\publicApi\Publi
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\message\NotificationRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\user\UserProfileRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\recruitment\ReviewFlowController.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\exam\Exam.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\recruitment\JobApplicationRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\StringUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\StaffingRequest.java
@@ -74,6 +79,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\message\Req
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\publicApi\PublicCountryApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\job\ContractApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\FileController.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\exam\QuestionService.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\job\DepartmentApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\util\JsonResponse.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\review\ReviewResponse.java
@@ -89,12 +95,14 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\message\Request
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\FileProfile.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\form\validator\UserCreateFormValidator.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\message\EmailService.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\exam\Answer.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\RegexUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\roster\RosterPK.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\VerifyUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\util\ExceptionHandlerControllerAdvice.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\recruitment\JobApplication.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\Role.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\ExamController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\Property.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\message\EmailApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\message\NotificationService.java
@@ -107,6 +115,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\user\UserPro
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\ScheduledTasks.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\recruitment\ReviewFlowService.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\FileTemplate.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\exam\AnswerRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\DateUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserServiceImpl.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\roster\ScheduleController.java
@@ -116,6 +125,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\config\SecurityConf
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\roster\ScheduleService.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\recruitment\JobPostApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\recruitment\ReviewFlowRepository.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\exam\Question.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\recruitment\JobApplicationService.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\util\CollectionUtil.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\service\currentuser\CurrentUserDetailsService.java
@@ -125,6 +135,7 @@ C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\user\Use
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\review\ReviewFlow.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\controller\RequestController.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\PropertyApi.java
+C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\repository\exam\ExamRepository.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\api\UserApi.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\domain\message\Thread.java
 C:\Users\Shuang\Dropbox\R2\src\main\java\com\worksap\stm2016\enums\UserStatus.java

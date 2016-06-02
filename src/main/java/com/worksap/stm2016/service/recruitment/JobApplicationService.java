@@ -47,6 +47,8 @@ public class JobApplicationService {
     ReviewResponseRepository reviewResponseRepository;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    JobPostRepository jobPostRepository;
 
     public JobApplication get(Long id){
         return jobApplicationRepository.findOne(id);
@@ -115,7 +117,7 @@ public class JobApplicationService {
                     this.createResponseList(jobApplication);
                 }
                 break;
-            case OFFER_ACCEPTED:
+            case CONTRACTED:
                 Collection<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(jobApplication.getApplicant());
                 for (JobApplication otherApplications : jobApplications) {
                     if (otherApplications != jobApplication) {
@@ -124,12 +126,11 @@ public class JobApplicationService {
                     }
                 }
 
-                Contract contract = contractService.createFromJobApplication(jobApplication);
+                jobPost.decreaseVacancies();
+                jobPostRepository.save(jobPost);
 
                 User user = jobApplication.getApplicant();
                 user.setRole(Role.EMPLOYEE);
-                user.setDepartment(contract.getJob().getDepartment());
-                user.setContract(contract);
                 userRepository.save(user);
                 break;
         }

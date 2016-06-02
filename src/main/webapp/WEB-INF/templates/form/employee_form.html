@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="contract_form">
-    <div class="modal fade" id="contract-modal" role="dialog">
-        <div v-if="contract" class="modal-dialog" role="document">
+<div th:fragment="employee_create_form">
+    <div class="modal fade" id="employee-create-modal" role="dialog">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 v-if="action!='edit'" class="modal-title">Create a contract</h4>
-                    <h4 v-if="action=='edit'" class="modal-title">Edit</h4>
+                    <h4 class="modal-title">Add an employee</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" class="form-horizontal" id="contract-form">
                         <div class="form-group required">
-                            <label for="user" class="col-sm-4 control-label">Employee</label>
+                            <label for="user" class="col-sm-4 control-label">Name</label>
                             <div class="col-sm-8">
-                                <input class="form-control" v-model="contract.user.name" id="user" name="user" required="required" readonly="readonly"/>
+                                <select class="form-control" id="user" name="user" required="required">
+                                    <option></option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group required" id="field-id">
                             <label for="jobId" class="col-sm-4 control-label">Job Code <span><a href="/job_profile" target="_blank" title="Click to view the job list">?</a></span></label>
                             <div class="col-sm-8">
-                                <input class="form-control" v-model="contract.job.id" id="jobId" name="jobId" type="number" onchange="checkJobCode()" required="required"/>
+                                <input class="form-control" id="jobId" name="jobId" type="number" onchange="checkJobCode()" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
                             <label for="startDate" class="col-sm-4 control-label">Contract Start Date</label>
                             <div class="col-sm-8">
-                                <input class="form-control" v-model="contract.startDate" id="startDate" name="startDate" required="required"/>
+                                <input class="form-control" id="startDate" name="startDate" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
                             <label for="endDate" class="col-sm-4 control-label">Contract End Date</label>
                             <div class="col-sm-8">
-                                <input class="form-control" v-model="contract.endDate" id="endDate" name="endDate" required="required"/>
+                                <input class="form-control" id="endDate" name="endDate" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
                             <label for="salary" class="col-sm-4 control-label">Salary</label>
                             <div class="col-sm-8">
-                                <input class="form-control" v-model="contract.salary" id="salary" name="salary" required="required"/>
+                                <input class="form-control" id="salary" name="salary" required="required"/>
                             </div>
                         </div>
                         <div class="form-group required">
                             <label for="payRate" class="col-sm-4 control-label">Pay By</label>
                             <div class="col-sm-8">
-                                <select class="form-control pay-rate-select" v-model="contract.payRate" id="payRate" name="payRate" required="required">
+                                <select class="form-control pay-rate-select" id="payRate" name="payRate" required="required">
                                     <option value="HOURLY">Hour</option>
                                     <option value="DAILY">Day</option>
                                     <option value="WEEKLY">Week</option>
@@ -57,8 +58,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-4">
-                                <button v-if="action=='edit'" onclick="submitContractForm(); return false;" class="btn btn-primary" id="edit">Save</button>
-                                <button v-if="action!='edit'" onclick="submitContractForm(); return false;" class="btn btn-primary" id="create">Create</button>
+                                <button type="submit" class="btn btn-primary" id="create">Create</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -70,64 +70,71 @@
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        var contractVM = new Vue({
-            el: '#contract-modal',
-            data: {
-                contract: null,
-                action: null,
-                index: null
-            },
-        })
-
+        var job;
+        var form = $("#contract-form");
 
         jQuery(document).ready(function ($) {
             $("#startDate").datepicker();
             $("#endDate").datepicker();
 
+            form.on('submit', function (e) {
+                e.preventDefault();
+                $('#contract-modal').modal('hide')
+                submitContractForm($(this));
+            })
+            initEmployeeSelect($("#user"))
+
             $('#contract-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
-                contractVM.index = button.data('index')
-                contractVM.action = button.data('action');
-                switch (contractVM.action) {
-                    case 'create':
-                        var application = $table.bootstrapTable('getData', true)[contractVM.index];
-
-                        var contract = {};
-                        contract.user = application.applicant;
-                        contract.job = application.jobPost.job;
-                        contract.startDate = application.jobPost.startDate;
-                        contract.endDate = application.jobPost.endDate;
-                        contract.salary = application.jobPost.salary;
-                        contract.payRate = application.jobPost.payRate;
-                        contractVM.contract = contract;
-                        break;
-                    case 'extend':
-                    case 'edit':
-                        var contract = $table.bootstrapTable('getData', true)[contractVM.index];
-                        contractVM.contract = contract;
-                        break;
-                }
+                form[0].reset();
+                form.find("select").val('').trigger('change');
             })
 
         });
-        function submitContractForm() {
-            $('#contract-modal').modal('hide')
+        function loadJobProfileForm(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/job/' + id,
+                success: function (data) {
+                    job = data;
+                    $.each(job, function (k, v) {
+                        var sel = $("#" + k);
+                        if (sel.length) {
+                            sel.val(v);
+                        }
+                    });
 
-            var method;
-            var message;
-            switch (contractVM.action) {
-                case 'create':
-                    method = 'post';
-                    break;
-                case 'extend':
-                    method = 'post';
-                    message = 'The old contract has been transferred to job history';
-                    break;
-                case 'edit':
-                    method = 'put';
-                    message = 'Done';
-                    break;
-            }
+                    if (job.jobCategory) {
+                        $("#jobCategory").data('select2').trigger('select', {
+                            data: {"id": job.jobCategory.id, "text": job.jobCategory.name}
+                        });
+                    }
+                    if (job.department) {
+                        $("#department").data('select2').trigger('select', {
+                            data: {"id": job.department.id, "text": job.department.name}
+                        });
+                    }
+                }
+            });
+        }
+        function submitContractForm() {
+            var data = {};
+            $.each(form.serializeArray(), function (i, field) {
+                switch (field.name) {
+                    case "user":
+                        data[field.name] = {id: field.value};
+                        break;
+                    case "jobId":
+                        data.job = job;
+                        break;
+                    case "startDate":
+                    case "endDate":
+                        data[field.name] = Date.parse(field.value);
+                        break;
+                    default:
+                        data[field.name] = field.value;
+                }
+            });
 
             var notify = $.notify({
                 icon: 'fa fa-info-circle',
@@ -135,19 +142,19 @@
             });
 
             $.ajax({
-                type: method,
+                type: "post",
                 url: '/api/contract',
-                data: JSON.stringify(contractVM.contract),
+                data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (job) {
-                    if (contractVM.action == 'create') {
-                        handleApplicationStatusChange('CONTRACTED', contractVM.index);
-                    } else {
-                        notify.update('message', message);
-                        setTimeout(function () {
-                            notify.close();
-                        }, 1000);
-                        $table.bootstrapTable('refresh');
+                    notify.update('message', "The old contract has been transferred to job history");
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
+                    $table.bootstrapTable('refresh');
+                    if (method = "post") {
+                        var options = $table.bootstrapTable('getOptions');
+                        $table.bootstrapTable('selectPage', options.totalPages);
                     }
                 },
                 error: function () {
