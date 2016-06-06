@@ -96,7 +96,7 @@
             data.id = job_application_id;
             data.name = file_generate_form.find("#name").val();
             data.html = file_generate_editor.getData();
-            var notify = $.notify({
+            notify = $.notify({
                 icon: 'fa fa-info-circle',
                 message: "Saving...",
             });
@@ -107,24 +107,28 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     if (res.response == "ERROR") {
-                        if (confirm(res.detail)) {
-                            data.overwrite = true;
-                            $.ajax({
-                                url: "/api/file/generate",
-                                type: "post",
-                                data: JSON.stringify(data),
-                                contentType: "application/json; charset=utf-8",
-                                success: function (data) {
-                                    notify.update('message', data.detail);
-                                    setTimeout(function () {
-                                        notify.close();
-                                    }, 1000);
-                                    $('#file-generate-modal').modal('hide')
-                                }
-                            });
-                        } else {
-                            notify.close();
-                        }
+                        $.confirm({
+                            title: res.detail,
+                            confirm: function(){
+                                data.overwrite = true;
+                                $.ajax({
+                                    url: "/api/file/generate",
+                                    type: "post",
+                                    data: JSON.stringify(data),
+                                    contentType: "application/json; charset=utf-8",
+                                    success: function (data) {
+                                        notify.update('message', data.detail);
+                                        setTimeout(function () {
+                                            notify.close();
+                                        }, 1000);
+                                        $('#file-generate-modal').modal('hide')
+                                    }
+                                });
+                            },
+                            cancel: function () {
+                                notify.close();
+                            },
+                        });
                     } else {
                         notify.update('message', res.detail);
                         setTimeout(function () {

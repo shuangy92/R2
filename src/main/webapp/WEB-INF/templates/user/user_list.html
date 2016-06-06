@@ -131,36 +131,26 @@
                     return res;
                 },
                 detailFormatter: function (index, row, element) {
-                    var url = '/api/user/' + row.id;
-                    var result;
-                    $.ajax({
-                        type: "GET",
-                        url: url,
-                        success: function (user) {
-                            var basic =
-                                    '<div class="row" id="user-info">' +
-                                    '<dl class="col-md-4 dl-horizontal">' +
-                                    '<dt>Name</dt>' + '<dd>' + user.name + '</dd>' +
-                                    '<dt>Emp No.</dt>' + '<dd>' + user.id + '</dd>' +
-                                    '</dl>' +
-                                    '<dl class="col-md-4 dl-horizontal">' +
-                                    '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
-                                    '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
-                                    '</dl>';
-                            var active = "";
-                            if (user.active == false) {
-                                active =
-                                        '<dl class="col-md-4 dl-horizontal">' +
-                                        '<strong>This employee has resigned</strong>' +
-                                        '</dl>';
-                            }
+                    var user = row;
+                    var basic =
+                            '<div class="row" id="user-info">' +
+                            '<dl class="col-md-4 dl-horizontal">' +
+                            '<dt>Name</dt>' + '<dd>' + user.name + '</dd>' +
+                            '<dt>Emp No.</dt>' + '<dd>' + user.id + '</dd>' +
+                            '</dl>' +
+                            '<dl class="col-md-4 dl-horizontal">' +
+                            '<dt>E-mail</dt>' + '<dd>' + user.email + '</dd>' +
+                            '<dt>Role</dt>' + '<dd>' + user.role + '</dd>' +
+                            '</dl>';
+                    var active = "";
+                    if (user.active == false) {
+                        active =
+                                '<dl class="col-md-4 dl-horizontal">' +
+                                '<strong>This employee has resigned</strong>' +
+                                '</dl>';
+                    }
 
-                            result = basic + active + '</div>';
-                        },
-                        async: false,
-                    });
-
-                    return result;
+                    return basic + active + '</div>';
                 },
                 onPostBody: function () {
                     $(".filterControl input").attr('placeholder', 'Search');

@@ -50,6 +50,9 @@ public class ReviewFlow implements Serializable {
         }
     }
 
+    @Column(name = "is_template")
+    private Boolean isTemplate = false;
+
     /* auditing */
     @OrderBy("name ASC")
     @ManyToOne

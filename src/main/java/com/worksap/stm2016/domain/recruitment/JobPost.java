@@ -55,9 +55,9 @@ public class JobPost implements Serializable {
     @Column(name = "published", nullable = false)
     private Boolean published = false;
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "review_flow_id")
-    private ReviewFlow reviewFlow;
+    private ReviewFlow reviewFlow;*/
 
     /* from staffing request */
 

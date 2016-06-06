@@ -19,7 +19,7 @@
         }
     </style>
     <div class="row" id="page">
-        <h3><a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a>Job Post Info </h3>
+        <h3>Job Post Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a></h3>
         <div th:replace="career/applicant_profile :: applicant_profile"></div>
         <h3>Review Detail</h3>
         <h4 id="notice">{{ notice }}</h4>

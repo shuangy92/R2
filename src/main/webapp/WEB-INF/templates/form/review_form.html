@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="review_form">
+    <div class="modal fade" id="review-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create a job category</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="review-flow-form">
+                        <div class="form-group">
+                            <select class="form-control" id="reviewFlow" required="required"><option></option></select>
+                        </div>
+                        <br/>
+                        <table
+                               id="review-table"
+                               data-id-field="id"
+                               smartDisplay="true">
+                        </table>
+                        <button type="submit" class="btn btn-primary" id="btn-save" style="float: right">save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="reviewer-modal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <select class="form-control" id="reviewer" required="required"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var $review_table = $('#review-table');
+
+        var reviewVM = new Vue({
+            el: '#review-modal',
+            data: {
+                reviewFlow: null,
+            },
+            watch: {
+                'reviewFlow': function (val, oldVal) {
+                    if (oldVal == null && val != null) {
+                        initReviewTable()
+                    }
+                },
+            }
+        });
+
+        jQuery(document).ready(function ($) {
+
+            var review_flow_select = $("#reviewFlow");
+            initReviewFlowSelect(review_flow_select, "Select a review flow")
+            review_flow_select.on('change',function(){
+                loadReviewFlow($(this).val())
+            });
+
+            $('#reviewer-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var index = button.data('index')
+
+                var reviewer_select = $(this).find("#reviewer");
+                initEmployeeSelect(reviewer_select, "Search")
+                reviewer_select.on('change',function(){
+                    var reviewer = reviewer_select.select2('data')[0];
+                    reviewVM.reviewFlow.runs[index].reviewer = {"id": reviewer.id, "name": reviewer.text.split(" (")[0]};
+                    $('#reviewer-modal').modal('hide')
+                    $review_table.bootstrapTable('load', reviewVM.reviewFlow.runs);
+                });
+            })
+
+
+            $("#review-run-form").on('submit', function (e) {
+                e.preventDefault();
+                submitReviewRunForm();
+            })
+
+        });
+
+        function initReviewTable() {
+
+            var columns = [{
+                field: 'runNumber',
+                title: 'Run No.',
+                formatter: function (index, row, element) {
+                    return index;
+                }
+            }, {
+                field: 'type',
+                title: 'Review Type'
+            }, {
+                field: 'note',
+                title: 'Note'
+            }, {
+                field: 'reviewer',
+                title: 'Reviewer',
+                formatter: function (index, row, element) {
+                    return index.name + ' <a data-toggle="modal" data-target="#reviewer-modal"  data-index="' + element + '" title="edit" style="cursor: pointer;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                },
+            }, {
+                title: 'Action',
+                formatter: function (index, row, element) {
+                },
+                events: {
+                    'click select': function (e, value, row, index) {
+                        initEmployeeSelect($(e.target), "S")
+                    },
+                }
+            }];
+
+            $review_table.bootstrapTable({
+                columns: columns,
+                data: reviewVM.reviewFlow.runs
+            });
+        }
+        function loadReviewFlow(id) {
+            $.ajax({
+                type: "get",
+                url: "/api/review_flow/" + id,
+                success: function (data) {
+                    reviewVM.reviewFlow = data;
+                    $review_table.bootstrapTable('load', data.runs);
+                }
+            });
+        }
+        function submitReviewRunForm() {
+            $('#review-run-model').modal('hide');
+
+            reviewFlowVM.reviewRun.reviewFlow = reviewFlowVM.reviewFlow;
+            $.ajax({
+                type: 'post',
+                url: '/api/review_flow/run',
+                data: JSON.stringify(reviewFlowVM.reviewRun),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (data) {
+                    reviewFlowVM.reviewFlow = data;
+                    $table.bootstrapTable('refresh');
+                }
+            });
+        }
+        function initReviewFlowSelect($select, placeholder) {
+            $select.select2({
+                ajax: {
+                    url: "/api/review_flow",
+                    delay: 250,
+                    data: function (params) {
+                        var data = {};
+                        data.sort = "title";
+                        data.order = "asc";
+                        data.limit = 10;
+                        data.offset = ((params.page-1) || 0) * 10;
+                        data.filter = JSON.stringify({"title": params.term, "isTemplate": "true"})
+                        return data;
+                    },
+                    processResults: function (data, params) {
+                        reviewVM.reviewflows = data.rows;
+
+                        var employees = $.map(data.rows, function (obj) {
+                            return {id: obj.id, text: obj.title + ' (by ' + obj.author.name + ')'};
+                        })
+                        params.page = params.page || 1;
+
+                        return {
+                            results: employees,
+                            pagination: {
+                                more: (params.page * 10) < data.total
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                //minimumInputLength: 1,
+                placeholder: placeholder
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>

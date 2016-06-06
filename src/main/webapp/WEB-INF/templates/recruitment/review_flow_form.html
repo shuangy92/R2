@@ -15,98 +15,130 @@
 <body>
 
 <div layout:fragment="content">
-    <div class="row">
-        <h3>Review Flow</h3>
-        <form role="form" id="review-flow-form">
-            <div class="form-group">
-                <label for="reviewers" class=" control-label">Title</label>
-                <input class="form-control" placeholder="Title" id="review-flow-title" name="review-flow-title"
-                       required="required"/>
-            </div>
-            <br/>
-
-            <div id="toolbar" class="btn-group">
-                <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#popup-model">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-                <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </button>
-            </div>
-            <table id="table"
-                   data-toolbar="#toolbar"
-                   data-show-refresh="true"
-                   data-show-toggle="true"
-                   data-show-columns="true"
-                   data-show-export="true"
-                   data-pagination="true"
-                   data-side-pagination="server"
-                   data-page-list="[ALL]"
-                   data-minimum-count-columns="1"
-                   data-id-field="id"
-                   smartDisplay="true"
-                   data-use-row-attr-func="true"
-                   data-reorderable-rows="true">
-            </table>
-            <button type="submit" class="btn btn-primary" id="btn-save" style="float: right">save</button>
-        </form>
-    </div>
-
-    <div th:replace="fragments/common :: deletion"></div>
-
-    <div class="modal fade" id="popup-model" role="dialog" aria-labelledby="popup-modelLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="popup-modelLabel">Create a review run</h4>
+    <div id="page">
+        <div class="row">
+            <h3>Review Flow</h3>
+            <form role="form" id="review-flow-form">
+                <div class="form-group">
+                    <label for="title" class=" control-label">Title</label>
+                    <input v-if="reviewFlow" v-model="reviewFlow.title" class="form-control" placeholder="Title" id="title" name="title" required="required"/>
                 </div>
-                <div class="modal-body">
-                    <form role="form" class="form-horizontal" id="review-run-form" style="padding: 10px 0px;">
-                        <div class="form-group required">
-                            <label for="task" class="col-sm-4 control-label">Task</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" placeholder="Task" id="task" name="task"
-                                       required="required"/>
+                <br/>
+
+                <div id="toolbar" class="btn-group">
+                    <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#review-run-model">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </div>
+                <table id="table"
+                       data-toolbar="#toolbar"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-columns="true"
+                       data-show-export="true"
+                       data-side-pagination="server"
+                       data-minimum-count-columns="1"
+                       data-id-field="id"
+                       smartDisplay="true"
+                       data-use-row-attr-func="true"
+                       data-reorderable-rows="true">
+                </table>
+                <button type="submit" class="btn btn-primary" id="btn-save" style="float: right">save</button>
+            </form>
+        </div>
+
+        <div th:replace="fragments/common :: deletion"></div>
+
+        <div class="modal fade" id="review-run-model" role="dialog" aria-labelledby="popup-modelLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="popup-modelLabel">Create a review run</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" class="form-horizontal" id="review-run-form">
+                            <div class="form-group required">
+                                <label for="reviewType" class="col-sm-4 control-label">Review Type</label>
+                                <div class="col-sm-8">
+                                    <select v-model="reviewRun.type" class="form-control" id="reviewType" required="required">
+                                        <option value="RESUME_CHECK">RESUME_CHECK</option>
+                                        <option value="INTERVIEW">INTERVIEW</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group required">
-                            <label for="reviewers" class="col-sm-4 control-label">Reviewers</label>
-                            <div class="col-sm-8">
-                                <select class="form-control reviewer-select" id="reviewers" name="reviewers"
-                                        multiple="multiple" required="required"></select>
+                            <div class="form-group">
+                                <label for="note" class="col-sm-4 control-label">Note</label>
+                                <div class="col-sm-8">
+                                    <input v-model="reviewRun.note" class="form-control" placeholder="Note" id="note"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="reviewers" class="col-sm-4 control-label">Department Filter</label>
-                            <div class="col-sm-8">
-                                <select class="form-control department-select" style="width: 100%">
-                                    <option></option>
-                                </select>
+                            <div class="form-group required">
+                                <label for="reviewer" class="col-sm-4 control-label">Reviewer</label>
+                                <div class="col-sm-8">
+                                    <select v-model="reviewerId" class="form-control" id="reviewer" required="required"></select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-4">
-                                <button type="submit" class="btn btn-success">Create</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <!--<div class="form-group">
+                                <label for="reviewer" class="col-sm-4 control-label">Department Filter</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control department-select" style="width: 100%">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>-->
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <button type="submit" class="btn btn-success">Create</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script type="text/javascript" th:inline="javascript">
-        var review_flow;
+        //<![CDATA[
         var $table = $('#table');
         var url = '/api' + window.location.pathname
         var final_rows;
 
+        var reviewFlowVM = new Vue({
+            el: '#page',
+            data: {
+                reviewerId: '',
+                reviewFlow: {},
+                reviewRun: {
+                    type: null,
+                    note: null,
+                    reviewer: null,
+                    reviewFlow: null,
+                },
+            }
+        });
+
         jQuery(document).ready(function ($) {
 
             initTable();
+
+            var reviewer_select = $("#reviewer");
+            initEmployeeSelect(reviewer_select, "Search");
+            reviewer_select.on('change',function(){
+                reviewFlowVM.reviewerId = $(this).val();
+                reviewFlowVM.reviewRun.reviewer = {"id": reviewFlowVM.reviewerId}
+            });
+
+            $('#review-run-model').on('show.bs.modal', function (event) {
+                reviewFlowVM.reviewRun = {type: null, note: null, reviewer: null, reviewFlow: null};
+                reviewFlowVM.reviewerId = null;
+            })
 
             $("#review-flow-form").on('submit', function (e) {
                 e.preventDefault();
@@ -116,6 +148,7 @@
                 e.preventDefault();
                 submitReviewRunForm();
             })
+
         });
 
         function initTable() {
@@ -133,41 +166,24 @@
                     return index;
                 }
             }, {
-                field: 'task',
-                title: 'Task'
+                field: 'type',
+                title: 'Review Type'
             }, {
-                field: 'reviewers',
-                title: 'Reviewers',
+                field: 'note',
+                title: 'Note'
+            }, {
+                field: 'reviewer',
+                title: 'Reviewer',
                 formatter: function (index, row, element) {
-                    var result = "";
-                    $.each(index, function (i, v) {
-                        result += '<a target="_blank" href="/user/' + v.id + '">' + v.name + '</a><br/>';
-                    });
-                    return result;
+                    return '<a target="_blank" href="/user/' + index.id + '">' + index.name + '</a><br/>';
                 }
             }];
 
             $table.bootstrapTable({
                 columns: columns,
                 url: url,
-                contentType: "application/x-www-form-urlencoded",
-                queryParamsType: "limit",
-                queryParams: function (p) {
-                    var data = {};
-                    if (p.sort) {
-                        data.sort = p.sort;
-                    } else {
-                        data.sort = "lastModifiedDate";
-                    }
-                    data.order = p.order;
-                    data.limit = p.limit;
-                    data.offset = p.offset;
-                    data.filter = p.filter;
-                    return data;
-                },
                 responseHandler: function (res) {
-                    review_flow = res;
-                    $("#review-flow-title").val(review_flow.title);
+                    reviewFlowVM.reviewFlow = res;
 
                     var data = {};
                     data.rows = res.runs;
@@ -180,39 +196,23 @@
                         row.runNumber = i;
                     });
                 },
-                sortOrder: 'asc',
                 cookie: true,
                 cookieIdTable: 'review_run',
                 clickToSelect: true,
             });
-
-            var $insert = $("#btn-add-row");
-
-            $insert.on('click', function () {
-                initReviewRunForm();
-            })
         }
         function submitReviewRunForm() {
-            var reviewers = [];
-            $.each($(".reviewer-select").val(), function (i, v) {
-                var reviewer = {}
-                reviewer.id = parseInt(v);
-                reviewers.push(reviewer);
-            });
-            var data = {};
-            data.reviewers = reviewers;
-            data.task = $("#review-run-form #task").val();
-            data.reviewFlow = review_flow;
+            $('#review-run-model').modal('hide');
 
-            $('#popup-model').modal('hide');
+            reviewFlowVM.reviewRun.reviewFlow = reviewFlowVM.reviewFlow;
             $.ajax({
                 type: 'post',
                 url: '/api/review_flow/run',
-                data: JSON.stringify(data),
+                data: JSON.stringify(reviewFlowVM.reviewRun),
                 contentType: "application/json; charset=utf-8",
                 async: false,
                 success: function (data) {
-                    review_flow = data;
+                    reviewFlowVM.reviewFlow = data;
                     $table.bootstrapTable('refresh');
                 }
             });
@@ -220,32 +220,28 @@
 
         function submitReviewFlowForm() {
             var data = {};
-            if (!review_flow) {
-                review_flow = {};
-            }
-            review_flow.title = $("#review-flow-title").val();
 
             var runs = [];
             $.each($('#table').bootstrapTable('getData', true), function( i, row ) { //reorder run number
                 row.runNumber = i + 1;
-                row.reviewFlow = {"id": review_flow.id};
+                row.reviewFlow = {"id": reviewFlowVM.reviewFlow.id};
                 runs.push(row);
             });
-            review_flow.runs = runs
+            reviewFlowVM.reviewFlow.runs = runs
 
             $.ajax({
                 type: 'post',
                 url: '/api/review_flow',
-                data: JSON.stringify(review_flow),
+                data: JSON.stringify(reviewFlowVM.reviewFlow),
                 contentType: "application/json; charset=utf-8",
                 async: false,
                 success: function (data) {
-                    review_flow = data;
+                    reviewFlowVM.reviewFlow = data;
                 }
             });
         }
 
-        var department;
+        /*var department;
         var $department_select;
         function initReviewRunForm() {
             $department_select = $(".department-select");
@@ -288,7 +284,8 @@
                     },
                 },
             });
-        }
+        }*/
+        //]]>
     </script>
 </div>
 </body>

@@ -2,6 +2,7 @@ package com.worksap.stm2016.domain.recruitment;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Data;
@@ -49,6 +50,10 @@ public class JobApplication implements Serializable {
     @Column(name = "created_date")
     @LastModifiedDate
     private Date applyDate;
+
+    @OneToOne
+    @JoinColumn(name = "review_flow_id")
+    private ReviewFlow reviewFlow;
 
     @JsonManagedReference(value="application-responses")
     @OneToMany(mappedBy="jobApplication", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -3,7 +3,6 @@ package com.worksap.stm2016.domain.review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +24,6 @@ public class ReviewResponse implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
-
-    @ManyToOne
     @JoinColumn(name = "review_run_id")
     private ReviewRun reviewRun;
 
@@ -37,12 +32,20 @@ public class ReviewResponse implements Serializable {
     @JoinColumn(name = "job_application_id")
     private JobApplication jobApplication;
 
+    @ManyToOne
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
+
     @Column(name = "response", columnDefinition = "text")
     private String response;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ReviewStatus status = ReviewStatus.REVIEWING;
+
+    public enum ReviewStatus {
+        REVIEWING, PASSED, FAILED;
+    }
 
     @Override
     public boolean equals(Object o) {

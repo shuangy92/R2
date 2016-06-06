@@ -130,7 +130,13 @@
                     data.order = p.order;
                     data.limit = p.limit;
                     data.offset = p.offset;
-                    data.filter = p.filter;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    filter.isTemplate = "true";
+                    data.filter = JSON.stringify(filter);
                     return data;
                 },
                 detailFormatter: function (index, row, element) {
@@ -152,6 +158,7 @@
         function submitReviewFlowForm() {
             var data = {};
             data.title = $("#review-flow-title").val();
+            data.isTemplate = true;
 
             $('#popup-model').modal('hide')
             $.ajax({

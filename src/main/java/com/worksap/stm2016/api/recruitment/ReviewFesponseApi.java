@@ -18,8 +18,8 @@ public class ReviewFesponseApi {
     @Autowired
     ReviewResponseService reviewResponseService;
 
-    @RequestMapping(value = "{jobApplicationId}", method = RequestMethod.PUT)
+    /*@RequestMapping(value = "{jobApplicationId}", method = RequestMethod.PUT)
     public ReviewResponse update(@PathVariable Long jobApplicationId, @RequestBody ReviewResponse reviewResponse){
         return reviewResponseService.updateResponseOfJobApplication(jobApplicationId, reviewResponse);
-    }
+    }*/
 }

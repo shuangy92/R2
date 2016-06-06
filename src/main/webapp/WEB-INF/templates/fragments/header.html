@@ -58,6 +58,7 @@
         //<![CDATA[
 
         var currentUser = getCurrentUser();
+        var notify;
 
         jQuery(document).ready(function ($) {
             //$('form').formcache();
@@ -103,6 +104,20 @@
                     exit: "animated fadeOutRight"
                 }
             });
+
+            jconfirm.defaults = {
+                content: null,
+                confirmButton: 'Yes',
+                cancelButton: 'No',
+                confirmButtonClass: 'btn-default',
+                cancelButtonClass: 'btn-default',
+                theme: 'white',
+                animationSpeed: 200,
+                animationBounce: 1.2,
+                keyboardEnabled: true,
+                backgroundDismiss: true,
+                confirmKeys: [13], // ENTER key
+            }
         });
         function getCurrentUser() {
             var currentUser;

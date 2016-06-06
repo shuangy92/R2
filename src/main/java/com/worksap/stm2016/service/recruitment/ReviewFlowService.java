@@ -18,6 +18,7 @@ import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
+import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 @Service
 public class ReviewFlowService {
@@ -46,11 +47,18 @@ public class ReviewFlowService {
             for (Iterator iterator = filterObj.keySet().iterator(); iterator.hasNext(); ) {
                 String key = (String) iterator.next();
                 String search = (String) filterObj.get(key);
-                Specification spec;
-                if (key.equals("author")) {
-                    spec = hasValue(key, "name", search);
-                } else { // key = title
-                    spec = hasValue(key, search);
+                Specification spec = null;
+                switch (key) {
+                    case "author":
+                        spec = hasValue(key, "name", search);
+                        break;
+                    case "title":
+                        spec = hasValue(key, search);
+                        break;
+                    case "isTemplate":
+                        Boolean isTemplate = search.equals("true") ? true : false;
+                        spec = isValue(key, isTemplate);
+                        break;
                 }
                 specs.add(spec);
             }

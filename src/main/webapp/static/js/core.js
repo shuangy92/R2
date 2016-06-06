@@ -79,23 +79,34 @@ function initDepartmentList($select, placeholder) {
 function initEmployeeSelect($select, placeholder) {
     $select.select2({
         ajax: {
-            url: "/api/user/name",
+            url: "/api/user",
             delay: 250,
             data: function (params) {
-                return {
-                    name: params.term, // search term
-                };
+                    var data = {};
+                    data.sort = "name";
+                    data.order = "asc";
+                    data.limit = 10;
+                    data.offset = ((params.page-1) || 0) * 10;
+                    data.filter = JSON.stringify({"roleList": ["ADMIN", "MANAGER", "EMPLOYEE"], "name": params.term})
+                    return data;
             },
             processResults: function (data, params) {
-                var employees = $.map(data, function (obj) {
-                    return {id: obj.id, text: obj.name + ' (No.' + obj.id +', ' + obj.department.name + ', ' + obj.department.location + ')'};
+                var employees = $.map(data.rows, function (obj) {
+                    return {id: obj.id, text: obj.name + ' (No.' + obj.id +', ' + obj.department.name + ', ' + obj.department.location + ', ' + obj.role + ')'};
                 })
+                params.page = params.page || 1;
+
                 return {
                     results: employees,
+                    pagination: {
+                        more: (params.page * 10) < data.total
+                    }
                 };
             },
+            cache: true
         },
-        placeholder: "Search"
+        minimumInputLength: 1,
+        placeholder: placeholder
     });
 }
 function initFileTemplateList($select, placeholder) {

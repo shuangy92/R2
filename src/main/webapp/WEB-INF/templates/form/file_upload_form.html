@@ -46,25 +46,29 @@
                 cache: false,
                 success: function (data) {
                     if (data.response == "ERROR") {
-                        if (confirm(data.detail)) {
-                            formData.append("overwrite", true);
-                            $.ajax({
-                                url: "/api/file",
-                                type: "POST",
-                                data: formData,
-                                enctype: 'multipart/form-data',
-                                processData: false,
-                                contentType: false,
-                                cache: false,
-                                success: function (data) {
-                                    $('#file-upload-form')[0].reset();
-                                    $file_table.bootstrapTable('refresh');
-                                    notify.close();
-                                }
-                            });
-                        } else {
-                            notify.close();
-                        }
+                        $.confirm({
+                            title: data.detail,
+                            confirm: function(){
+                                formData.append("overwrite", true);
+                                $.ajax({
+                                    url: "/api/file",
+                                    type: "POST",
+                                    data: formData,
+                                    enctype: 'multipart/form-data',
+                                    processData: false,
+                                    contentType: false,
+                                    cache: false,
+                                    success: function (data) {
+                                        $('#file-upload-form')[0].reset();
+                                        $file_table.bootstrapTable('refresh');
+                                        notify.close();
+                                    }
+                                });
+                            },
+                            cancel: function () {
+                                notify.close();
+                            },
+                        });
                     } else {
                         $('#file-upload-form')[0].reset();
                         $file_table.bootstrapTable('refresh');

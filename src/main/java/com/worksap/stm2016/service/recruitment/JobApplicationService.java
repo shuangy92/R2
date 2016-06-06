@@ -113,10 +113,10 @@ public class JobApplicationService {
         JobPost jobPost = jobApplication.getJobPost();
         switch (jobApplication.getStatus()) {
             case REVIEWING:
-                if (jobPost.getReviewFlow() != null) {
+                /*if (jobPost.getReviewFlow() != null) {
                     this.createResponseList(jobApplication);
                 }
-                break;
+                break;*/
             case CONTRACTED:
                 Collection<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(jobApplication.getApplicant());
                 for (JobApplication otherApplications : jobApplications) {
@@ -156,7 +156,7 @@ public class JobApplicationService {
         return Long.valueOf(0);
     }
 
-    public JobApplication createResponseList(JobApplication jobApplication){
+    /*public JobApplication createResponseList(JobApplication jobApplication){
         ReviewFlow reviewFlow = jobApplication.getJobPost().getReviewFlow();
         for (ReviewRun reviewRun: reviewFlow.getRuns()) {
             for (User reviewer: reviewRun.getReviewers()) {
@@ -165,10 +165,10 @@ public class JobApplicationService {
                 response.setReviewer(reviewer);
                 jobApplication.addResponse(response);
 
-                /* Review notification for reviewers */
+                // Review notification for reviewers
                 notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_START);
             }
         }
         return jobApplicationRepository.save(jobApplication);
-    }
+    }*/
 }

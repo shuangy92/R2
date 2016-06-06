@@ -35,6 +35,14 @@
             <div class="checkbox status"><label><input type="checkbox" name="status" value="WITHDREW"/> WITHDREW </label></div>
             <div class="checkbox status"><label><input type="checkbox" name="status" value="CLOSED"/> CLOSED </label></div>
         </form>
+        <div id="toolbar" class="btn-group">
+            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#review-modal" data-action="create">Review
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
         <table id="table"
                data-toolbar="#toolbar"
                data-sortable="true"
@@ -54,6 +62,7 @@
     <div th:replace="form/file_generate_form :: file_generate_form"></div>
     <div th:replace="career/career_job_post :: job_post_modal"></div>
     <div th:replace="form/contract_form :: contract_form"></div>
+    <div th:replace="form/review_form :: review_form"></div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
@@ -94,6 +103,9 @@
 
         function initTable() {
             var columns = [{
+                field: 'state',
+                checkbox: true
+            }, {
                 field: 'applyDate',
                 title: 'Applied',
                 sortable: true,
@@ -177,7 +189,7 @@
                             '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
                             '<button class="btn btn-success application" id="OFFER_ACCEPTED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_ACCEPTED\',' + index + ')">Offer Accepted</button>' +
                             '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>' +
-                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#contract-modal" data-action="create" data-index=' + index + '>Contract</a>';
+                            '<button class="btn btn-primary application" id="CONTRACTED" disabled="disabled" data-toggle="modal" data-target="#contract-modal" data-action="create" data-index=' + index + '>Create Contract</a>';
                     return result;
                 },
                 onExpandRow: function(index, row, $detail) {
@@ -194,6 +206,9 @@
                         case "OFFER_SENT":
                             $detail.find("#OFFER_ACCEPTED, #OFFER_DECLINED").prop( "disabled", false );
                             break;
+                        case "OFFER_ACCEPTED":
+                            $detail.find("#CONTRACTED").prop( "disabled", false );
+                            break;
                     }
                 },
                 filterControl: true,
@@ -206,7 +221,7 @@
             application.status = status;
 
             if (status != 'CONTRACTED') {
-                var notify = $.notify({
+                notify = $.notify({
                     icon: 'fa fa-info-circle',
                     message: "Waiting...",
                 });

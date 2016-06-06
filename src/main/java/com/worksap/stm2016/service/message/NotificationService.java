@@ -70,7 +70,7 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public Notification createReviewNotification (JobApplication jobApplication, ReviewResponse reviewResponse, Notification.NotificationType type) {
+    /*public Notification createReviewNotification (JobApplication jobApplication, ReviewResponse reviewResponse, Notification.NotificationType type) {
         Notification notification = new Notification();
         switch (type) {
             case REVIEW_START:
@@ -94,7 +94,7 @@ public class NotificationService {
 
         }
         return notificationRepository.save(notification);
-    }
+    }*/
     public Notification createContractExpiringNotification (User manager, Long expiringCount, Date from, Date to) {
         Notification notification = new Notification();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");

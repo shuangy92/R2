@@ -2,7 +2,6 @@ package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.enums.ReviewStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,26 +24,30 @@ public class ReviewRun implements Comparable<ReviewRun> {
     @Column(name = "review_run_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "run_number")
-    private Short runNumber;
-
-    @Column(name = "task")
-    private String task;
-
-    @Column(name = "deadline")
-    private Date deadline;
-
     @JsonBackReference(value="flow-runs")
     @ManyToOne
     @JoinColumn(name = "review_flow_id")
     private ReviewFlow reviewFlow;
 
-    @ManyToMany
-    @JoinColumn(name = "reviewers")
-    private List<User> reviewers = new ArrayList<>();
+    @Column(name = "run_number")
+    private Short runNumber;
 
-    @Transient
-    private ReviewStatus status = ReviewStatus.REVIEWING;
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReviewType type;
+
+    @ManyToOne
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
+
+    public enum ReviewType {
+        INTERVIEW,
+        RESUME_CHECK,
+        ONLINE_TEST
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -67,10 +70,8 @@ public class ReviewRun implements Comparable<ReviewRun> {
         return "ReviewRun{" +
                 "id=" + id +
                 ", runNumber=" + runNumber +
-                ", task='" + task + '\'' +
-                ", deadline=" + deadline +
+                ", note='" + note + '\'' +
                 ", reviewFlow=" + reviewFlow +
-                ", status=" + status +
                 '}';
     }
 

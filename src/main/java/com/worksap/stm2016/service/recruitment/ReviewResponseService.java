@@ -6,7 +6,6 @@ import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.enums.ReviewStatus;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
@@ -38,7 +37,7 @@ public class ReviewResponseService {
         return reviewResponseRepository.save(reviewResponse);
     }
 
-    public ReviewResponse updateResponseOfJobApplication(Long jobApplicationId, ReviewResponse reviewResponse){
+   /* public ReviewResponse updateResponseOfJobApplication(Long jobApplicationId, ReviewResponse reviewResponse){
         boolean finishRun = true;
         JobApplication jobApplication = jobApplicationRepository.findOne(jobApplicationId);
         reviewResponse.setJobApplication(jobApplication);
@@ -51,11 +50,11 @@ public class ReviewResponseService {
                 }
             }
         }
-        /*Review notification for HR*/
+        // Review notification for HR
         if (finishRun) {
             notificationService.createReviewNotification(jobApplication, reviewResponse, Notification.NotificationType.REVIEW_UPDATE_HR);
 
-            /*Review notification for reviewers*/
+            // Review notification for reviewers
             for (ReviewResponse response: jobApplication.getResponses()) {
                 if (response.getReviewRun().getRunNumber() == reviewResponse.getReviewRun().getRunNumber() + 1) {
                     notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_UPDATE);
@@ -64,7 +63,7 @@ public class ReviewResponseService {
         }
         reviewResponse.setJobApplication(jobApplication);
         return reviewResponse;
-    }
+    }*/
 
     public void delete(Long id){
         reviewResponseRepository.delete(id);

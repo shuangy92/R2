@@ -151,7 +151,7 @@
             $.each(form.serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            var notify = $.notify({
+            notify = $.notify({
                 icon: 'fa fa-info-circle',
                 message: "Saving...",
             });
