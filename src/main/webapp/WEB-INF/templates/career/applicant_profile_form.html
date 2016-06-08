@@ -14,6 +14,7 @@
 
 <div layout:fragment="content">
     <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
         var job_post;
         var job_application;
         jQuery(document).ready(function ($) {
@@ -63,7 +64,7 @@
             });
             /* all other jquery libs need to be after jquery-steps*/
         });
-
+        //]]>
     </script>
     <div id="job-info" style="display: none;">
         <h3><a id="job-post-title"></a></h3>
@@ -72,16 +73,17 @@
     </div>
     <div id="steps">
         <h3>Document</h3>
-        <section>
-            <p>You may submit any relevant documents to be saved on your profile. Example documents are resumes, cover
+        <section id="document">
+            <p>You may submit any relevant documents to be saved on your profile. Example documents are cover
                 letters, work experience and education documentation. You may review your attachments at any time under
                 the My Profile tab.</p>
             <p>This step is optional. To skip this step, click Next Without Document. Skipping this step will not impact
                 your eligibility for employment.</p>
             <div th:replace="fragments/user_file_list :: user_file_list"></div>
+            <div th:replace="form/file_upload_form :: file_upload_form"></div>
         </section>
         <h3>Contact</h3>
-        <section>
+        <section id="contact">
             <form class="form-horizontal" role="form" id="contact-form">
                 <div class="form-group required">
                     <label for="name" class="col-sm-4 control-label">Full name</label>
@@ -133,7 +135,7 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var user_profile;
-        var editable = true;
+
         jQuery(document).ready(function ($) {
             $("#birthday").datepicker({dateFormat: 'yy-mm-dd'});
 
@@ -141,8 +143,9 @@
 
             $('#file-upload-form').on('submit', function (e) {
                 e.preventDefault();
-                uploadFile();
+                uploadFile("APPLICATION");
             })
+
             $('#contact-form').on('submit', function (e) {
                 e.preventDefault();
                 notify = $.notify({

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Calendar</title>
+
+    <link th:href="@{/static/css/fullcalendar.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/fullcalendar.min.js}"></script>
+</head>
+<body>
+
+<div th:fragment="calendar_modal">
+    <div class="modal fade" id="calendar-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="calendar/calendar :: calendar_script"></div>
+</div>
+
+<div th:fragment="calendar_script">
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var m_uid;
+        function setUid(uid) {
+            m_uid = uid;
+        }
+
+        function loadEvents() {
+            var calendar = $('#calendar').fullCalendar({
+                eventSources: [{
+                    url: "/api/calendar/",
+                    data : function() { // a function that returns an object
+                        return {
+                            id : m_uid
+                        };
+                    },
+                    success: function(events) {
+                        $.each(events, function( index, event ) {
+                            event.color = event.editable ? null : "chocolate";
+                            event.editable = event.editable && currentUser.id == m_uid;
+                        });
+                    },
+                }],
+                customButtons: {
+                    trash: {
+                        text: 'Trash',
+                        //icon: 'glyphicon glyphicon-trash',
+                    }
+                },
+                header: {
+                    left: 'prev, next today trash',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultTimedEventDuration: '00:30:00',
+                forceEventDuration: true,
+                selectable: window.location.pathname == "/user" ? false : currentUser.id == m_uid,
+                selectHelper: true,
+                select: function(start, end) {
+                    var title = prompt('Event Title:');
+                    if (title) {
+                        var event = {};
+                        event.title = title;
+                        event.start = start;
+                        event.end = end;
+                        event.allDay = !start.hasTime() && !end.hasTime();
+                        event.editable = true;
+                        calendar.fullCalendar('renderEvent', event, true);
+
+                        submitEvent(event);
+                    }
+
+                    calendar.fullCalendar('unselect');
+                },
+                eventClick: function(event, element) {
+                    if (event.editable) {
+                        event.title = prompt('Event Title:');
+                        if (event.title) {
+                            calendar.fullCalendar('updateEvent', event);
+                            submitEvent(event);
+                        }
+                    }
+                },
+                eventDrop: function(event, delta, revertFunc) {
+                    if (event.editable) {
+                        calendar.fullCalendar('updateEvent', event);
+                        submitEvent(event);
+                    }
+                },
+                dragRevertDuration: 1,
+                eventDragStop: function(event,jsEvent) {
+                    var trashEl = jQuery('.fc-trash-button');
+                    var ofs = trashEl.offset();
+
+                    var x1 = ofs.left;
+                    var x2 = ofs.left + trashEl.outerWidth(true);
+                    var y1 = ofs.top;
+                    var y2 = ofs.top + trashEl.outerHeight(true);
+
+                    if (jsEvent.pageX >= x1 && jsEvent.pageX<= x2 &&
+                            jsEvent.pageY>= y1 && jsEvent.pageY <= y2) {
+                        calendar.fullCalendar('removeEvents', event.id);
+                        deleteEvent(event)
+                    }
+                }
+
+            });
+
+        }
+
+        function submitEvent(event) {
+            event.user = {"id": m_uid};
+            $.ajax({
+                type: "post",
+                url: "/api/calendar/",
+                data: JSON.stringify(event),
+                contentType: "application/json; charset=utf-8",
+            });
+        }
+        function deleteEvent(event) {
+            $.ajax({
+                type: "delete",
+                url: "/api/calendar/",
+                data: JSON.stringify(event),
+                contentType: "application/json; charset=utf-8",
+            });
+        }
+
+        //]]>
+    </script>
+</div>
+
+<div layout:fragment="content">
+    <h3>Calendar</h3>
+    <div class="row">
+       <div id="calendar"></div>
+    </div>
+    <div th:replace="calendar/calendar :: calendar_script"></div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        jQuery(document).ready(function ($) {
+            var uid = currentUser.id;
+            if (window.location.pathname != "/user/calendar") {
+                uid = window.location.pathname.split("/")[2];
+            }
+            setUid(uid)
+            loadEvents()
+        });
+        //]]>
+    </script>
+</div>
+</body>
+</html>

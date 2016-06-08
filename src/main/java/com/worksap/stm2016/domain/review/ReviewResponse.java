@@ -23,14 +23,21 @@ public class ReviewResponse implements Serializable {
     @Column(name = "review_response_id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "review_run_id")
-    private ReviewRun reviewRun;
-
     @JsonBackReference(value="application-responses")
     @ManyToOne
     @JoinColumn(name = "job_application_id")
     private JobApplication jobApplication;
+
+    /*@ManyToOne
+    @JoinColumn(name = "review_run_id")
+    private ReviewRun reviewRun;*/
+
+    @Column(name = "run_number")
+    private Short runNumber;
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReviewType type;
 
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
@@ -45,6 +52,10 @@ public class ReviewResponse implements Serializable {
 
     public enum ReviewStatus {
         REVIEWING, PASSED, FAILED;
+    }
+
+    public enum ReviewType {
+        PROFILE_REVIEW, INTERVIEW, ONLINE_TEST
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * DATE 继承于 java.util.Date，多实现了很多方法。
@@ -70,5 +71,25 @@ public class DateUtil extends java.util.Date {
         c.setTime(date);
         c.add(Calendar.DATE, days);
         return c.getTime();
+    }
+
+    public static Long diffInHours(Date start, Date end) {
+        long duration  = end.getTime() - start.getTime();
+        return TimeUnit.MILLISECONDS.toHours(duration);
+    }
+
+    public static Long diffInMinutes(Date start, Date end) {
+        long duration  = end.getTime() - start.getTime();
+        return TimeUnit.MILLISECONDS.toMinutes(duration);
+    }
+
+    public static Date removeTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }

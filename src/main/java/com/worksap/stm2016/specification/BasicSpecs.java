@@ -1,5 +1,6 @@
 package com.worksap.stm2016.specification;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import org.json.simple.JSONObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -95,6 +96,38 @@ public class BasicSpecs {
             }
         };
     }
+    public static <T> Specification<T> gtDate(String c_name, Date value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.greaterThan(root.get(c_name), value);
+            }
+        };
+    }
+    public static <T> Specification<T> ltDate(String c_name, Date value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.lessThan(root.get(c_name), value);
+            }
+        };
+    }
+    public static <T> Specification<T> geDate(String c_name, Date value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.greaterThanOrEqualTo(root.get(c_name), value);
+            }
+        };
+    }
+    public static <T> Specification<T> leDate(String c_name, Date value) {
+        return new Specification<T>() {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                return builder.lessThanOrEqualTo(root.get(c_name), value);
+            }
+        };
+    }
 
     public static <T> Specification<T> betweenDates(String c_name, Date from, Date to) {
         return new Specification<T>() {
@@ -105,7 +138,7 @@ public class BasicSpecs {
         };
     }
 
-    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject andFilter(
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JsonArrayResponse andFilter(
             String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
         Integer page = offset / limit;
         Sort.Direction direction = Sort.Direction.ASC;
@@ -134,14 +167,10 @@ public class BasicSpecs {
             count = repository.count();
         }
 
-        JSONObject result = new JSONObject();
-        result.put("rows", rows);
-        result.put("total", count);
-
-        return result;
+        return new JsonArrayResponse(rows, count);
     }
 
-    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JSONObject orFilter(
+    public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> JsonArrayResponse orFilter(
             String sort, String order, Integer limit, Integer offset, String filter, ArrayList<Specification> specs, T repository) {
         Integer page = offset / limit;
         Sort.Direction direction = Sort.Direction.ASC;
@@ -170,11 +199,7 @@ public class BasicSpecs {
             count = repository.count();
         }
 
-        JSONObject result = new JSONObject();
-        result.put("rows", rows);
-        result.put("total", count);
-
-        return result;
+        return new JsonArrayResponse(rows, count);
     }
 
     public static <T extends PagingAndSortingRepository & JpaSpecificationExecutor> List andFilterRows(

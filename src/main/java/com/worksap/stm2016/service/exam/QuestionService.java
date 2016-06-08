@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.exam;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.exam.Question;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
@@ -35,7 +36,7 @@ public class QuestionService {
         return questionRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 
@@ -62,8 +63,7 @@ public class QuestionService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, questionRepository);
-        return result;
+        return andFilter( sort,  order,  limit,  offset,  filter,  specs, questionRepository);
     }
 
     public Question save(Question question)  {
@@ -74,7 +74,6 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
     public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
             try {

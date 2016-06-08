@@ -465,7 +465,7 @@
         }
     };
 
-    BootstrapTable.LOCALES = [];
+    BootstrapTable.LOCALES = {};
 
     BootstrapTable.LOCALES['en-US'] = BootstrapTable.LOCALES.en = {
         formatLoadingMessage: function () {
@@ -1057,6 +1057,7 @@
         if (this.options.showPaginationSwitch) {
             html.push(sprintf('<button class="btn' +
                     sprintf(' btn-%s', this.options.buttonsClass) +
+                    sprintf(' btn-%s', this.options.iconSize) +
                     '" type="button" name="paginationSwitch" title="%s">',
                 this.options.formatPaginationSwitch()),
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.paginationSwitchDown),
@@ -1100,7 +1101,7 @@
                     return;
                 }
 
-                if (that.options.cardView && (!column.cardVisible)) {
+                if (that.options.cardView && !column.cardVisible) {
                     return;
                 }
 
@@ -1172,10 +1173,8 @@
             this.$toolbar.append(html.join(''));
             $search = this.$toolbar.find('.search input');
             $search.off('keyup drop').on('keyup drop', function (event) {
-                if (that.options.searchOnEnterKey) {
-                    if (event.keyCode !== 13) {
-                        return;
-                    }
+                if (that.options.searchOnEnterKey && event.keyCode !== 13) {
+                    return;
                 }
 
                 if ($.inArray(event.keyCode, [37, 38, 39, 40]) > -1) {
@@ -1228,19 +1227,15 @@
                 return;
             }
 
-            var s = !this.options.escape ? this.searchText && escapeHTML(this.searchText).toLowerCase()
-                : this.searchText && this.searchText.toLowerCase();
+            var s = this.searchText && (this.options.escape ?
+                    escapeHTML(this.searchText) : this.searchText).toLowerCase();
             var f = $.isEmptyObject(this.filterColumns) ? null : this.filterColumns;
 
             // Check filter
             this.data = f ? $.grep(this.options.data, function (item, i) {
                 for (var key in f) {
-                    if ($.isArray(f[key])) {
-                        // TODO: remove this extra if statement
-                        if ($.inArray(item[key], f[key]) === -1) {
-                            return false;
-                        }
-                    } else if (item[key] !== f[key]) {
+                    if ($.isArray(f[key]) && $.inArray(item[key], f[key]) === -1 ||
+                        item[key] !== f[key]) {
                         return false;
                     }
                 }
@@ -1248,20 +1243,33 @@
             }) : this.options.data;
 
             this.data = s ? $.grep(this.data, function (item, i) {
-                for (var key in item) {
-                    key = $.isNumeric(key) ? parseInt(key, 10) : key;
-                    var value = item[key],
-                        column = that.columns[getFieldIndex(that.columns, key)],
-                        j = $.inArray(key, that.header.fields);
+                for (var j = 0; j < that.header.fields.length; j++) {
 
-                    // Fix #142: search use formatted data
-                    if (column && column.searchFormatter) {
-                        value = calculateObjectValue(column,
-                            that.header.formatters[j], [value, item, i], value);
+                    if (!that.header.searchables[j]) {
+                        continue;
                     }
 
-                    var index = $.inArray(key, that.header.fields);
-                    if (index !== -1 && that.header.searchables[index] && (typeof value === 'string' || typeof value === 'number')) {
+                    var key = $.isNumeric(that.header.fields[j]) ? parseInt(that.header.fields[j], 10) : that.header.fields[j];
+                    var column = that.columns[getFieldIndex(that.columns, key)];
+                    var value;
+
+                    if (typeof key === 'string') {
+                        value = item;
+                        var props = key.split('.');
+                        for (var prop_index = 0; prop_index < props.length; prop_index++) {
+                            value = value[props[prop_index]];
+                        }
+
+                        // Fix #142: respect searchForamtter boolean
+                        if (column && column.searchFormatter) {
+                            value = calculateObjectValue(column,
+                                that.header.formatters[j], [value, item, i], value);
+                        }
+                    } else {
+                        value = item[key];
+                    }
+
+                    if (typeof value === 'string' || typeof value === 'number') {
                         if (that.options.strictSearch) {
                             if ((value + '').toLowerCase() === s) {
                                 return true;
@@ -1668,7 +1676,7 @@
                     return;
                 }
 
-                if (that.options.cardView && (!column.cardVisible)) {
+                if (that.options.cardView && !column.cardVisible) {
                     return;
                 }
 
@@ -2712,7 +2720,8 @@
         if (params && params.url) {
             this.options.pageNumber = 1;
         }
-        this.initServer(params && params.silent, params && params.query, params && params.url);
+        this.initServer(params && params.silent,
+            params && params.query, params && params.url);
         this.trigger('refresh', params);
     };
 

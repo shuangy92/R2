@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.job;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
@@ -43,15 +44,15 @@ public class ContractService {
         return contractRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
         return getListHelper(sort, order, limit, offset, filter, Contract.class);
     }
 
-    public JSONObject getJobHistoryList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getJobHistoryList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
         return getListHelper(sort, order, limit, offset, filter, JobHistory.class);
     }
 
-    private<T> JSONObject getListHelper(String sort, String order, Integer limit, Integer offset, String filter, Class<T> tClass) throws ParseException {
+    private<T> JsonArrayResponse getListHelper(String sort, String order, Integer limit, Integer offset, String filter, Class<T> tClass) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 

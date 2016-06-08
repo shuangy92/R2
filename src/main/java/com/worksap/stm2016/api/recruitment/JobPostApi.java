@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.recruitment;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.service.recruitment.JobPostService;
@@ -32,11 +33,11 @@ public class JobPostApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter
     ) throws org.json.simple.parser.ParseException {
 
         return jobPostService.getList(sort, order, limit, offset, filter);

@@ -8,11 +8,12 @@
     <nav class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li class="all" ><a href="/dashboard"> Dashboard</a></li>
+                <li class="all"><a href="/dashboard"> Dashboard</a></li>
+                <li class="all"><a href="/user/calendar"> My schedule</a></li>
                 <li class="manager"><a th:href="@{/user/request}"> My Requests</a></li>
-                <li class="admin" ><a th:href="@{/user}"> User List</a></li>
-                <li class="admin" ><a th:href="@{/request}"> Employee Request List</a></li>
-                <li class="admin" >
+                <li class="admin manager"><a th:href="@{/schedule_filter}"> Schedule Filter</a></li>
+                <li class="admin"><a id="user-menu" th:href="@{/user}"> User List</a></li>
+                <li class="admin">
                     <a href="#"> Recruitment<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li class="admin manager" ><a th:href="@{/job_post}"> Job Post List</a></li>
@@ -23,6 +24,7 @@
                 <li class="admin manager employee" >
                     <a href="#"> Management<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
+                        <li class="admin"><a th:href="@{/request}"> Employee Request List</a></li>
                         <li class="admin" ><a th:href="@{/department}"> Department List</a></li>
                         <li class="admin" ><a th:href="@{/job_category}"> Job Category List</a></li>
                         <li class="admin manager"><a th:href="@{/job_profile}"> Job List</a></li>
@@ -56,6 +58,11 @@
                     $(".employee").show();
                     break;
             }
+
+            if (window.location.pathname != '/user') {
+                $("#user-menu").removeClass('active');
+            }
+
         });
 
         var connect = function () {
@@ -117,7 +124,6 @@
             if (window.location.pathname != '/career') {
                 $("#career").removeClass('active');
             }
-
             if (currentUser == null) {
                 $(".applicant").hide();
             }

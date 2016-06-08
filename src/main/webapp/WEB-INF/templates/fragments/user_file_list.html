@@ -6,10 +6,8 @@
 <body>
 
 <div th:fragment="user_file_list">
-    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"
-          media="screen" type="text/css"/>
-    <script type="text/javascript"
-            th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <table id="file-table"
            data-toolbar="#toolbar"
            data-sortable="true"
@@ -24,19 +22,11 @@
            data-id-field="id"
            smartDisplay="true">
     </table>
-    <div class="file-upload-form" style="display: none">
-        <div th:replace="form/file_upload_form :: file_upload_form"></div>
-    </div>
+
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        var $file_table = $('#file-table');
-        jQuery(document).ready(function ($) {
-            if (editable) {
-                $(".file-upload-form").show();
-            }
-        });
         function initFileListTable(uid) {
-            $file_table.bootstrapTable({
+            $("#file-table").bootstrapTable({
                 columns: [{
                     field: 'name',
                     title: 'Document Name',
@@ -46,7 +36,7 @@
                 }, {
                     title: 'Action',
                     formatter: function (index, row, element) {
-                        if (currentUser.role == "APPLICANT" && row.type == "APPLICATION" || currentUser.role != "APPLICANT" && row.type == "DOCUMENT") {
+                        if (currentUser.role == "APPLICANT" && (row.type == "APPLICATION") || currentUser.role != "APPLICANT" && row.type == "DOCUMENT") {
                             return '<a href="/files/' + row.id + '" target="_blank">View</a> / <a onclick="deleteFile(' + row.id + ')" style="cursor: pointer;">Delete</a>';
                         } else {
                             return '<a href="/files/' + row.id + '" target="_blank">View</a>';

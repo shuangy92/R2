@@ -20,8 +20,8 @@
             </div>
             <div class="row">
                 <div class="col-md-4">Job Code: {{ jobPost.job.id }}</div>
-                <div class="col-md-4">Job Category: {{ jobPost.job.jobCategory.name}}</div>
-                <div class="col-md-4">Updated: {{updated}}</div>
+                <div class="col-md-4">Job Category: {{ jobPost.job.jobCategory.name }}</div>
+                <div class="col-md-4">Updated: {{ jobPost.lastModifiedDate | formatDate }}</div>
             </div>
             <hr/>
 
@@ -84,18 +84,18 @@
             el: '#job-post',
             data: {
                 jobPost: null,
-                updated: null,
             },
+            filters: {
+                formatDate(date) {
+                    return (new Date(date)).toString("yyyy/M/dd hh:mm:ss")
+                }
+            }
         })
-
-        //var jobPostVM.jobPost;
-
         function loadJobPost(id) {
             $.ajax({
                 type: 'get',
                 url: '/api/public/job_post/' + id,
                 success: function (data) {
-                    jobPostVM.updted = (new Date(data.lastModifiedDate)).toString("yyyy/M/dd hh:mm:ss");
                     jobPostVM.jobPost = data;
                     if (checkJobApplicationExistence(data.id) && currentUser != null) {
                         $("#apply-btn").html('<button class="btn btn-success" onclick="applyJob()" disabled="disabled">Apply</button>')

@@ -1,16 +1,26 @@
 package com.worksap.stm2016.api.recruitment;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
+import com.worksap.stm2016.domain.review.ReviewResponse;
+import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
+import com.worksap.stm2016.service.message.NotificationService;
 import com.worksap.stm2016.service.recruitment.JobApplicationService;
 import com.worksap.stm2016.service.recruitment.JobPostService;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Shuang on 4/25/2016.
@@ -24,7 +34,8 @@ public class JobApplicationApi {
     JobApplicationService jobApplicationService;
     @Autowired
     JobPostService jobPostService;
-
+    @Autowired
+    NotificationService notificationService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public JobApplication get(@PathVariable("id") Long id) {
@@ -39,14 +50,18 @@ public class JobApplicationApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter
     ) throws org.json.simple.parser.ParseException {
-
         return jobApplicationService.getList(sort, order, limit, offset, filter);
+    }
+
+    @RequestMapping(value = "profile_review/{ids}", method = RequestMethod.GET)
+    public List<JobApplication> getReviewList(@PathVariable List<Integer> ids) throws org.json.simple.parser.ParseException {
+        return jobApplicationService.getReviewList(ids);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -68,4 +83,17 @@ public class JobApplicationApi {
         jobApplicationService.delete(jobApplication);
     }
 
+    @RequestMapping(value = "profile_review", method = RequestMethod.POST)
+    public void profileReview(Authentication authentication, @RequestBody profileReviewRequest request){
+        User sender = ((CurrentUser)authentication.getPrincipal()).getUser();
+        jobApplicationService.handleProfileReview(request.applications, request.reviewers, request.notes, sender);
+    }
+
+    @Getter
+    @Setter
+    private static class profileReviewRequest {
+        List<Long> applications;
+        List<Long> reviewers;
+        String notes;
+    }
 }

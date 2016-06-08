@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.job;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
 import org.json.simple.JSONObject;
@@ -36,7 +37,7 @@ public class JobCategoryService {
         return jobCategoryRepository.findAllByOrderByNameAsc();
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
         ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
@@ -55,8 +56,7 @@ public class JobCategoryService {
                 specs.add(spec);
             }
         }
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
-        return result;
+        return andFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
     }
 
     public void save(JobCategory jobCategory) throws ParseException {

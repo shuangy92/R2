@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.job;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
@@ -42,7 +43,7 @@ public class DepartmentService {
         return departmentRepository.findAllByOrderByNameAsc();
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
         ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
@@ -65,8 +66,7 @@ public class DepartmentService {
                 specs.add(spec);
             }
         }
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, departmentRepository);
-        return result;
+        return andFilter(sort, order, limit, offset, filter, specs, departmentRepository);
     }
 
     public Department save(Department department) throws ParseException {

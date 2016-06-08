@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Career</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <style>
+        .btn.application {
+            margin: 0 10px;
+        }
+    </style>
+
+    <div class="row">
+        <h3>Profiles to Review</h3>
+
+        <div id="toolbar" class="btn-group">
+            <button type="button" class="btn btn-default" onclick="slideshow()">Slideshow Mode
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-sortable="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-pagination="true"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               data-detail-view="true"
+               data-minimum-count-columns="1"
+               data-id-field="id"
+               smartDisplay="true">
+        </table>
+    </div>
+    <div class="modal fade" id="profile-review-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Send profiles to: </h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="profile-review-form">
+                        <div class="form-group required">
+                            <label for="employee-select" class="col-sm-2 control-label">Reviewers</label>
+                            <div class="col-sm-10">
+                                <select v-model="reviewers" class="form-control" id="employee-select" multiple="multiple" required="required"><option></option></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-2 control-label">Note</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="notes" class="form-control" id="note" multiple="multiple"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="career/career_job_post :: job_post_modal"></div>
+
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var $table = $('#table');
+
+        jQuery(document).ready(function ($) {
+            loadApplications()
+
+        });
+
+        function loadApplications() {
+            var applicationIdList = getUrlParameter("applications")
+            url = "/api/job_application/profile_review/" + applicationIdList;
+            $.ajax({
+                type: "get",
+                url: url,
+                success: function (data) {
+                    initTable(data);
+                }
+            });
+        }
+
+        function slideshow() {
+            window.open("/job_application/profile_review/slideshow/?applications=" + getUrlParameter("applications"), "_self");
+        }
+        function initTable(data) {
+            var columns = [{
+                field: 'applyDate',
+                title: 'Applied',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return (new Date(index)).toString("yyyy/M/dd");
+                }
+            }, {
+                field: 'id',
+                title: 'ID',
+                sortable: true,
+            }, {
+                field: 'applicant.name',
+                title: 'Applicant',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return '<a href="/job_application/' + row.id + '">' + index + '</a>';
+                }
+            }, {
+                field: 'jobPost.title',
+                title: 'Job Post',
+                sortable: true,
+                formatter: function (index, row, element) {
+                    return '<a href="/job_post/' + row.jobPost.id + '">' + index + ' </a>' +
+                            '<a data-toggle="modal" data-target="#job-post-modal"  data-id="' + row.jobPost.id + '" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                }
+            }, {
+                field: 'jobPost.department.location',
+                title: 'Location',
+                sortable: true,
+            }, {
+                field: 'jobPost.department.name',
+                title: 'Department',
+                sortable: true,
+            }];
+
+            $table.bootstrapTable({
+                columns: columns,
+                data: data,
+                detailFormatter: function (index, row, element) {
+                    var result =
+                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#email-modal" data-id=' + row.id + ' data-touid="' + row.applicant.id + '">Send Email</a>' +
+                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#file-generate-modal" data-id=' + row.id + '>Generate Document</a>' +
+                            '<button class="btn btn-primary application" id="REVIEWING" disabled="disabled" onclick="handleApplicationStatusChange(\'REVIEWING\',' + index + ')"">Start Review</a>' +
+                            '<button class="btn btn-success application" id="PASSED" disabled="disabled" onclick="handleApplicationStatusChange(\'PASSED\',' + index + ')">Pass</button>' +
+                            '<button class="btn btn-danger application" id="FAILED" disabled="disabled" onclick="handleApplicationStatusChange(\'FAILED\',' + index + ')">Fail</button>' +
+                            '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
+                            '<button class="btn btn-success application" id="OFFER_ACCEPTED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_ACCEPTED\',' + index + ')">Offer Accepted</button>' +
+                            '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>' +
+                            '<button class="btn btn-primary application" id="CONTRACTED" disabled="disabled" data-toggle="modal" data-target="#contract-modal" data-action="create" data-index=' + index + '>Create Contract</a>';
+                    return result;
+                },
+                onExpandRow: function(index, row, $detail) {
+                    switch (row.status) {
+                        case "SUBMITTED":
+                            $detail.find("#REVIEWING").prop( "disabled", false );
+                            break;
+                        case "REVIEWING":
+                            $detail.find("#PASSED, #FAILED").prop( "disabled", false );
+                            break;
+                        case "PASSED":
+                            $detail.find("#OFFER_SENT").prop( "disabled", false );
+                            break;
+                        case "OFFER_SENT":
+                            $detail.find("#OFFER_ACCEPTED, #OFFER_DECLINED").prop( "disabled", false );
+                            break;
+                        case "OFFER_ACCEPTED":
+                            $detail.find("#CONTRACTED").prop( "disabled", false );
+                            break;
+                    }
+                },
+                cookie: true,
+                cookieIdTable: 'applicant_application',
+            });
+        }
+
+        function getIdSelections() {
+            return $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            });
+        }
+
+        function handleApplicationStatusChange(status, index) {
+            var application = $table.bootstrapTable('getData', true)[index];
+            application.status = status;
+
+            if (status != 'CONTRACTED') {
+                notify = $.notify({
+                    icon: 'fa fa-info-circle',
+                    message: "Waiting...",
+                });
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/api/job_application/",
+                data: JSON.stringify(application),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    notify.update('message', 'Done');
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
+                    $table.bootstrapTable('updateRow', {index: index, row: application});
+                    $table.bootstrapTable('expandRow', index);
+                }
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>

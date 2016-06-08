@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Career</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
@@ -23,20 +23,23 @@
         <h3>Job Application List</h3>
         <form class="form-inline" role="form" id="status-checkboxes">
             Status:
-            <div class="checkbox"><label><input type="checkbox" name="all-status"/> ALL </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="SUBMITTED" checked="checked"/> SUBMITTED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="REVIEWING" checked="checked"/> REVIEWING </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="PASSED" checked="checked"/> PASSED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="FAILED"/> FAILED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_SENT" checked="checked"/> OFFER_SENT </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_ACCEPTED" checked="checked"/> OFFER_ACCEPTED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="OFFER_DECLINED" checked="checked"/> OFFER_DECLINED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="CONTRACTED" checked="checked"/> CONTRACTED </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="WITHDREW"/> WITHDREW </label></div>
-            <div class="checkbox status"><label><input type="checkbox" name="status" value="CLOSED"/> CLOSED </label></div>
+            <div class="checkbox"><label><input v-model="allStatus" type="checkbox"/> ALL </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="SUBMITTED" checked="checked"/> SUBMITTED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="REVIEWING" checked="checked"/> REVIEWING </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="PASSED" checked="checked"/> PASSED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="FAILED"/> FAILED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_SENT" checked="checked"/> OFFER_SENT </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_ACCEPTED" checked="checked"/> OFFER_ACCEPTED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_DECLINED" checked="checked"/> OFFER_DECLINED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CONTRACTED" checked="checked"/> CONTRACTED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="WITHDREW"/> WITHDREW </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CLOSED"/> CLOSED </label></div>
         </form>
         <div id="toolbar" class="btn-group">
             <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#review-modal" data-action="create">Review
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-default" id="btn-profile-review" data-toggle="modal" data-target="#profile-review-modal" disabled="disabled">Resume Check
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
             <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
@@ -58,48 +61,79 @@
                smartDisplay="true">
         </table>
     </div>
+    <div class="modal fade" id="profile-review-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Send profiles to: </h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="profile-review-form">
+                        <div class="form-group required">
+                            <label for="employee-select" class="col-sm-2 control-label">Reviewers</label>
+                            <div class="col-sm-10">
+                                <select v-model="reviewers" class="form-control" id="employee-select" multiple="multiple" required="required"><option></option></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-2 control-label">Note</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="notes" class="form-control" id="note" multiple="multiple"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div th:replace="form/email_form :: email_form"></div>
     <div th:replace="form/file_generate_form :: file_generate_form"></div>
     <div th:replace="career/career_job_post :: job_post_modal"></div>
     <div th:replace="form/contract_form :: contract_form"></div>
-    <div th:replace="form/review_form :: review_form"></div>
+    <!--<div th:replace="form/review_form :: review_form"></div>-->
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var $table = $('#table');
         var $status_checkboxes = $("#status-checkboxes");
         var url = "/api/job_application";
-        var status_list;
-        var all_status = false;
+        var $profile_review_btn = $("#btn-profile-review")
+
+        var profileReviewModalVM = new Vue({
+            el: '#profile-review-modal',
+            data: {
+                notes: null,
+                reviewers: null,
+            },
+        })
+
+        var statusVM = new Vue({
+            el: '#status-checkboxes',
+            data: {
+                status: [],
+                allStatus: false
+            },
+        })
 
         jQuery(document).ready(function ($) {
+            $status_checkboxes.on('change' , "input" , function(){
+                $table.bootstrapTable('refresh');
+            });
+
             initTable();
 
-            var boxes = $status_checkboxes.find("input[name='status']");
-            var box_labels = $status_checkboxes.find(".status");
-            $status_checkboxes.on('change' , "input[name='all-status']" , function(){
-                if ($(this).is(":checked")) {
-                    all_status = true;
-                    boxes.prop('disabled', true);
-                    box_labels.addClass('disabled');
-                } else {
-                    all_status = false;
-                    boxes.prop('disabled', false);
-                    box_labels.removeClass('disabled');
-                }
-                $table.bootstrapTable('refresh');
-            });
-            $status_checkboxes.on('change' , "input[name='status']" , function(){
-                $table.bootstrapTable('refresh');
-            });
+            initProfileReviewModal();
         });
-        function getStatusList() {
-            status_list = [];
-            $status_checkboxes.find("input[name='status']:checked").each(function() {
-                status_list.push($(this).attr('value'));
-            });
-            return status_list.length != 0 && !all_status;
-        }
+
 
         function initTable() {
             var columns = [{
@@ -166,8 +200,8 @@
                     for (var key in tmp) {
                         filter[key] = tmp[key];
                     }
-                    if (getStatusList()) {
-                        filter.statusList = status_list;
+                    if (!statusVM.allStatus && statusVM.status) {
+                        filter.statusList = statusVM.status;
                     }
                     data.filter = JSON.stringify(filter);
                     return data;
@@ -216,6 +250,58 @@
                 cookieIdTable: 'applicant_application',
             });
         }
+
+        function initProfileReviewModal() {
+            $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', function () {
+                $profile_review_btn.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            });
+
+            var employee_select = $("#employee-select")
+            initEmployeeSelect(employee_select, "Search")
+
+            employee_select.on('change',function(){
+                profileReviewModalVM.reviewers = $(this).val();
+            });
+
+            $("#profile-review-form").on('submit', function (e) {
+                e.preventDefault();
+                sendResumes();
+            })
+        }
+        function sendResumes() {
+            var data = {};
+            data.applications = getIdSelections();
+            data.notes = profileReviewModalVM.notes;
+            data.reviewers = profileReviewModalVM.reviewers;
+
+            notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Sending...",
+            });
+            $.ajax({
+                type: "post",
+                url: "/api/job_application/profile_review",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#profile-review-modal").modal('hide');
+                    $profile_review_btn.prop('disabled', true);
+
+                    notify.update('message', 'Done');
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
+                    $table.bootstrapTable('refresh');
+                }
+            });
+        }
+        function getIdSelections() {
+            return $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            });
+        }
+
         function handleApplicationStatusChange(status, index) {
             var application = $table.bootstrapTable('getData', true)[index];
             application.status = status;
@@ -241,7 +327,6 @@
                 }
             });
         }
-
         //]]>
     </script>
 </div>

@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.audit.CurrentUser;
@@ -42,11 +43,11 @@ public class UserApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return userService.getList(sort, order, limit, offset, filter);
     }

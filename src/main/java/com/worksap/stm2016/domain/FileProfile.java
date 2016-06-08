@@ -37,7 +37,7 @@ public class FileProfile implements Serializable {
     private String info;
 
     public enum FileType {
-        DOCUMENT, APPLICATION
+        DOCUMENT, APPLICATION, RESUME
     }
 
 }

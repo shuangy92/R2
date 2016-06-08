@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.recruitment;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
@@ -37,7 +38,7 @@ public class JobPostService {
         return jobPostRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter
     ) throws org.json.simple.parser.ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
@@ -77,8 +78,7 @@ public class JobPostService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, jobPostRepository);
-        return result;
+        return andFilter( sort,  order,  limit,  offset,  filter,  specs, jobPostRepository);
     }
 
     public JobPost save(JobPost post){

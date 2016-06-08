@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.FileProfile;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.repository.FileProfileRepository;
@@ -37,7 +38,7 @@ public class FileService {
         return fileProfileRepository.findOneByPath(path);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 
@@ -60,8 +61,7 @@ public class FileService {
             }
         }
 
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, fileProfileRepository);
-        return result;
+        return andFilter(sort, order, limit, offset, filter, specs, fileProfileRepository);
     }
     public Collection<FileProfile> getAllByUserAndType(User user, FileProfile.FileType type) {
         return fileProfileRepository.findAllByUserAndType(user, type);

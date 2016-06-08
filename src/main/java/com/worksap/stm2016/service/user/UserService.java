@@ -1,7 +1,7 @@
 package com.worksap.stm2016.service.user;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Department;
-import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.domain.user.UserProfile;
 import com.worksap.stm2016.enums.Role;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class UserService {
@@ -44,8 +46,22 @@ public class UserService {
     public Iterable<User> getAllByDepartment(Department department) {
         return userRepository.findByDepartment(department);
     }
+    /*public List<User> getAllByDepartmentAndLocation(Department department, String location) {
+        Specifications spec;
+        if (department != null && location != null) {
+            spec = where(isValue("user", "department", department)).and(isValue("user", "department", "location", location));
+        } else if (department != null) {
+            spec = where(isValue("user", "department", department));
+        } else if (location != null) {
+            spec = where(isValue("user", "department", "location", location));
+        } else {
+            return (List<User>) userRepository.findAll();
+        }
+        return userRepository.findAll(spec);
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    }*/
+
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 
@@ -62,6 +78,9 @@ public class UserService {
                         List<Role> roleList = new ArrayList<>();
                         for (String status : (List<String>) filterObj.get(key)) {
                             roleList.add(Role.valueOf(status));
+                        }
+                        if (roleList.size() == 0) {
+                            return new JsonArrayResponse(new ArrayList<>(), 0);
                         }
                         spec = inValue("role", roleList);
                         break;
@@ -88,8 +107,7 @@ public class UserService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
-        return result;
+        return andFilter( sort,  order,  limit,  offset,  filter,  specs, userRepository);
     }
 
     public Iterable<User> getByNameContaining(String name) {

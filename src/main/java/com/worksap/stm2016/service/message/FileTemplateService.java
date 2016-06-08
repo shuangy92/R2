@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.message;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.message.FileTemplate;
 import com.worksap.stm2016.repository.message.FileTemplateRepository;
 import org.json.simple.JSONObject;
@@ -34,7 +35,7 @@ public class FileTemplateService {
         return fileTemplateRepository.findAll();
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
         ArrayList<Specification> specs = new ArrayList<>();
 
         if (filter != null) {
@@ -56,8 +57,7 @@ public class FileTemplateService {
                 specs.add(spec);
             }
         }
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, fileTemplateRepository);
-        return result;
+        return andFilter(sort, order, limit, offset, filter, specs, fileTemplateRepository);
     }
 
     public FileTemplate save(FileTemplate fileTemplate) {

@@ -1,6 +1,7 @@
 package com.worksap.stm2016.service.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.message.OtherRequest;
 import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.message.StaffingRequest;
@@ -34,7 +35,7 @@ public class RequestService {
         return (Request) requestRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 
@@ -63,8 +64,7 @@ public class RequestService {
             }
         }
 
-        JSONObject result = andFilter(sort, order, limit, offset, filter, specs, requestRepository);
-        return result;
+        return andFilter(sort, order, limit, offset, filter, specs, requestRepository);
     }
 
     public Request save(JSONObject requestJson) throws IOException {

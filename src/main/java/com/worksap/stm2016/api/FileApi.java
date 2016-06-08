@@ -1,6 +1,7 @@
 package com.worksap.stm2016.api;
 
 import com.itextpdf.text.DocumentException;
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.api.util.JsonResponse.ResponseStatus;
 import com.worksap.stm2016.domain.FileProfile;
@@ -40,11 +41,11 @@ public class FileApi {
     UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return fileService.getList(sort, order, limit, offset, filter);
     }
@@ -90,7 +91,7 @@ public class FileApi {
                 fileProfile.setPath(absPath.toString());
                 fileProfile.setName(name);
                 fileProfile.setUser(user);
-                fileProfile.setType(FileProfile.FileType.APPLICATION);
+                fileProfile.setType(FileProfile.FileType.valueOf(type));
                 fileProfile.setInfo(info);
                 fileService.save(fileProfile);
 

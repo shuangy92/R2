@@ -22,15 +22,14 @@
             <label for="info" class="control-label">Additional details on attachment(s)</label>
             <textarea class="form-control" id="info" name="info" rows="5"> </textarea>
         </div>
-        <input class="form-control" type="hidden" name="type" id="type" th:value="application"/>
         <button type="submit" class="btn btn-primary" id="save" style="float: right">Upload</button>
     </form>
 
     <script type="text/javascript" th:inline="javascript">
-        var notify;
-        function uploadFile() {
+        function uploadFile(type) {
             var formData = new FormData($('#file-upload-form')[0]);
             formData.append("user", currentUser.id);
+            formData.append("type", type);
 
             notify = $.notify({
                 icon: 'fa fa-info-circle',
@@ -60,7 +59,7 @@
                                     cache: false,
                                     success: function (data) {
                                         $('#file-upload-form')[0].reset();
-                                        $file_table.bootstrapTable('refresh');
+                                        $('#file-table').bootstrapTable('refresh');
                                         notify.close();
                                     }
                                 });
@@ -71,7 +70,7 @@
                         });
                     } else {
                         $('#file-upload-form')[0].reset();
-                        $file_table.bootstrapTable('refresh');
+                        $('#file-table').bootstrapTable('refresh');
                         notify.close();
                     }
                 }

@@ -21,7 +21,19 @@ public class JobApplicationController {
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/job_application/{id}", method = RequestMethod.GET)
-    public String getReviewDetailPage(@PathVariable Long id) {
+    public String getJobApplicationPage(@PathVariable Long id) {
         return "recruitment/job_application";
+    }
+
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
+    @RequestMapping(value = "/job_application/profile_review", method = RequestMethod.GET)
+    public String getProfileReviewListPage() {
+        return "recruitment/job_application_review_list";
+    }
+
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
+    @RequestMapping(value = "/job_application/profile_review/slideshow", method = RequestMethod.GET)
+    public String getProfileReviewPage() {
+        return "recruitment/job_application_review_slideshow";
     }
 }

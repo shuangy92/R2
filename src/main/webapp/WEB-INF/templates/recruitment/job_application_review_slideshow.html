@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Job Post List</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <style>
+        .th-inner {
+            font-weight: normal;
+            font-style: italic;
+        }
+    </style>
+    <div class="row" id="page">
+        <h3>Job Post Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a></h3>
+        <div th:replace="career/applicant_profile :: applicant_profile"></div>
+        <hr/>
+        <div role="form">
+            <div class="form-group">
+                <label for="response" class="control-label">Comment</label>
+                <textarea class="form-control" id="response" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" id="pass" onclick="submitResponse('PASSED')">Pass</button>
+                <button class="btn btn-danger" id="fail" onclick="submitResponse('FAILED')">Fail</button>
+            </div>
+        </div>
+        <div th:replace="career/career_job_post :: job_post_modal"></div>
+        <button class="btn btn-default" id="pass" onclick="submitResponse('PASSED')"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="btn btn-default" id="pass" onclick="submitResponse('PASSED')"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var $table = $('#table');
+        var url = '/api/job_application/' + window.location.pathname.split("/")[3];
+
+        getUrlParameter("applications")
+
+        var vm = new Vue({
+            el: '#page',
+            data: {
+                jobApplication: null,
+            },
+        })
+
+        jQuery(document).ready(function ($) {
+            var id = window.location.pathname.split("/")[3]
+            loadApplication(id);
+        });
+
+        function loadApplication(id) {
+            $.ajax({
+                type: "get",
+                url: "/api/job_application/" + id,
+                success: function (data) {
+                    vm.jobApplication = data;
+
+                    initFileListTable(vm.jobApplication.applicant.id);
+                    loadContactForm("/api/user/profile/" + vm.jobApplication.applicant.id);
+                }
+            });
+        }
+
+
+        //]]>
+    </script>
+</div>
+</body>
+</html>

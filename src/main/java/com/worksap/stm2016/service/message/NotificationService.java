@@ -1,9 +1,8 @@
 package com.worksap.stm2016.service.message;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Notification;
-import com.worksap.stm2016.domain.recruitment.JobApplication;
-import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.message.NotificationRepository;
@@ -22,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 import static com.worksap.stm2016.specification.BasicSpecs.orFilter;
@@ -40,7 +40,7 @@ public class NotificationService {
     }
 
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
 
@@ -62,8 +62,7 @@ public class NotificationService {
 
         }
 
-        JSONObject result = orFilter(sort, order, limit, offset, filter, specs, notificationRepository);
-        return result;
+        return orFilter(sort, order, limit, offset, filter, specs, notificationRepository);
     }
 
     public Notification update (Notification notification) {
@@ -95,7 +94,7 @@ public class NotificationService {
         }
         return notificationRepository.save(notification);
     }*/
-    public Notification createContractExpiringNotification (User manager, Long expiringCount, Date from, Date to) {
+    public Notification createContractExpiringNotification(User manager, Long expiringCount, Date from, Date to) {
         Notification notification = new Notification();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
@@ -104,7 +103,7 @@ public class NotificationService {
         notification.setUser(manager);
         return notificationRepository.save(notification);
     }
-    public Notification createContractNotification (Contract contract, Notification.NotificationType type) {
+    public Notification createContractNotification(Contract contract, Notification.NotificationType type) {
         Notification notification = new Notification();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         switch (type) {
@@ -120,6 +119,18 @@ public class NotificationService {
                 notification.setUser(contract.getJob().getDepartment().getManager());
                 break;
         }
+        return notificationRepository.save(notification);
+    }
+    public Notification createProfileReviewNotification(User user, User sender, List<Long> resumeIds, String notes) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setType(Notification.NotificationType.PROFILE_REVIEW);
+        JSONObject content = new JSONObject();
+        content.put("applications", resumeIds);
+        content.put("notes", notes);
+        content.put("senderName", sender.getName());
+        content.put("senderId", sender.getId());
+        notification.setContent(content.toString());
         return notificationRepository.save(notification);
     }
 

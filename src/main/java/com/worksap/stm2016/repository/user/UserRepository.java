@@ -15,5 +15,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>,
 
     Iterable<User> findByDepartment(Department department);
 
+
     Iterable<User> findByNameContainingIgnoreCaseAndRole(String name, Role role);
 }

@@ -1,5 +1,6 @@
 com\worksap\stm2016\service\exam\QuestionService.class
 com\worksap\stm2016\repository\exam\ExamRepository.class
+com\worksap\stm2016\domain\calendar\Calendar.class
 com\worksap\stm2016\domain\exam\Question$QuestionType.class
 com\worksap\stm2016\controller\HomeController.class
 com\worksap\stm2016\controller\RequestController.class
@@ -7,8 +8,10 @@ com\worksap\stm2016\domain\roster\RosterPK.class
 com\worksap\stm2016\service\roster\ScheduleService.class
 com\worksap\stm2016\config\AuditingConfig.class
 com\worksap\stm2016\controller\career\CareerController.class
+com\worksap\stm2016\domain\calendar\CalendarEvent.class
 com\worksap\stm2016\controller\user\CurrentUserControllerAdvice.class
 com\worksap\stm2016\api\message\RequestApi.class
+com\worksap\stm2016\service\calendar\CalendarService.class
 com\worksap\stm2016\api\exam\QuestionApi.class
 com\worksap\stm2016\controller\user\UsersController.class
 com\worksap\stm2016\repository\exam\QuestionCategoryRepository.class
@@ -18,10 +21,13 @@ com\worksap\stm2016\util\VerifyUtil.class
 com\worksap\stm2016\enums\UserIdType.class
 com\worksap\stm2016\controller\util\SimpleErrorController.class
 com\worksap\stm2016\ScheduledTasks.class
+com\worksap\stm2016\repository\calendar\CalendarRepository.class
 com\worksap\stm2016\domain\review\ReviewResponse$ReviewStatus.class
 com\worksap\stm2016\api\recruitment\ReviewFlowApi.class
 com\worksap\stm2016\controller\roster\RosterController.class
+com\worksap\stm2016\api\calendar\CalendarApi.class
 com\worksap\stm2016\controller\roster\ShiftController.class
+com\worksap\stm2016\controller\CalendarController.class
 com\worksap\stm2016\api\message\FileTemplateApi.class
 com\worksap\stm2016\config\WebConfig.class
 com\worksap\stm2016\controller\ExamController.class

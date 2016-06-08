@@ -31,11 +31,33 @@
            data-id-field="id"
            smartDisplay="true">
     </table>
+    <div class="modal fade" id="notes-modal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{ notes }}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var $table = $('#table');
+        var vm = new Vue({
+            el: '#notes-modal',
+            data: {
+                notes: null
+            },
+        })
         jQuery(document).ready(function ($) {
             initTable();
+
+            $('#notes-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var content = button.data('content');
+                vm.notes = content.senderName + ": " + content.notes
+            })
         })
 
         function initTable() {
@@ -43,10 +65,21 @@
                 columns: [{
                     field: 'content',
                     formatter: function (index, row, element) {
+                        var content;
+                        var obj = JSON.parse(index);
+                        switch (row.type) {
+                            case 'PROFILE_REVIEW':
+                                content = 'You have some job applicants\' profiles to review' +
+                                    '<a id="notes" data-toggle="popover" data-trigger="hover"  data-placement="top" data-content="' + obj.senderName + ': ' + obj.notes  +'"> Notes </a>'
+                                break;
+                            default:
+                                content = index;
+                                break;
+                        }
                         if (row.read == false) {
-                            return '<b>' + index + '</b>';
+                            return '<b>' + content + '</b>';
                         } else {
-                            return index;
+                            return content;
                         }
                     }
                 }, {
@@ -97,12 +130,19 @@
                             var from = row.itemNote.split("-")[0], to = row.itemNote.split("-")[1];
                             window.open('/contract?from=' + from + '&to=' + to, "_self");
                             break;
+                        case "PROFILE_REVIEW":
+                            var obj = JSON.parse(row.content)
+                            window.open('/job_application/profile_review/?applications=' + obj.applications);
+                            break;
                     }
                 },
                 filterControl: true,
                 cookie: true,
                 cookieIdTable: 'notification',
                 cardView: true,
+                onPostBody: function () {
+                    $("#notes").popover()
+                }
             });
         }
         //]]>

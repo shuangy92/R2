@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.job;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.service.job.ContractService;
 import org.json.simple.JSONObject;
@@ -26,17 +27,17 @@ public class ContractApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws ParseException {
 
         return contractService.getList(sort, order, limit, offset, filter);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
-    public JSONObject getJobHistoryList(@RequestParam(name = "sort") String sort,
+    public JsonArrayResponse getJobHistoryList(@RequestParam(name = "sort") String sort,
                               @RequestParam(name = "order") String order,
                               @RequestParam(name = "limit") Integer limit,
                               @RequestParam(name = "offset") Integer offset,

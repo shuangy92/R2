@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.recruitment;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
@@ -24,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -54,7 +57,7 @@ public class JobApplicationService {
         return jobApplicationRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter
     ) throws org.json.simple.parser.ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
@@ -72,6 +75,9 @@ public class JobApplicationService {
                         List<JobApplication.JobApplicationStatus> statusList = new ArrayList<>();
                         for (String status : (List<String>) filterObj.get(key)) {
                             statusList.add(JobApplication.JobApplicationStatus.valueOf(status));
+                        }
+                        if (statusList.size() == 0) {
+                            return new JsonArrayResponse(new ArrayList<>(), 0);
                         }
                         spec = inValue("status", statusList);
                         break;
@@ -98,8 +104,15 @@ public class JobApplicationService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
-        return result;
+        return andFilter( sort,  order,  limit,  offset,  filter,  specs, jobApplicationRepository);
+    }
+
+    public List<JobApplication> getReviewList(List<Integer> ids) throws org.json.simple.parser.ParseException {
+        List<JobApplication> rows = new ArrayList<>();
+        for (Integer id : ids) {
+            rows.add(jobApplicationRepository.findOne(Long.valueOf(id)));
+        }
+        return rows;
     }
 
     public JobApplication getByJobPostAndApplicant(JobPost jobPost, User applicant) {
@@ -145,7 +158,7 @@ public class JobApplicationService {
         jobApplicationRepository.delete(jobApplication);
     }
 
-    public Long deleteList(@RequestBody ArrayList<Long> ids){
+    public Long deleteList(ArrayList<Long> ids){
         for (Long id: ids) {
             try {
                 jobApplicationRepository.delete(id);
@@ -154,6 +167,33 @@ public class JobApplicationService {
             }
         }
         return Long.valueOf(0);
+    }
+    public void handleProfileReview(List<Long> ids, List<Long> reviewers, String notes, User sender){
+        for (long id: ids) {
+            // update status
+            JobApplication jobApplication = jobApplicationRepository.findOne(id);
+            jobApplication.setStatus(JobApplication.JobApplicationStatus.REVIEWING);
+
+            // add review response
+            for (Long reviewerId: reviewers) {
+                User reviewer = new User();
+                reviewer.setId(reviewerId);
+
+                ReviewResponse reviewResponse = new ReviewResponse();
+                reviewResponse.setReviewer(reviewer);
+                reviewResponse.setType(ReviewResponse.ReviewType.PROFILE_REVIEW);
+                reviewResponse.setRunNumber((short) (jobApplication.getResponses().size() + 1));
+                jobApplication.addResponse(reviewResponse);
+            }
+            jobApplicationRepository.save(jobApplication);
+        }
+
+        // add notification
+        for (Long id: reviewers) {
+            User reviewer = new User();
+            reviewer.setId(id);
+            notificationService.createProfileReviewNotification(reviewer, sender, ids, notes);
+        }
     }
 
     /*public JobApplication createResponseList(JobApplication jobApplication){

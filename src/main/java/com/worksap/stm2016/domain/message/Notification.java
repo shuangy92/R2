@@ -3,6 +3,7 @@ package com.worksap.stm2016.domain.message;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import lombok.Data;
+import org.json.simple.JSONObject;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -48,7 +49,8 @@ public class Notification implements Serializable {
     private NotificationType type;
 
     public enum NotificationType {
-        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING, CONTRACT_EXPIRED
+        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING, CONTRACT_EXPIRED,
+        PROFILE_REVIEW,
     }
 
     /* auditing */

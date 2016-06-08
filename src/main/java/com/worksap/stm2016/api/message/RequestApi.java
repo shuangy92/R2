@@ -1,6 +1,7 @@
 package com.worksap.stm2016.api.message;
 
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.repository.message.RequestRepository;
 import com.worksap.stm2016.service.message.RequestService;
@@ -35,11 +36,11 @@ public class RequestApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                              @RequestParam(name = "order") String order,
-                              @RequestParam(name = "limit") Integer limit,
-                              @RequestParam(name = "offset") Integer offset,
-                              @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws org.json.simple.parser.ParseException {
 
         return requestService.getList(sort, order, limit, offset, filter);
     }

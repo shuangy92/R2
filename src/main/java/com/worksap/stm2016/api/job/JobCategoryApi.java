@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.job;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.service.job.JobCategoryService;
@@ -36,11 +37,11 @@ public class JobCategoryApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                                         @RequestParam(name = "order") String order,
-                                         @RequestParam(name = "limit") Integer limit,
-                                         @RequestParam(name = "offset") Integer offset,
-                                         @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws ParseException {
         return jobCategoryService.getList(sort, order, limit, offset, filter);
     }
 

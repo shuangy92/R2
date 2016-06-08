@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.publicApi;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.service.recruitment.JobPostService;
 import org.json.simple.JSONObject;
@@ -25,7 +26,7 @@ public class PublicJobPostApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
                                      @RequestParam(name = "order") String order,
                                      @RequestParam(name = "limit") Integer limit,
                                      @RequestParam(name = "offset") Integer offset,

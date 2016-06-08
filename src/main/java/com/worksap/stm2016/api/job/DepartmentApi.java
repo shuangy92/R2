@@ -3,6 +3,7 @@ package com.worksap.stm2016.api.job;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.service.job.DepartmentService;
@@ -46,11 +47,11 @@ public class DepartmentApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public JSONObject getList(@RequestParam(name = "sort") String sort,
-                                         @RequestParam(name = "order") String order,
-                                         @RequestParam(name = "limit") Integer limit,
-                                         @RequestParam(name = "offset") Integer offset,
-                                         @RequestParam(name = "filter", required = false) String filter) throws ParseException {
+    public JsonArrayResponse getList(@RequestParam(name = "sort") String sort,
+                                     @RequestParam(name = "order") String order,
+                                     @RequestParam(name = "limit") Integer limit,
+                                     @RequestParam(name = "offset") Integer offset,
+                                     @RequestParam(name = "filter", required = false) String filter) throws ParseException {
         return departmentService.getList(sort, order, limit, offset, filter);
     }
 

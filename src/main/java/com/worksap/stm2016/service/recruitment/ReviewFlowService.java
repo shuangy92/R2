@@ -1,5 +1,6 @@
 package com.worksap.stm2016.service.recruitment;
 
+import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
@@ -35,7 +36,7 @@ public class ReviewFlowService {
         return reviewFlowRepository.findOne(id);
     }
 
-    public JSONObject getList(String sort, String order, Integer limit, Integer offset, String filter
+    public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter
     ) throws org.json.simple.parser.ParseException {
 
         ArrayList<Specification> specs = new ArrayList<>();
@@ -64,8 +65,7 @@ public class ReviewFlowService {
             }
         }
 
-        JSONObject result = andFilter( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
-        return result;
+        return andFilter( sort,  order,  limit,  offset,  filter,  specs, reviewFlowRepository);
     }
 
     public ReviewFlow save(ReviewFlow reviewFlow){

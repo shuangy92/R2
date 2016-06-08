@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Calendar</title>
+    <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/fullcalendar.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/fullcalendar.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
+    <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h3>Schedule Filter</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="filter">
+                <form class="form-inline" role="form" id="role-checkboxes">
+                    User role:
+                    <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="ADMIN" v-bind:disabled="allRoles" checked="checked"/> HR </label></div>
+                    <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="MANAGER" v-bind:disabled="allRoles" checked="checked"/> Manager </label></div>
+                    <div class="checkbox" v-bind:class="{'disabled': allRoles}"><label><input type="checkbox" v-model="roles" value="EMPLOYEE" v-bind:disabled="allRoles" checked="checked"/> Employee </label></div>
+                </form>
+                <div>Time slot: {{start | formatDate}} - {{end | formatDate}}</div>
+            </div>
+            <table id="table"
+                   data-toolbar="#toolbar"
+                   data-show-refresh="true"
+                   data-show-toggle="true"
+                   data-show-export="true"
+                   data-pagination="true"
+                   data-side-pagination="server"
+                   data-page-list="[10, 25, 50, 100]"
+                   data-minimum-count-columns="1"
+                   smartDisplay="true">
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div id="date-filter"></div>
+        </div>
+    </div>
+    <div th:replace="calendar/calendar :: calendar_modal"></div>
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var $table = $('#table');
+        var $roles_checkboxes = $("#role-checkboxes");
+        var vm = new Vue({
+            el: '#filter',
+            data: {
+                roles: [],
+                start: null,
+                end: null
+            },
+            filters: {
+                formatDate: function (date) {
+                    if (date) {
+                        return moment(date).format('MMMM Do YYYY, h:mm a');
+                    } else {
+                        return date;
+                    }
+                }
+            }
+        })
+        jQuery(document).ready(function ($) {
+            initDateFilter()
+            initTable()
+
+            $roles_checkboxes.on('change', 'input', function(){
+                $table.bootstrapTable('refresh');
+            });
+
+            $('#calendar-modal').on('shown.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                modal.find('.modal-title').text(button.data('username') + '\'s schedule');
+
+                setUid(button.data('id'))
+                loadEvents()
+                $("#calendar").fullCalendar( 'refetchEvents' )
+            })
+        });
+
+        function initDateFilter() {
+            $('#date-filter').fullCalendar({
+                header: {
+                    left: 'prev, next today trash',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultTimedEventDuration: '00:30:00',
+                selectable: true,
+                selectHelper: true,
+                select: function(start, end) {
+                    vm.start = start;
+                    vm.end = end;
+                },
+            });
+        }
+
+        function initTable() {
+            $table.bootstrapTable({
+                columns: [{
+                    field: 'user',
+                    title: 'User',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.user.id + '">' + index.name + '</a> ';
+                    }
+                }, {
+                    field: 'availability',
+                    title: 'Availability',
+                    formatter: function (index, row, element) {
+                        if (index == -1) {
+                            return "Free"
+                        } else if (index == 0) {
+                            return "Not available"
+                        } else if (index == 1) {
+                            return index + " hour"
+                        } else {
+                            return index + " hours"
+                        }
+                    }
+                }, {
+                    field: 'department',
+                    title: 'Department',
+                    filterControl: 'select',
+                }, {
+                    field: 'location',
+                    title: 'Location',
+                    filterControl: 'select',
+                }, {
+                    title: 'Schedule',
+                    formatter: function (index, row, element) {
+                        return '<a data-toggle="modal" data-target="#calendar-modal" data-id=' + row.user.id + ' data-username="' + row.user.name + '" style="cursor: pointer;"><i class="fa fa-calendar" aria-hidden="true"></i></a>';
+                    },
+                }],
+                url: "/api/calendar/filter",
+                contentType: "application/json; charset=utf-8",
+                queryParamsType: "limit",
+                method: "post",
+                queryParams: function (p) {
+                    var data = {};
+                    data.limit = p.limit;
+                    data.offset = p.offset;
+                    data.start = vm.start;
+                    data.end = vm.end;
+                    var tmp = $.parseJSON(p.filter);
+                    var filter = {};
+                    for (var key in tmp) {
+                        filter[key] = tmp[key];
+                    }
+                    filter.roleList = vm.roles;
+                    data.filter = JSON.stringify(filter);
+                    return JSON.stringify(data);
+                },
+                responseHandler: function (res) {
+                    $.each(res.rows, function (i, v) {
+                        res.rows[i].location = res.rows[i].user.department.location;
+                        res.rows[i].department = res.rows[i].user.department.name;
+                    });
+                    return res;
+                },
+                filterControl: true,
+                cookie: true,
+                cookieIdTable: 'schedule',
+                cookiesEnabled: ['bs.table.pageNumber', 'bs.table.pageList']
+            });
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>
