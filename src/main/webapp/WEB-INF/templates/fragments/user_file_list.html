@@ -25,7 +25,10 @@
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        function initFileListTable(uid) {
+        var uid;
+        function initFileListTable(id) {
+            uid = id;
+
             $("#file-table").bootstrapTable({
                 columns: [{
                     field: 'name',

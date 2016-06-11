@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class JobApplicationController {
@@ -25,15 +26,19 @@ public class JobApplicationController {
         return "recruitment/job_application";
     }
 
-    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
+    /*@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/job_application/profile_review", method = RequestMethod.GET)
     public String getProfileReviewListPage() {
         return "recruitment/job_application_review_list";
-    }
+    }*/
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
-    @RequestMapping(value = "/job_application/profile_review/slideshow", method = RequestMethod.GET)
-    public String getProfileReviewPage() {
-        return "recruitment/job_application_review_slideshow";
+    @RequestMapping(value = "/job_application/profile_review", method = RequestMethod.GET)
+    public String getProfileReviewPage(@RequestParam(name="mode", required = false) String mode) {
+        if (mode == null) {
+            return "recruitment/job_application_review_list";
+        } else { // if (mode.equals("slideshow"))
+            return "recruitment/job_application_review_slideshow";
+        }
     }
 }

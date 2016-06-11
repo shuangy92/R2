@@ -9,12 +9,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "review_response")
-public class ReviewResponse implements Serializable {
+public class ReviewResponse implements Comparable<ReviewResponse> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,10 +28,6 @@ public class ReviewResponse implements Serializable {
     @ManyToOne
     @JoinColumn(name = "job_application_id")
     private JobApplication jobApplication;
-
-    /*@ManyToOne
-    @JoinColumn(name = "review_run_id")
-    private ReviewRun reviewRun;*/
 
     @Column(name = "run_number")
     private Short runNumber;
@@ -49,6 +46,12 @@ public class ReviewResponse implements Serializable {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ReviewStatus status = ReviewStatus.REVIEWING;
+
+    @Column(name = "interview_start_time")
+    private Date start;
+
+    @Column(name = "interview_end_time")
+    private Date end;
 
     public enum ReviewStatus {
         REVIEWING, PASSED, FAILED;
@@ -83,5 +86,14 @@ public class ReviewResponse implements Serializable {
                 ", response='" + response + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    @Override
+    public int compareTo(ReviewResponse another) {
+        if (this.getRunNumber() < another.getRunNumber()){
+            return -1;
+        }else{
+            return 1;
+        }
     }
 }

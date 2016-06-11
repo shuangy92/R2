@@ -24,7 +24,7 @@ public class Notification implements Serializable {
     @Column(name = "request_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "content", updatable = false)
+    @Column(name = "content", columnDefinition = "text")
     private String content;
 
     @Column(name = "read")
@@ -49,8 +49,9 @@ public class Notification implements Serializable {
     private NotificationType type;
 
     public enum NotificationType {
-        REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR, CONTRACT_EXPIRING, CONTRACT_EXPIRED,
-        PROFILE_REVIEW,
+        //REVIEW_START, REVIEW_UPDATE, REVIEW_UPDATE_HR,
+        CONTRACT_EXPIRING, CONTRACT_EXPIRED,
+        PROFILE_REVIEW, INTERVIEW
     }
 
     /* auditing */

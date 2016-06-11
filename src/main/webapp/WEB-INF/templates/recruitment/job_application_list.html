@@ -5,10 +5,12 @@
       layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Career</title>
+    <link th:href="@{/static/css/jquery.timepicker.css}" rel="stylesheet"/>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet"/>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js}"></script>
     <script type="text/javascript" th:src="@{/static/bower_components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.timepicker.min.js}"></script>
 </head>
 <body>
 
@@ -36,15 +38,7 @@
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CLOSED"/> CLOSED </label></div>
         </form>
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" id="btn-add-row" data-toggle="modal" data-target="#review-modal" data-action="create">Review
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>
-            <button type="button" class="btn btn-default" id="btn-profile-review" data-toggle="modal" data-target="#profile-review-modal" disabled="disabled">Resume Check
-                <i class="glyphicon glyphicon-plus"></i>
-            </button>
-            <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
+            <button type="button" class="btn btn-primary" id="btn-profile-review" data-toggle="modal" data-target="#profile-review-modal" disabled="disabled">Profile Review</button>
         </div>
         <table id="table"
                data-toolbar="#toolbar"
@@ -61,6 +55,7 @@
                smartDisplay="true">
         </table>
     </div>
+
     <div class="modal fade" id="profile-review-modal" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -72,15 +67,15 @@
                 <div class="modal-body">
                     <form role="form" class="form-horizontal" id="profile-review-form">
                         <div class="form-group required">
-                            <label for="employee-select" class="col-sm-2 control-label">Reviewers</label>
+                            <label for="reviewer-select" class="col-sm-2 control-label">Reviewers</label>
                             <div class="col-sm-10">
-                                <select v-model="reviewers" class="form-control" id="employee-select" multiple="multiple" required="required"><option></option></select>
+                                <select v-model="reviewers" class="form-control" id="reviewer-select" multiple="multiple" required="required"><option></option></select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="note" class="col-sm-2 control-label">Note</label>
                             <div class="col-sm-10">
-                                <textarea v-model="notes" class="form-control" id="note" multiple="multiple"></textarea>
+                                <textarea v-model="notes" class="form-control" id="note"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -93,13 +88,66 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="interview-modal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Setup an interview </h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="interview-form">
+                        <div class="form-group required">
+                            <label for="interviewer-select" class="col-sm-2 control-label">Interviewer <a href="schedule_filter" target="_blank">?</a></label>
+                            <div class="col-sm-10">
+                                <select v-model="reviewers" class="form-control" id="interviewer-select" required="required"><option></option></select>
+                            </div>
+                        </div>
+                        <div class="form-group required form-inline">
+                            <label class="col-sm-2 control-label">Time</label>
+                            <div class="col-sm-10">
+                                <input v-model="date" id="date" class="form-control" type="date" required="required"/>
+                                <input id="from" class="form-control" type="datetime" required="required"/> -
+                                <input id="to" class="form-control" type="datetime" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-2 control-label">Note</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="notes" class="form-control" id="note"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="review-modal" tabindex="-1" role="dialog">
+        <div v-if="event" class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table id="review-table"
+                           data-show-header="true"
+                           data-id-field="id"
+                           smartDisplay="true"
+                           style="word-wrap: break-word">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div th:replace="form/email_form :: email_form"></div>
     <div th:replace="form/file_generate_form :: file_generate_form"></div>
     <div th:replace="career/career_job_post :: job_post_modal"></div>
     <div th:replace="form/contract_form :: contract_form"></div>
-    <!--<div th:replace="form/review_form :: review_form"></div>-->
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
@@ -113,6 +161,14 @@
             data: {
                 notes: null,
                 reviewers: null,
+            },
+        })
+        var interviewModalVM = new Vue({
+            el: '#interview-modal',
+            data: {
+                notes: null,
+                interviewer: null,
+                date: null,
             },
         })
 
@@ -132,13 +188,21 @@
             initTable();
 
             initProfileReviewModal();
+            initInterviewModal();
+            initReviewModal();
         });
-
 
         function initTable() {
             var columns = [{
                 field: 'state',
-                checkbox: true
+                checkbox: true,
+                formatter: function (index, row, element) {
+                    if (row.status != "REVIEWING" && row.status != "SUBMITTED") {
+                        return {
+                            disabled: true
+                        };
+                    }
+                }
             }, {
                 field: 'applyDate',
                 title: 'Applied',
@@ -177,7 +241,16 @@
                 field: 'status',
                 title: 'Status',
                 sortable: true,
-                filterControl: 'select'
+                filterControl: 'select',
+                formatter: function (index, row, element) {
+                    if (index == "REVIEWING" && row.newFinished > 0) {
+                        return '<b><a data-toggle="modal" data-target="#review-modal"  data-index="' + element + '" style="cursor: pointer;">' + index + ' </a></b><span class="badge">' + row.newFinished + '</span>'
+                    } else if (index == "REVIEWING") {
+                        return '<a data-toggle="modal" data-target="#review-modal"  data-index="' + element + '" style="cursor: pointer;">' + index + ' </a>'
+                    } else {
+                        return index;
+                    }
+                }
             }];
 
             $table.bootstrapTable({
@@ -217,7 +290,7 @@
                     var result =
                             '<button class="btn btn-primary application" data-toggle="modal" data-target="#email-modal" data-id=' + row.id + ' data-touid="' + row.applicant.id + '">Send Email</a>' +
                             '<button class="btn btn-primary application" data-toggle="modal" data-target="#file-generate-modal" data-id=' + row.id + '>Generate Document</a>' +
-                            '<button class="btn btn-primary application" id="REVIEWING" disabled="disabled" onclick="handleApplicationStatusChange(\'REVIEWING\',' + index + ')"">Start Review</a>' +
+                            '<button class="btn btn-primary application" id="REVIEWING" disabled="disabled" data-toggle="modal" data-target="#interview-modal" data-id=' + row.id + '>Interview</a>' +
                             '<button class="btn btn-success application" id="PASSED" disabled="disabled" onclick="handleApplicationStatusChange(\'PASSED\',' + index + ')">Pass</button>' +
                             '<button class="btn btn-danger application" id="FAILED" disabled="disabled" onclick="handleApplicationStatusChange(\'FAILED\',' + index + ')">Fail</button>' +
                             '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
@@ -232,6 +305,7 @@
                             $detail.find("#REVIEWING").prop( "disabled", false );
                             break;
                         case "REVIEWING":
+                            $detail.find("#REVIEWING").prop( "disabled", false );
                             $detail.find("#PASSED, #FAILED").prop( "disabled", false );
                             break;
                         case "PASSED":
@@ -251,25 +325,68 @@
             });
         }
 
+        var review_table = $("#review-table")
+        function initReviewModal() {
+            initReviewTable();
+            $('#review-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var index = button.data('index')
+                var application = $table.bootstrapTable('getData', true)[index];
+                review_table.bootstrapTable('load', application.responses.sort(sortByRunNumber));
+
+                $.ajax({
+                    type: "post",
+                    url: "/api/job_application/" + application.id + "/clearNewFinished",
+                    success: function (data) {
+                        $table.bootstrapTable('updateRow', {index: index, row: data});
+                    }
+                });
+
+            })
+        }
+        function initReviewTable() {
+            review_table.bootstrapTable({
+                columns: [{
+                    field: 'runNumber',
+                    title: 'No.',
+                }, {
+                    field: 'reviewer.name',
+                    title: 'Reviewer',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.reviewer.id + '">' + index + '</a>';
+                    }
+                }, {
+                    field: 'type',
+                    title: 'Review Type',
+                }, {
+                    field: 'response',
+                    title: 'Comment',
+                }, {
+                    field: 'status',
+                    title: 'Result',
+                }],
+            });
+        }
+
         function initProfileReviewModal() {
             $table.on('check.bs.table uncheck.bs.table ' +
                     'check-all.bs.table uncheck-all.bs.table', function () {
                 $profile_review_btn.prop('disabled', !$table.bootstrapTable('getSelections').length);
             });
 
-            var employee_select = $("#employee-select")
-            initEmployeeSelect(employee_select, "Search")
+            var reviewer_select = $("#reviewer-select")
+            initEmployeeSelect(reviewer_select, "Search")
 
-            employee_select.on('change',function(){
+            reviewer_select.on('change',function(){
                 profileReviewModalVM.reviewers = $(this).val();
             });
 
             $("#profile-review-form").on('submit', function (e) {
                 e.preventDefault();
-                sendResumes();
+                submitProfileReviewForm();
             })
         }
-        function sendResumes() {
+        function submitProfileReviewForm() {
             var data = {};
             data.applications = getIdSelections();
             data.notes = profileReviewModalVM.notes;
@@ -301,6 +418,61 @@
                 return row.id
             });
         }
+        function initInterviewModal() {
+            $('#interview-modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id')
+
+                var interview_form = $("#interview-form")
+                if ( $('[type="date"]').prop('type') != 'date' ) {
+                    $('[type="date"]').datepicker();
+                }
+                interview_form.find("#from,#to").timepicker();
+
+                var interviewer_select = $("#interviewer-select")
+                initEmployeeSelect(interviewer_select, "Search")
+                interviewer_select.on('change',function(){
+                    interviewModalVM.interviewer = {"id": $(this).val()};
+                });
+
+                interview_form.on('submit', function (e) {
+                    e.preventDefault();
+                    submitInterviewForm(id);
+                })
+            })
+        }
+        function submitInterviewForm(id) {
+            var interview_form = $("#interview-form")
+            var from = interview_form.find("#from")
+            var to = interview_form.find("#to")
+
+            var data = {};
+            data.notes = interviewModalVM.notes;
+            data.interviewer = interviewModalVM.interviewer;
+            data.start = from.timepicker('getTime', new Date(interviewModalVM.date));
+            data.end = to.timepicker('getTime', new Date(interviewModalVM.date));
+            data.application = {"id": id};
+
+            notify = $.notify({
+                icon: 'fa fa-info-circle',
+                message: "Sending...",
+            });
+            $.ajax({
+                type: "post",
+                url: "/api/job_application/interview",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#interview-modal").modal('hide');
+
+                    notify.update('message', 'Done');
+                    setTimeout(function () {
+                        notify.close();
+                    }, 1000);
+                    $table.bootstrapTable('refresh');
+                }
+            });
+        }
 
         function handleApplicationStatusChange(status, index) {
             var application = $table.bootstrapTable('getData', true)[index];
@@ -326,6 +498,11 @@
                     $table.bootstrapTable('expandRow', index);
                 }
             });
+        }
+        function sortByRunNumber(a, b){
+            var aa = a.runNumber;
+            var bb = b.runNumber;
+            return ((aa < bb) ? -1 : ((aa > bb) ? 1 : 0));
         }
         //]]>
     </script>

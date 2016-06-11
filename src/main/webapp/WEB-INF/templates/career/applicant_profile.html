@@ -44,9 +44,9 @@
 <div th:fragment="applicant_profile_script">
     <script type="text/javascript" th:inline="javascript">
         var editable = false;
-        function loadContactForm(url) {
+        function loadContactForm(uid) {
             $.ajax({
-                url: url,
+                url: "/api/user/profile/" + uid,
                 type: "GET",
                 success: function (data) {
                     $.each(data.user, function (k, v) {
@@ -87,7 +87,7 @@
         jQuery(document).ready(function ($) {
             var uid = currentUser.id;
             initFileListTable(uid);
-            loadContactForm("/api/user/profile/" + uid);
+            loadContactForm(uid);
         });
     </script>
 </div>

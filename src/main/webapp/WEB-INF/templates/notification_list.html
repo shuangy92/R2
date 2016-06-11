@@ -68,9 +68,20 @@
                         var content;
                         var obj = JSON.parse(index);
                         switch (row.type) {
+                            case 'CONTRACT_EXPIRING':
+                                content = obj.employee +  "'s contract has expired";
+                                break;
+                            case 'CONTRACT_EXPIRING':
+                                var x = obj.count == '1' ? 'contract' : 'contracts';
+                                content = obj.count + " " + x + " will expire in your department from " + obj.from + " to " + obj.to;
+                                break;
                             case 'PROFILE_REVIEW':
                                 content = 'You have some job applicants\' profiles to review' +
-                                    '<a id="notes" data-toggle="popover" data-trigger="hover"  data-placement="top" data-content="' + obj.senderName + ': ' + obj.notes  +'"> Notes </a>'
+                                        '<a class="notes" data-toggle="popover" data-trigger="hover"  data-placement="top" data-content="' + obj.senderName + ': ' + obj.notes  +'"> Notes </a>'
+                                break;
+                            case 'INTERVIEW':
+                                content = 'You have an interview at ' + (new Date(obj.start)).toString("yyyy/MM/dd") + ' from ' + (new Date(obj.start)).toString("HH:mm") + ' to ' + (new Date(obj.end)).toString("HH:mm") +
+                                        '<a class="notes" data-toggle="popover" data-trigger="hover"  data-placement="top" data-content="' + obj.senderName + ': ' + obj.notes  +'"> Notes </a>'
                                 break;
                             default:
                                 content = index;
@@ -120,19 +131,16 @@
                         async: false,
                     });
 
+                    var obj = JSON.parse(row.content)
                     switch (row.type) {
-                        case 'REVIEW_START':
-                        case 'REVIEW_UPDATE':
-                        case 'REVIEW_UPDATE_HR':
-                            window.open('/job_application/' + row.itemId, "_self");
-                            break;
                         case 'CONTRACT_EXPIRING':
-                            var from = row.itemNote.split("-")[0], to = row.itemNote.split("-")[1];
-                            window.open('/contract?from=' + from + '&to=' + to, "_self");
+                            window.open('/contract?from=' + obj.from + '&to=' + obj.to, "_self");
                             break;
-                        case "PROFILE_REVIEW":
-                            var obj = JSON.parse(row.content)
-                            window.open('/job_application/profile_review/?applications=' + obj.applications);
+                        case 'PROFILE_REVIEW':
+                            window.open('/job_application/profile_review/?applications=' + obj.applications + '&responses=' + obj.responses);
+                            break;
+                        case 'INTERVIEW':
+                            window.open('/job_application/' + obj.applicationId + '?responseId=' + obj.responseId);
                             break;
                     }
                 },
@@ -141,7 +149,7 @@
                 cookieIdTable: 'notification',
                 cardView: true,
                 onPostBody: function () {
-                    $("#notes").popover()
+                    $(".notes").popover()
                 }
             });
         }

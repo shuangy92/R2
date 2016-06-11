@@ -3,6 +3,7 @@ package com.worksap.stm2016.service.message;
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Notification;
+import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.message.NotificationRepository;
@@ -96,11 +97,14 @@ public class NotificationService {
     }*/
     public Notification createContractExpiringNotification(User manager, Long expiringCount, Date from, Date to) {
         Notification notification = new Notification();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        notification.setContent(expiringCount + " contracts will expire in your department from " + df.format(from) + " to " + df.format(to));
-        notification.setType(Notification.NotificationType.CONTRACT_EXPIRING);
-        notification.setItemNote(df.format(from) + "-" + df.format(to));
         notification.setUser(manager);
+        notification.setType(Notification.NotificationType.CONTRACT_EXPIRING);
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        JSONObject content = new JSONObject();
+        content.put("count", expiringCount);
+        content.put("from", df.format(from));
+        content.put("to", df.format(to));
+        notification.setContent(content.toString());
         return notificationRepository.save(notification);
     }
     public Notification createContractNotification(Contract contract, Notification.NotificationType type) {
@@ -108,30 +112,43 @@ public class NotificationService {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         switch (type) {
             case CONTRACT_EXPIRING: //TODO
-                notification.setContent("Your contracts will expire on " + df.format(contract.getEndDate()));
-                notification.setType(type);
-                notification.setItemId(contract.getId());
-                notification.setUser(contract.getUser());
                 break;
             case CONTRACT_EXPIRED:
-                notification.setContent(contract.getUser().getName() + "'s contract has expired");
                 notification.setType(type);
                 notification.setUser(contract.getJob().getDepartment().getManager());
+                JSONObject content = new JSONObject();
+                content.put("employee", contract.getUser().getName());
+                notification.setContent(content.toString());
                 break;
         }
         return notificationRepository.save(notification);
     }
-    public Notification createProfileReviewNotification(User user, User sender, List<Long> resumeIds, String notes) {
+    public Notification createProfileReviewNotification(User user, User sender, List<Long> applicationIds, List<Long> responseIds, String notes) {
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setType(Notification.NotificationType.PROFILE_REVIEW);
         JSONObject content = new JSONObject();
-        content.put("applications", resumeIds);
+        content.put("applications", applicationIds);
+        content.put("responses", responseIds);
         content.put("notes", notes);
         content.put("senderName", sender.getName());
         content.put("senderId", sender.getId());
         notification.setContent(content.toString());
         return notificationRepository.save(notification);
     }
-
+    public Notification createInterviewNotification(Long applicationId, Long responseId, User user, User sender, String notes, Date start, Date end) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setType(Notification.NotificationType.INTERVIEW);
+        JSONObject content = new JSONObject();
+        content.put("applicationId", applicationId);
+        content.put("responseId", responseId);
+        content.put("notes", notes);
+        content.put("senderName", sender.getName());
+        content.put("senderId", sender.getId());
+        content.put("start", start.toString());
+        content.put("end", end.toString());
+        notification.setContent(content.toString());
+        return notificationRepository.save(notification);
+    }
 }

@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Calendar</title>
 
@@ -32,31 +32,44 @@
 <div th:fragment="calendar_script">
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
-        var m_uid;
+        var event_modal = $("#event-modal")
+        var calendar;
+        var eventVM = new Vue({
+            el: '#event-modal',
+            data: {
+                event: null,
+                uid: null,
+                method: null,
+            },
+            filters: {
+                formatDate(date) {
+                    return (new Date(date)).toString("yyyy/M/dd hh:mm")
+                }
+            }
+        })
+
         function setUid(uid) {
-            m_uid = uid;
+            eventVM.uid = uid;
         }
 
         function loadEvents() {
-            var calendar = $('#calendar').fullCalendar({
+            calendar = $('#calendar').fullCalendar({
                 eventSources: [{
                     url: "/api/calendar/",
                     data : function() { // a function that returns an object
                         return {
-                            id : m_uid
+                            id : eventVM.uid
                         };
                     },
                     success: function(events) {
                         $.each(events, function( index, event ) {
-                            event.color = event.editable ? null : "chocolate";
-                            event.editable = event.editable && currentUser.id == m_uid;
+                            event.editable = currentUser.id == eventVM.uid;
                         });
                     },
                 }],
                 customButtons: {
                     trash: {
                         text: 'Trash',
-                        //icon: 'glyphicon glyphicon-trash',
                     }
                 },
                 header: {
@@ -64,34 +77,29 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                timezone: 'local',
                 defaultTimedEventDuration: '00:30:00',
                 forceEventDuration: true,
-                selectable: window.location.pathname == "/user" ? false : currentUser.id == m_uid,
+                selectable: window.location.pathname == "/user" ? false : currentUser.id == eventVM.uid,
                 selectHelper: true,
                 select: function(start, end) {
-                    var title = prompt('Event Title:');
-                    if (title) {
-                        var event = {};
-                        event.title = title;
-                        event.start = start;
-                        event.end = end;
-                        event.allDay = !start.hasTime() && !end.hasTime();
-                        event.editable = true;
-                        calendar.fullCalendar('renderEvent', event, true);
+                    var event = {};
+                    event.title = null;
+                    event.start = start;
+                    event.end = end;
+                    event.allDay = !start.hasTime() && !end.hasTime();
+                    event.editable = true;
 
-                        submitEvent(event);
-                    }
+                    eventVM.method = 'create'
+                    eventVM.event = event
+                    event_modal.modal('show')
 
                     calendar.fullCalendar('unselect');
                 },
                 eventClick: function(event, element) {
-                    if (event.editable) {
-                        event.title = prompt('Event Title:');
-                        if (event.title) {
-                            calendar.fullCalendar('updateEvent', event);
-                            submitEvent(event);
-                        }
-                    }
+                    eventVM.method = 'edit'
+                    eventVM.event = event
+                    event_modal.modal('show')
                 },
                 eventDrop: function(event, delta, revertFunc) {
                     if (event.editable) {
@@ -121,13 +129,25 @@
         }
 
         function submitEvent(event) {
-            event.user = {"id": m_uid};
+            if (eventVM.method == "create" || eventVM.method == "edit") {
+                event = eventVM.event;
+            }
+            event.user = {"id": eventVM.uid};
             $.ajax({
                 type: "post",
                 url: "/api/calendar/",
                 data: JSON.stringify(event),
                 contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    event_modal.modal('hide')
+                    if (eventVM.method == 'edit') {
+                        calendar.fullCalendar('updateEvent', data);
+                    } else if (eventVM.method == 'create') {
+                        calendar.fullCalendar('renderEvent', data, true);
+                    }
+                }
             });
+            return false;
         }
         function deleteEvent(event) {
             $.ajax({
@@ -147,6 +167,41 @@
     <div class="row">
        <div id="calendar"></div>
     </div>
+    <div class="modal fade" id="event-modal" tabindex="-1" role="dialog">
+        <div v-if="event" class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="event-form" onsubmit="return submitEvent();">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Time</label>
+                            <div class="col-sm-10">
+                                <p style="padding-top: 7px"> {{ event.start | formatDate}} - {{ event.end | formatDate}} </p>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="title" class="col-sm-2 control-label">Title</label>
+                            <div class="col-sm-10">
+                                <input v-model="event.title" v-bind:readonly="!event.editable" placeholder="Title" id="title" class="form-control" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="event.description" v-bind:readonly="!event.editable" placeholder="Description" id="description" class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button type="submit" class="btn btn-primary" id="create">Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:replace="calendar/calendar :: calendar_script"></div>
 
     <script type="text/javascript" th:inline="javascript">

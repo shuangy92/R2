@@ -1,6 +1,7 @@
 package com.worksap.stm2016.service.recruitment;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
+import com.worksap.stm2016.domain.calendar.CalendarEvent;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
@@ -10,6 +11,7 @@ import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.repository.calendar.CalendarEventRepository;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
@@ -29,10 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
 
@@ -43,8 +42,6 @@ public class JobApplicationService {
     @Autowired
     JobApplicationRepository jobApplicationRepository;
     @Autowired
-    ContractService contractService;
-    @Autowired
     UserRepository userRepository;
     @Autowired
     ReviewResponseRepository reviewResponseRepository;
@@ -52,6 +49,9 @@ public class JobApplicationService {
     NotificationService notificationService;
     @Autowired
     JobPostRepository jobPostRepository;
+    @Autowired
+    CalendarEventRepository calendarEventRepository;
+
 
     public JobApplication get(Long id){
         return jobApplicationRepository.findOne(id);
@@ -128,8 +128,8 @@ public class JobApplicationService {
             case REVIEWING:
                 /*if (jobPost.getReviewFlow() != null) {
                     this.createResponseList(jobApplication);
-                }
-                break;*/
+                }*/
+                break;
             case CONTRACTED:
                 Collection<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(jobApplication.getApplicant());
                 for (JobApplication otherApplications : jobApplications) {
@@ -169,13 +169,20 @@ public class JobApplicationService {
         return Long.valueOf(0);
     }
     public void handleProfileReview(List<Long> ids, List<Long> reviewers, String notes, User sender){
-        for (long id: ids) {
+        List <JobApplication> applications = new ArrayList<>();
+        for (long id : ids) {
             // update status
             JobApplication jobApplication = jobApplicationRepository.findOne(id);
             jobApplication.setStatus(JobApplication.JobApplicationStatus.REVIEWING);
+            applications.add(jobApplication);
+        }
 
-            // add review response
-            for (Long reviewerId: reviewers) {
+        // add notification
+        for (Long reviewerId : reviewers) {
+            List <Long> responseIds = new ArrayList<>();
+
+            for (JobApplication jobApplication : applications) {
+                // update status
                 User reviewer = new User();
                 reviewer.setId(reviewerId);
 
@@ -183,32 +190,48 @@ public class JobApplicationService {
                 reviewResponse.setReviewer(reviewer);
                 reviewResponse.setType(ReviewResponse.ReviewType.PROFILE_REVIEW);
                 reviewResponse.setRunNumber((short) (jobApplication.getResponses().size() + 1));
+                responseIds.add(reviewResponseRepository.save(reviewResponse).getId());
                 jobApplication.addResponse(reviewResponse);
             }
-            jobApplicationRepository.save(jobApplication);
+
+            User reviewer = new User();
+            reviewer.setId(reviewerId);
+            notificationService.createProfileReviewNotification(reviewer, sender, ids, responseIds, notes);
         }
 
-        // add notification
-        for (Long id: reviewers) {
-            User reviewer = new User();
-            reviewer.setId(id);
-            notificationService.createProfileReviewNotification(reviewer, sender, ids, notes);
+        for (JobApplication jobApplication : applications) {
+            jobApplicationRepository.save(jobApplication);
         }
     }
 
-    /*public JobApplication createResponseList(JobApplication jobApplication){
-        ReviewFlow reviewFlow = jobApplication.getJobPost().getReviewFlow();
-        for (ReviewRun reviewRun: reviewFlow.getRuns()) {
-            for (User reviewer: reviewRun.getReviewers()) {
-                ReviewResponse response = new ReviewResponse();
-                response.setReviewRun(reviewRun);
-                response.setReviewer(reviewer);
-                jobApplication.addResponse(response);
+    public void handleInterview(JobApplication jobApplication, User interviewer, String notes, Date start, Date end, User sender) {
+        // update status
+        jobApplication = jobApplicationRepository.findOne(jobApplication.getId());
+        jobApplication.setStatus(JobApplication.JobApplicationStatus.REVIEWING);
+        // add response
+        ReviewResponse reviewResponse = new ReviewResponse();
+        reviewResponse.setReviewer(interviewer);
+        reviewResponse.setType(ReviewResponse.ReviewType.INTERVIEW);
+        reviewResponse.setRunNumber((short) (jobApplication.getResponses().size() + 1));
+        reviewResponse.setStart(start);
+        reviewResponse.setEnd(end);
+        Long responseId = reviewResponseRepository.save(reviewResponse).getId();
+        jobApplication.addResponse(reviewResponse);
 
-                // Review notification for reviewers
-                notificationService.createReviewNotification(jobApplication, response, Notification.NotificationType.REVIEW_START);
-            }
-        }
-        return jobApplicationRepository.save(jobApplication);
-    }*/
+        jobApplicationRepository.save(jobApplication);
+
+        // add calendar event
+        CalendarEvent calendarEvent = new CalendarEvent();
+        calendarEvent.setAuthor(sender);
+        calendarEvent.setDescription(notes);
+        calendarEvent.setStart(start);
+        calendarEvent.setEnd(end);
+        calendarEvent.setTitle("Interview");
+        calendarEvent.setUser(interviewer);
+        calendarEventRepository.save(calendarEvent);
+
+        // add notification
+        notificationService.createInterviewNotification(jobApplication.getId(), responseId, interviewer, sender, notes, start, end);
+    }
+
 }

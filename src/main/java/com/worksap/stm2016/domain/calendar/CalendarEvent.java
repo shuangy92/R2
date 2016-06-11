@@ -30,6 +30,9 @@ public class CalendarEvent {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "start_time")
     private Date start;
 
@@ -39,23 +42,21 @@ public class CalendarEvent {
     @Column(name = "all_day")
     private Boolean allDay = false;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(referencedColumnName = "user_id", name = "user_id")
     private User user;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    /*@JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Transient
     private Boolean editable;
 
     public Boolean getEditable() {
         return this.assigner.getId().equals(this.user.getId());
-    }
+    }*/
 
     /* auditing */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id", name = "assigner_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "author_id")
     @CreatedBy
-    private User assigner;
+    private User author;
 }

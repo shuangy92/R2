@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ReviewResponseService {
@@ -33,10 +34,32 @@ public class ReviewResponseService {
         return reviewResponseRepository.findOne(id);
     }
 
-    public ReviewResponse save(ReviewResponse reviewResponse){
+    public ReviewResponse update(ReviewResponse reviewResponse){
+        if (reviewResponse.getStatus() != ReviewResponse.ReviewStatus.REVIEWING) {
+            JobApplication jobApplication = jobApplicationRepository.findOne(reviewResponse.getJobApplication().getId());
+            jobApplication.increaseNewfinished();
+            jobApplicationRepository.save(jobApplication);
+        }
         return reviewResponseRepository.save(reviewResponse);
     }
 
+
+    public List<ReviewResponse.ReviewStatus> getStatusList(List<Integer> responses){
+        List<ReviewResponse.ReviewStatus> results = new ArrayList<>();
+        for (Integer id: responses) {
+            results.add(reviewResponseRepository.findOne(Long.valueOf(id)).getStatus());
+        }
+        return results;
+    }
+    /*public boolean isFinishProfileReview(List<Long> responses){
+        List<ReviewResponse.ReviewStatus> results = new ArrayList<>();
+        for (Long id: responses) {
+            if (reviewResponseRepository.findOne(id).getStatus() == ReviewResponse.ReviewStatus.REVIEWING) {
+                return false;
+            }
+        }
+        return true;
+    }*/
    /* public ReviewResponse updateResponseOfJobApplication(Long jobApplicationId, ReviewResponse reviewResponse){
         boolean finishRun = true;
         JobApplication jobApplication = jobApplicationRepository.findOne(jobApplicationId);

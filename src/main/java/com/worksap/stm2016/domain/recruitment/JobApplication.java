@@ -51,9 +51,16 @@ public class JobApplication implements Serializable {
     @LastModifiedDate
     private Date applyDate;
 
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name = "review_flow_id")
-    private ReviewFlow reviewFlow;
+    private ReviewFlow reviewFlow;*/
+
+    @Column(name = "new_finished")
+    private Integer newFinished = 0;
+
+    public void increaseNewfinished() {
+        this.newFinished++;
+    }
 
     @JsonManagedReference(value="application-responses")
     @OneToMany(mappedBy="jobApplication", cascade = CascadeType.ALL, orphanRemoval = true)

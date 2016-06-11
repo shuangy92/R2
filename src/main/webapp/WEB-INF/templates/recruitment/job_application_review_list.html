@@ -13,18 +13,12 @@
 <body>
 
 <div layout:fragment="content">
-    <style>
-        .btn.application {
-            margin: 0 10px;
-        }
-    </style>
-
     <div class="row">
         <h3>Profiles to Review</h3>
 
         <div id="toolbar" class="btn-group">
-            <button type="button" class="btn btn-default" onclick="slideshow()">Slideshow Mode
-                <i class="glyphicon glyphicon-plus"></i>
+            <button type="button" class="btn btn-default" onclick="slideshowMode()" title="slideshow mode">
+                <i class="fa fa-caret-square-o-right"></i>
             </button>
             <button type="button" class="btn btn-default" id="btn-delete-row" data-toggle="modal" data-target="#delete-confirm-modal" disabled="disabled">
                 <i class="glyphicon glyphicon-trash"></i>
@@ -36,9 +30,6 @@
                data-show-refresh="true"
                data-show-toggle="true"
                data-show-columns="true"
-               data-pagination="true"
-               data-page-list="[10, 25, 50, 100, ALL]"
-               data-detail-view="true"
                data-minimum-count-columns="1"
                data-id-field="id"
                smartDisplay="true">
@@ -84,25 +75,46 @@
         //<![CDATA[
         var $table = $('#table');
 
-        jQuery(document).ready(function ($) {
-            loadApplications()
+        var vm = new Vue({
+            data: {
+                applicationIds: null,
+                responseIds: null,
+            }
+        })
 
+        jQuery(document).ready(function ($) {
+            vm.applicationIds = getUrlParameter("applications").split(',');
+            vm.responseIds = getUrlParameter("responses").split(',');
+
+            loadApplications()
         });
 
         function loadApplications() {
-            var applicationIdList = getUrlParameter("applications")
-            url = "/api/job_application/profile_review/" + applicationIdList;
             $.ajax({
                 type: "get",
-                url: url,
+                url: "/api/job_application/profile_review/" + vm.applicationIds,
                 success: function (data) {
-                    initTable(data);
+                    var applications = data;
+                    $.ajax({
+                        type: "get",
+                        url: "/api/review_response/status_list/" + vm.responseIds,
+                        success: function (data) {
+                            var results = data;
+                            var rows = [];
+                            $.each(applications, function( i, v ) {
+                                v.result = results[i];
+                                rows.push(v);
+                            });
+                            initTable(rows);
+                        }
+                    });
                 }
             });
+
         }
 
-        function slideshow() {
-            window.open("/job_application/profile_review/slideshow/?applications=" + getUrlParameter("applications"), "_self");
+        function slideshowMode() {
+            window.open("/job_application/profile_review/?applications=" + vm.applicationIds + '&responses=' + vm.responseIds + '&mode=slideshow', "_self");
         }
         function initTable(data) {
             var columns = [{
@@ -121,7 +133,7 @@
                 title: 'Applicant',
                 sortable: true,
                 formatter: function (index, row, element) {
-                    return '<a href="/job_application/' + row.id + '">' + index + '</a>';
+                    return '<a href="/job_application/profile_review/?mode=slideshow&applications=' + vm.applicationIds + '&responses=' + vm.responseIds + '&index=' + element + '">' + index + '</a>';
                 }
             }, {
                 field: 'jobPost.title',
@@ -139,45 +151,15 @@
                 field: 'jobPost.department.name',
                 title: 'Department',
                 sortable: true,
+            }, {
+                field: 'result',
+                title: 'Your Response',
+                sortable: true,
             }];
 
             $table.bootstrapTable({
                 columns: columns,
                 data: data,
-                detailFormatter: function (index, row, element) {
-                    var result =
-                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#email-modal" data-id=' + row.id + ' data-touid="' + row.applicant.id + '">Send Email</a>' +
-                            '<button class="btn btn-primary application" data-toggle="modal" data-target="#file-generate-modal" data-id=' + row.id + '>Generate Document</a>' +
-                            '<button class="btn btn-primary application" id="REVIEWING" disabled="disabled" onclick="handleApplicationStatusChange(\'REVIEWING\',' + index + ')"">Start Review</a>' +
-                            '<button class="btn btn-success application" id="PASSED" disabled="disabled" onclick="handleApplicationStatusChange(\'PASSED\',' + index + ')">Pass</button>' +
-                            '<button class="btn btn-danger application" id="FAILED" disabled="disabled" onclick="handleApplicationStatusChange(\'FAILED\',' + index + ')">Fail</button>' +
-                            '<button class="btn btn-primary application" id="OFFER_SENT" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_SENT\',' + index + ')">Offer Sent</button>' +
-                            '<button class="btn btn-success application" id="OFFER_ACCEPTED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_ACCEPTED\',' + index + ')">Offer Accepted</button>' +
-                            '<button class="btn btn-danger application" id="OFFER_DECLINED" disabled="disabled" onclick="handleApplicationStatusChange(\'OFFER_DECLINED\',' + index + ')">Offer Declined</button>' +
-                            '<button class="btn btn-primary application" id="CONTRACTED" disabled="disabled" data-toggle="modal" data-target="#contract-modal" data-action="create" data-index=' + index + '>Create Contract</a>';
-                    return result;
-                },
-                onExpandRow: function(index, row, $detail) {
-                    switch (row.status) {
-                        case "SUBMITTED":
-                            $detail.find("#REVIEWING").prop( "disabled", false );
-                            break;
-                        case "REVIEWING":
-                            $detail.find("#PASSED, #FAILED").prop( "disabled", false );
-                            break;
-                        case "PASSED":
-                            $detail.find("#OFFER_SENT").prop( "disabled", false );
-                            break;
-                        case "OFFER_SENT":
-                            $detail.find("#OFFER_ACCEPTED, #OFFER_DECLINED").prop( "disabled", false );
-                            break;
-                        case "OFFER_ACCEPTED":
-                            $detail.find("#CONTRACTED").prop( "disabled", false );
-                            break;
-                    }
-                },
-                cookie: true,
-                cookieIdTable: 'applicant_application',
             });
         }
 

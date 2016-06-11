@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Job Post List</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
@@ -12,65 +12,182 @@
 <body>
 
 <div layout:fragment="content">
-    <style>
-        .th-inner {
-            font-weight: normal;
-            font-style: italic;
-        }
-    </style>
     <div class="row" id="page">
-        <h3>Job Post Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a></h3>
+        <button v-bind:disabled="isFirstPage()" class="btn btn-default" onclick="changePage('prev')"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+        <button v-bind:disabled="isLastPage()" class="btn btn-default" onclick="changePage('next')"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-default" onclick="listMode()"><i class="fa fa-list-ul"></i></button>
+
+        <h3 v-if="result">{{ result }}</h3>
+
+        <h3>Job Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3>
         <div th:replace="career/applicant_profile :: applicant_profile"></div>
+        <h3>Review Detail</h3>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-show-header="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-side-pagination="server"
+               data-id-field="id"
+               smartDisplay="true"
+               style="word-wrap: break-word">
+        </table>
         <hr/>
-        <div role="form">
+        <div v-if="!result" role="form">
             <div class="form-group">
                 <label for="response" class="control-label">Comment</label>
-                <textarea class="form-control" id="response" rows="5"></textarea>
+                <textarea v-model="comment" class="form-control" id="response" rows="2"></textarea>
             </div>
             <div class="form-group">
-                <button class="btn btn-success" id="pass" onclick="submitResponse('PASSED')">Pass</button>
-                <button class="btn btn-danger" id="fail" onclick="submitResponse('FAILED')">Fail</button>
+                <button class="btn btn-success" onclick="submitResponse('PASSED')">Pass</button>
+                <button class="btn btn-danger" onclick="submitResponse('FAILED')">Fail</button>
             </div>
         </div>
         <div th:replace="career/career_job_post :: job_post_modal"></div>
-        <button class="btn btn-default" id="pass" onclick="submitResponse('PASSED')"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-        <button class="btn btn-default" id="pass" onclick="submitResponse('PASSED')"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
 
+        <button v-bind:disabled="isFirstPage()" class="btn btn-default" onclick="changePage('prev')"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+        <button v-bind:disabled="isLastPage()" class="btn btn-default" onclick="changePage('next')"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
     </div>
 
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var $table = $('#table');
-        var url = '/api/job_application/' + window.location.pathname.split("/")[3];
-
-        getUrlParameter("applications")
 
         var vm = new Vue({
             el: '#page',
             data: {
                 jobApplication: null,
+                reviewResponse: null,
+                applicationIds: null,
+                responseIds: null,
+                index: 0,
+                comment: null,
+                result: null,
             },
+            methods: {
+                isFirstPage: function() {
+                    return this.applicationIds && this.index == 0;
+                },
+                isLastPage: function() {
+                    return this.applicationIds && this.index == this.applicationIds.length - 1;
+                }
+            }
         })
 
         jQuery(document).ready(function ($) {
-            var id = window.location.pathname.split("/")[3]
-            loadApplication(id);
+            vm.applicationIds = getUrlParameter("applications").split(',');
+            vm.responseIds = getUrlParameter("responses").split(',');
+
+            if (getUrlParameter("index")) {
+                vm.index = getUrlParameter("index");
+            }
+            loadPage(true)
         });
+        function listMode() {
+            window.open("/job_application/profile_review/?applications=" + getUrlParameter("applications") + '&responses=' + vm.responseIds, "_self");
+        }
+        function initTable(url) {
+            $table.bootstrapTable({
+                columns: [{
+                    field: 'runNumber',
+                    title: 'No.',
+                    formatter: function (index, row, element) {
+                        if (vm.reviewResponse.status == "REVIEWING" && row.id == vm.reviewResponse.id) {
+                            return '<b><i>' + index + ' </i></b><i class="fa fa-hand-o-left" aria-hidden="true"></i>';
+                        } else if (row.id == vm.reviewResponse.id) {
+                            return '<b><i>' + index + ' </i></b>';
+                        } else {
+                            return index;
+                        }
+                    }
+                }, {
+                    field: 'reviewer.name',
+                    title: 'Reviewer',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.reviewer.id + '">' + index + '</a>';
+                    }
+                }, {
+                    field: 'type',
+                    title: 'Review Type',
+                }, {
+                    field: 'response',
+                    title: 'Comment',
+                }, {
+                    field: 'status',
+                    title: 'Result',
+                }],
+                url: url,
+                responseHandler: function (res) {
+                    vm.jobApplication = res;
 
-        function loadApplication(id) {
-            $.ajax({
-                type: "get",
-                url: "/api/job_application/" + id,
-                success: function (data) {
-                    vm.jobApplication = data;
+                    var uid = vm.jobApplication.applicant.id;
+                    if (vm.index == 0) {
+                        initFileListTable(uid);
+                    } else {
+                        initFileListTable(uid);
+                        $('#file-table').bootstrapTable('refresh');
+                    }
+                    loadContactForm(uid);
+                    setMyRun();
 
-                    initFileListTable(vm.jobApplication.applicant.id);
-                    loadContactForm("/api/user/profile/" + vm.jobApplication.applicant.id);
-                }
+                    var data = {};
+                    data.rows = res.responses;
+                    data.total = res.responses.length;
+                    data.rows.sort(sortByRunNumber);
+                    return data;
+                },
             });
         }
 
+        function loadPage(init) {
+            if (init) {
+                initTable('/api/job_application/' + vm.applicationIds[vm.index])
+            } else {
+                $table.bootstrapTable('refresh', {url: '/api/job_application/' + vm.applicationIds[vm.index]});
+            }
+        }
+        function changePage(direction) {
+            vm.result = null;
+            if (direction == 'prev') {
+                vm.index--;
+                loadPage();
+            } else if (direction == 'next') {
+                vm.index++;
+                loadPage();
+            }
+        }
+        function setMyRun() {
+            vm.result = null;
+            $.each(vm.jobApplication.responses, function( i, response ) {
+                if (vm.responseIds[vm.index] == response.id) {
+                    vm.reviewResponse = response;
+                    if (response.status != "REVIEWING") {
+                        vm.result = response.status
+                    }
+                }
+            });
+        }
+        function submitResponse(status) {
+            vm.reviewResponse.response = vm.comment;
+            vm.reviewResponse.status = status;
+            vm.reviewResponse.jobApplication = {"id": vm.jobApplication.id};
 
+            $.ajax({
+                type: "put",
+                url: "/api/review_response/",
+                data: JSON.stringify(vm.reviewResponse),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    vm.comment = null;
+                    loadPage();
+                }
+            });
+        }
+        function sortByRunNumber(a, b){
+            var aa = a.runNumber;
+            var bb = b.runNumber;
+            return ((aa < bb) ? -1 : ((aa > bb) ? 1 : 0));
+        }
         //]]>
     </script>
 </div>

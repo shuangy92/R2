@@ -1,5 +1,6 @@
 package com.worksap.stm2016.api.recruitment;
 
+import com.worksap.stm2016.Application;
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
@@ -84,16 +85,39 @@ public class JobApplicationApi {
     }
 
     @RequestMapping(value = "profile_review", method = RequestMethod.POST)
-    public void profileReview(Authentication authentication, @RequestBody profileReviewRequest request){
+    public void profileReview(Authentication authentication, @RequestBody ProfileReviewRequest request){
         User sender = ((CurrentUser)authentication.getPrincipal()).getUser();
         jobApplicationService.handleProfileReview(request.applications, request.reviewers, request.notes, sender);
     }
 
+    @RequestMapping(value = "interview", method = RequestMethod.POST)
+    public void interview(Authentication authentication, @RequestBody InterviewRequest request){
+        User sender = ((CurrentUser)authentication.getPrincipal()).getUser();
+        jobApplicationService.handleInterview(request.application, request.interviewer, request.notes, request.start, request.end, sender);
+    }
+
+    @RequestMapping(value = "{id}/clearNewFinished", method = RequestMethod.POST)
+    public JobApplication clearNewFinished(@PathVariable Long id){
+        JobApplication jobApplication = jobApplicationService.get(id);
+        jobApplication.setNewFinished(0);
+        return jobApplicationService.save(jobApplication);
+    }
+
     @Getter
     @Setter
-    private static class profileReviewRequest {
+    private static class ProfileReviewRequest {
         List<Long> applications;
         List<Long> reviewers;
         String notes;
+    }
+
+    @Getter
+    @Setter
+    private static class InterviewRequest {
+        JobApplication application;
+        User interviewer;
+        String notes;
+        Date start;
+        Date end;
     }
 }

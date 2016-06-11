@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Job Post List</title>
     <link th:href="@{/static/bower_components/bootstrap-table/dist/bootstrap-table.min.css}" rel="stylesheet" media="screen" type="text/css"/>
@@ -12,40 +12,31 @@
 <body>
 
 <div layout:fragment="content">
-    <style>
-        .th-inner {
-            font-weight: normal;
-            font-style: italic;
-        }
-    </style>
     <div class="row" id="page">
-        <h3>Job Post Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-eye" aria-hidden="true"></i></a></h3>
+        <h3 v-if="result">{{ result }}</h3>
+
+        <h3>Job Info <a v-if="jobApplication" data-toggle="modal" data-target="#job-post-modal"  data-id="{{ jobApplication.jobPost.id }}" title="preview" style="cursor: pointer;"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3>
         <div th:replace="career/applicant_profile :: applicant_profile"></div>
         <h3>Review Detail</h3>
-        <h4 id="notice">{{ notice }}</h4>
-
         <table id="table"
                data-toolbar="#toolbar"
-               data-show-header="false"
+               data-show-header="true"
                data-show-refresh="true"
                data-show-toggle="true"
-               data-pagination="true"
                data-side-pagination="server"
-               data-page-list="[ALL]"
-               data-detail-view="true"
                data-id-field="id"
                smartDisplay="true"
                style="word-wrap: break-word">
         </table>
-
-        <div v-if="myRunStatus == 1 &amp;&amp; !responseSubmitted" role="form">
+        <hr/>
+        <div v-if="reviewResponse &amp;&amp; !result" role="form">
             <div class="form-group">
-                <label for="response" class="control-label">Your comment for run {{ myRun.runNumber }}: {{ myRun.task }}</label>
-                <textarea class="form-control" id="response" rows="5"></textarea>
+                <label for="response" class="control-label">Comment</label>
+                <textarea v-model="comment" class="form-control" id="response" rows="2"></textarea>
             </div>
             <div class="form-group">
-                <button class="btn btn-success" id="pass" onclick="submitResponse('PASSED')">Pass</button>
-                <button class="btn btn-danger" id="fail" onclick="submitResponse('FAILED')">Fail</button>
+                <button class="btn btn-success" onclick="submitResponse('PASSED')">Pass</button>
+                <button class="btn btn-danger" onclick="submitResponse('FAILED')">Fail</button>
             </div>
         </div>
         <div th:replace="career/career_job_post :: job_post_modal"></div>
@@ -59,180 +50,114 @@
             el: '#page',
             data: {
                 jobApplication: null,
-                myResponse: null,
-                myRun: null,
-                myRunStatus: 0,
-                hasRun: false,
-                notice: null,
-                responseSubmitted: false
+                reviewResponse: null,
+                comment: null,
+                result: null,
             },
         })
 
         jQuery(document).ready(function ($) {
-            initTable();
+            initTable('/api/job_application/' + window.location.pathname.split("/")[2])
         });
 
-        function initTable() {
+        function initTable(url) {
             $table.bootstrapTable({
                 columns: [{
-                    formatter: function (index, row, element) { // one row is one reviewRun
-                        return "Run " + row.runNumber + ": " + row.task;
-                    },
-                    width: "3000"
+                    field: 'runNumber',
+                    title: 'No.',
+                    width: '5%',
+                    formatter: function (index, row, element) {
+                        if (vm.reviewResponse && vm.reviewResponse.status == "REVIEWING" && row.id == vm.reviewResponse.id) {
+                            return '<b><i>' + index + ' </i></b><i class="fa fa-hand-o-left" aria-hidden="true"></i>';
+                        } else if (vm.reviewResponse && row.id == vm.reviewResponse.id) {
+                            return '<b><i>' + index + ' </i></b>';
+                        } else {
+                            return index;
+                        }
+                    }
+                }, {
+                    field: 'reviewer.name',
+                    title: 'Reviewer',
+                    width: '10%',
+                    formatter: function (index, row, element) {
+                        return '<a href="/user/' + row.reviewer.id + '">' + index + '</a>';
+                    }
+                }, {
+                    field: 'type',
+                    title: 'Review Type',
+                    width: '10%',
+                    formatter: function (index, row, element) {
+                        if (row.type == "INTERVIEW") {
+                            return index + '<br>' + (new Date(row.start)).toString("yyyy/MM/dd") + '<br>' + (new Date(row.start)).toString("HH:mm") + ' - ' + (new Date(row.end)).toString("HH:mm")
+                        } else {
+                            return index;
+                        }
+                    }
+                }, {
+                    field: 'response',
+                    title: 'Comment',
+                }, {
+                    field: 'status',
+                    title: 'Result',
+                    width: '10%',
                 }],
-                url: '/api/job_application/' + window.location.pathname.split("/")[2],
+                url: url,
                 contentType: "application/x-www-form-urlencoded",
                 queryParamsType: "limit",
-                queryParams: function (p) {
-                    var data = {};
-                    if (p.sort) {
-                        data.sort = p.sort;
-                    } else {
-                        data.sort = "lastModifiedDate";
-                    }
-                    data.order = p.order;
-                    data.limit = p.limit;
-                    data.offset = p.offset;
-                    data.filter = p.filter;
-                    return data;
-                },
                 responseHandler: function (res) {
                     vm.jobApplication = res;
 
-                    if (vm.jobApplication.status == "REVIEWING") {
-                        setMyRunStatus();
-                        if (vm.hasRun) {
-                            if (vm.myRunStatus == 1) {
-                                vm.notice = "It's your turn now"
-                            } else if (vm.myRunStatus == -1) {
-                                vm.notice = "You have finished your turn"
-                            } else {
-                                vm.notice = "It's not your turn yet"
-                            }
-                        }
-                    } else {
-                        vm.notice = "Application status: " + vm.jobApplication.status
-                    }
-
                     var uid = vm.jobApplication.applicant.id;
-                    initFileListTable(uid);
-                    loadContactForm("/api/user/profile/" + uid);
+                    if (vm.index == 0) {
+                        initFileListTable(uid);
+                    } else {
+                        initFileListTable(uid);
+                        $('#file-table').bootstrapTable('refresh');
+                    }
+                    loadContactForm(uid);
+                    setMyRun();
 
                     var data = {};
-                    if (res.jobPost.reviewFlow) {
-                        data.rows = res.jobPost.reviewFlow.runs;
-                        data.total = res.jobPost.reviewFlow.runs.length;
-                    }
+                    data.rows = res.responses;
+                    data.total = res.responses.length;
+                    data.rows.sort(sortByRunNumber);
                     return data;
                 },
-                rowStyle: function rowStyle(value, row, index) {
-                    return {
-                        css: {"font-weight": "bolder"}
-                    }
-                },
-                onExpandRow: function(index, row, $detail) { // one row is one reviewRun
-                    $detail.html('<table></table>').find('table').bootstrapTable({
-                        columns: [{
-                            field: 'reviewer',
-                            title: 'Reviewer',
-                            width:"15%",
-                            formatter: function (index, row, element) {
-                                if (vm.myRunStatus == 1 && index.id == vm.myResponse.reviewer.id && row.reviewRun.id == vm.myRun.id) {
-                                    return '<b>' + index.name + '</b>';
-                                }
-                                return index.name;
-                            },
-                        }, {
-                            field: 'response',
-                            title: 'Comment',
-                            formatter: function (index, row, element) { // one row is one reviewResponse
-                                if (index) {
-                                    return index;
-                                }
-                            },
-                            cellStyle: function (value, row, index) {
-                                return {
-                                    css: {"max-width": "100px"}
-                                };
-                            }
-                        }, {
-                            field: 'status',
-                            title: 'Status',
-                            width:"10%",
-                        }],
-                        data: getResponsesOfRun(row.runNumber),
-                    });
-                },
-                onLoadSuccess: function () {
-                    $table.bootstrapTable('expandAllRows', false);
-                },
-                cookie: true,
-                cookieIdTable: 'review_run',
             });
-
         }
 
-        function getResponsesOfRun(runNumber) {
-            var responses = [];
-            $.each(vm.jobApplication.responses, function( i, v ) {
-                if (v.reviewRun.runNumber == runNumber) {
-                    responses.push(v);
-                }
-            });
-            return responses;
-        }
-        function setMyTurn() {
-            $.each(vm.jobApplication.responses, function( i, v ) {
-                if (v.reviewer.id == currentUser.id) {
-                    vm.hasRun = true;
-                    if (!vm.myRun || v.reviewRun.runNumber < vm.myRun.runNumber) {
-                        if (v.status != "REVIEWING") {
-                            vm.myRun = null
-                        } else {
-                            vm.myRun = v.reviewRun;
-                            vm.myResponse = v;
-                        }
+        function setMyRun() {
+            vm.result = null;
+            $.each(vm.jobApplication.responses, function( i, response ) {
+                if (getUrlParameter('responseId') == response.id) {
+                    vm.reviewResponse = response;
+                    if (response.status != "REVIEWING") {
+                        vm.result = response.status
                     }
                 }
             });
-        }
-        function setMyRunStatus() {
-            setMyTurn();
-            if (!vm.myRun) {
-                vm.myRunStatus = -1;
-                return
-            }
-            if (vm.myRun.runNumber == 1) {
-                vm.myRunStatus = 1;
-                return
-            }
-            var result = true;
-            var responses = getResponsesOfRun(vm.myRun.runNumber - 1);
-            $.each(responses, function( i, v ) {
-                if (v.status == "REVIEWING") {
-                    result = false;
-                }
-            });
-            vm.myRunStatus = result ? 1 : 0;
-            return;
         }
         function submitResponse(status) {
-            vm.myResponse.response = $("#response").val();
-            vm.myResponse.status = status;
+            vm.reviewResponse.response = vm.comment;
+            vm.reviewResponse.status = status;
+            vm.reviewResponse.jobApplication = {"id": vm.jobApplication.id};
 
             $.ajax({
                 type: "put",
-                url: "/api/review_flow/" + vm.jobApplication.id,
-                data: JSON.stringify(vm.myResponse),
+                url: "/api/review_response/",
+                data: JSON.stringify(vm.reviewResponse),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    vm.responseSubmitted = true;
+                    vm.comment = null;
                     $table.bootstrapTable('refresh');
                 }
             });
         }
-
-
+        function sortByRunNumber(a, b){
+            var aa = a.runNumber;
+            var bb = b.runNumber;
+            return ((aa < bb) ? -1 : ((aa > bb) ? 1 : 0));
+        }
         //]]>
     </script>
 </div>

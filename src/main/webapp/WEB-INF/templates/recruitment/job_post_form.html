@@ -99,12 +99,12 @@
                     <input class="form-control" placeholder="Salary / Salary Range / Negotiable" type="input"
                            id="salary" name="salary" required="required"/>
                 </div>
-                <div class="form-group required">
+                <!--<div class="form-group required">
                     <label for="reviewFlowId" class="control-label">Review Flow ID</label>
                     <a href="/review_flow" target="_blank" title="Click to view the review flow list">?</a>
                     <input class="form-control" placeholder="Review Flow ID" type="number" id="reviewFlowId"
                            name="reviewFlowId" required="required"/>
-                </div>
+                </div>-->
                 <button type="submit" class="btn btn-default" id="save">Save</button>
                 <button type="submit" class="btn btn-success" id="publish" style="display: none;">Publish</button>
                 <button type="submit" class="btn btn-warning" id="unpublish" style="display: none;">Unpublish</button>
@@ -116,7 +116,7 @@
     <script type="text/javascript" th:inline="javascript">
         //<![CDATA[
         var request;
-        var reviewFlow;
+        //var reviewFlow;
         var job;
 
         jQuery(document).ready(function ($) {
@@ -165,15 +165,15 @@
             $("#jobCategory").val(request.job.jobCategory.name);
             $("#departmentName").val(request.department.name);
 
-            if (request.reviewFlow) {
+            /*if (request.reviewFlow) {
                 $("#reviewFlowId").val(request.reviewFlow.id);
-            }
+            }*/
         }
         function handleFormSubmission(method) {
 
             $('form').on('submit', function (e) {
                 e.preventDefault();
-                checkReviewFlowExistence();
+                /*checkReviewFlowExistence();
                 if ($("#reviewFlowId").val() && reviewFlow == null) {
                     $.notify({
                         icon: 'fa fa-info-circle',
@@ -182,7 +182,7 @@
                         delay: 500,
                     })
                 }
-                else {
+                else {*/
                     var data = {};
                     $.each($('form').serializeArray(), function (i, field) {
                         switch (field.name) {
@@ -201,11 +201,11 @@
                                     data.job = job;
                                 }
                                 break;
-                            case "reviewFlowId":
+                            /*case "reviewFlowId":
                                 if (field.value) {
                                     data.reviewFlow = {id: field.value};
                                 }
-                                break;
+                                break;*/
                             default:
                                 data[field.name] = field.value;
                         }
@@ -250,10 +250,10 @@
                             window.location.href = "/job_post";
                         }
                     });
-                }
+                //}
             });
         }
-        function checkReviewFlowExistence() {
+        /*function checkReviewFlowExistence() {
             var id = $("#reviewFlowId").val();
             if (id) {
                 $.ajax({
@@ -271,7 +271,7 @@
                     }
                 });
             }
-        }
+        }*/
         function loadJobPostForm() {
             $.ajax({
                 type: 'get',
