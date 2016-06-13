@@ -8,10 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface ContractRepository extends PagingAndSortingRepository<Contract, Long>,
         JpaSpecificationExecutor {
     Collection<Contract> findByEndDate(Date endDate);
     Collection<Contract> findByEndDateBetween(Date from, Date to);
+    List<Contract> findFirstByOrderByEndDateDesc();
 }

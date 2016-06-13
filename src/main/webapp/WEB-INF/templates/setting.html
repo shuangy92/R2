@@ -25,18 +25,22 @@
                 <span class="help-block">You will get notification of contracts that expires between (current day + A days) and (current day + A + B days) at the beginning of every month</span>
             </div>
             <div class="form-group">
+                <div class="checkbox"><label><input type="checkbox" v-model="notification.emailNotification" v-bind:true-value="1" v-bind:false-value="0"/> Send email for notifications </label></div>
+                <span class="help-block">Users will get email as well for notifications</span>
+            </div>
+            <div class="form-group">
                 <button id="notification" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
             </div>
         </fieldset>
-        <fieldset class="well the-fieldset">
-            <legend class="the-legend">Talent</legend>
+        <!--<fieldset class="well the-fieldset">
+            <legend class="the-legend">Email</legend>
             <div class="form-group">
                 <div class="checkbox"><label><input type="checkbox" v-model="talent.autoAddFormerEmployee" v-bind:true-value="1" v-bind:false-value="0" lazy="lazy"/> Auto add employees to talent bank when contract expires. </label></div>
             </div>
             <div class="form-group">
                 <button id="talent" onclick="submitSettingForm(this.id); return false;" class="btn btn-primary">Save</button>
             </div>
-        </fieldset>
+        </fieldset>-->
     </form>
 
 
@@ -47,10 +51,11 @@
                 notification: {
                     contractNotifyDaysBefore: null,
                     contractNotifyDayLength: null,
+                    emailNotification: null,
                 },
-                talent: {
+                /*talent: {
                     autoAddFormerEmployee: null
-                },
+                },*/
             },
         })
         jQuery(document).ready(function ($) {
@@ -71,11 +76,12 @@
                        switch (v.name) {
                            case 'contractNotifyDaysBefore':
                            case 'contractNotifyDayLength':
+                           case 'emailNotification':
                                vm.notification[v.name] = v.value;
                                break;
-                           case 'autoAddFormerEmployee':
+                           /*case 'autoAddFormerEmployee':
                                vm.talent.autoAddFormerEmployee = v.value;
-                               break;
+                               break;*/
                        }
                     });
                 }

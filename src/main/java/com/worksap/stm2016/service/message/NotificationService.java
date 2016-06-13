@@ -1,13 +1,18 @@
 package com.worksap.stm2016.service.message;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
+import com.worksap.stm2016.domain.Property;
 import com.worksap.stm2016.domain.job.Contract;
+import com.worksap.stm2016.domain.message.Email;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.repository.PropertyRepository;
 import com.worksap.stm2016.repository.message.NotificationRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,11 +42,14 @@ public class NotificationService {
     NotificationRepository notificationRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    PropertyRepository propertyRepository;
 
     public Notification get(Long id) {
         return notificationRepository.findOne(id);
     }
-
 
     public JsonArrayResponse getList(String sort, String order, Integer limit, Integer offset, String filter) throws ParseException {
 
@@ -70,31 +80,6 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    /*public Notification createReviewNotification (JobApplication jobApplication, ReviewResponse reviewResponse, Notification.NotificationType type) {
-        Notification notification = new Notification();
-        switch (type) {
-            case REVIEW_START:
-                notification.setContent("You have a new review task: " + reviewResponse.getReviewRun().getTask());
-                notification.setType(Notification.NotificationType.REVIEW_START);
-                notification.setItemId(jobApplication.getId());
-                notification.setUser(reviewResponse.getReviewer());
-                break;
-            case REVIEW_UPDATE:
-                notification.setContent("It's your turn for review: " + reviewResponse.getReviewRun().getTask());
-                notification.setType(type);
-                notification.setItemId(jobApplication.getId());
-                notification.setUser(reviewResponse.getReviewer());
-                break;
-            case REVIEW_UPDATE_HR:
-                notification.setContent("Review \"" + reviewResponse.getReviewRun().getTask() + "\" for application " + jobApplication.getId() + " has finished.");
-                notification.setType(type);
-                notification.setItemId(jobApplication.getId());
-                notification.setRole(Role.ADMIN);
-                break;
-
-        }
-        return notificationRepository.save(notification);
-    }*/
     public Notification createContractExpiringNotification(User manager, Long expiringCount, Date from, Date to) {
         Notification notification = new Notification();
         notification.setUser(manager);
@@ -105,21 +90,43 @@ public class NotificationService {
         content.put("from", df.format(from));
         content.put("to", df.format(to));
         notification.setContent(content.toString());
+
+        if (propertyRepository.findOne(Property.PropertyName.emailNotification).getValue() == 1) {
+            Email email = new Email();
+            String x = expiringCount == 1 ? "contract" : "contracts";
+            email.setSubject("[NOTIFICATION]: " + expiringCount + " " + x + " will expire in your department from " + df.format(from) + " to " + df.format(to));
+            email.setBody("Please login to check the detail.");
+            email.setTo(manager);
+            try {
+                emailService.send(email);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         return notificationRepository.save(notification);
     }
-    public Notification createContractNotification(Contract contract, Notification.NotificationType type) {
+    public Notification createContractExpiredNotification(Contract contract) {
         Notification notification = new Notification();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        switch (type) {
-            case CONTRACT_EXPIRING: //TODO
-                break;
-            case CONTRACT_EXPIRED:
-                notification.setType(type);
-                notification.setUser(contract.getJob().getDepartment().getManager());
-                JSONObject content = new JSONObject();
-                content.put("employee", contract.getUser().getName());
-                notification.setContent(content.toString());
-                break;
+
+        notification.setType(Notification.NotificationType.CONTRACT_EXPIRED);
+        notification.setUser(contract.getJob().getDepartment().getManager());
+        JSONObject content = new JSONObject();
+        content.put("employee", contract.getUser().getName());
+        notification.setContent(content.toString());
+
+        if (propertyRepository.findOne(Property.PropertyName.emailNotification).getValue() == 1) {
+            Email email = new Email();
+            email.setSubject("[NOTIFICATION]: " + contract.getUser().getName() + "'s contract has expired");
+            email.setTo(contract.getJob().getDepartment().getManager());
+            try {
+                emailService.send(email);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return notificationRepository.save(notification);
     }
@@ -134,6 +141,21 @@ public class NotificationService {
         content.put("senderName", sender.getName());
         content.put("senderId", sender.getId());
         notification.setContent(content.toString());
+
+        if (propertyRepository.findOne(Property.PropertyName.emailNotification).getValue() == 1) {
+            Email email = new Email();
+            email.setSubject("[NOTIFICATION]: You have some job applicants\' profiles to review.");
+            email.setBody("[Notes] " + sender.getName() + ": " + notes + "<br/>Please login to check the detail.");
+            email.setFrom(sender);
+            email.setTo(userRepository.findOne(user.getId()));
+            try {
+                emailService.send(email);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         return notificationRepository.save(notification);
     }
     public Notification createInterviewNotification(Long applicationId, Long responseId, User user, User sender, String notes, Date start, Date end) {
@@ -149,6 +171,21 @@ public class NotificationService {
         content.put("start", start.toString());
         content.put("end", end.toString());
         notification.setContent(content.toString());
+
+        if (propertyRepository.findOne(Property.PropertyName.emailNotification).getValue() == 1) {
+            Email email = new Email();
+            email.setSubject("[NOTIFICATION]: You have an interview at " + new LocalDate(start).toString("yyyy/MM/dd") + " from " + (new LocalTime(start)).toString("HH:mm") + " to " + (new LocalTime(end)).toString("HH:mm"));
+            email.setBody("[Notes] " + sender.getName() + ": " + notes + "<br/>Please login to check the detail.");
+            email.setFrom(sender);
+            email.setTo(userRepository.findOne(user.getId()));
+            try {
+                emailService.send(email);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         return notificationRepository.save(notification);
     }
 }

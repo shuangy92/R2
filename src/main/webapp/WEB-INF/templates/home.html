@@ -5,6 +5,9 @@
 >
 <head>
     <th:block th:include="fragments/head :: head"/>
+    <link th:href="@{/static/css/fullcalendar.min.css}" rel="stylesheet" media="screen" type="text/css"/>
+    <script type="text/javascript" th:src="@{/static/bower_components/moment/min/moment.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/fullcalendar.min.js}"></script>
 </head>
 <body>
 <!--/* Standard layout can be mixed with Layout Dialect */-->
@@ -13,6 +16,7 @@
     <div id="page-wrapper-career">
         <div class="container">
             <h1>Welcome</h1>
+
         </div>
     </div>
     <div th:replace="fragments/footer :: footer"></div>

@@ -33,7 +33,7 @@
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_SENT" checked="checked"/> OFFER_SENT </label></div>
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_ACCEPTED" checked="checked"/> OFFER_ACCEPTED </label></div>
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="OFFER_DECLINED" checked="checked"/> OFFER_DECLINED </label></div>
-            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CONTRACTED" checked="checked"/> CONTRACTED </label></div>
+            <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CONTRACTED"/> CONTRACTED </label></div>
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="WITHDREW"/> WITHDREW </label></div>
             <div class="checkbox" v-bind:class="{'disabled': allStatus}"><label><input type="checkbox" v-model="status" v-bind:disabled="allStatus" value="CLOSED"/> CLOSED </label></div>
         </form>
@@ -169,6 +169,7 @@
                 notes: null,
                 interviewer: null,
                 date: null,
+                applicationId: null,
             },
         })
 
@@ -334,14 +335,15 @@
                 var application = $table.bootstrapTable('getData', true)[index];
                 review_table.bootstrapTable('load', application.responses.sort(sortByRunNumber));
 
-                $.ajax({
-                    type: "post",
-                    url: "/api/job_application/" + application.id + "/clearNewFinished",
-                    success: function (data) {
-                        $table.bootstrapTable('updateRow', {index: index, row: data});
-                    }
-                });
-
+                if (application.newFinished > 0) {
+                    $.ajax({
+                        type: "post",
+                        url: "/api/job_application/" + application.id + "/clearNewFinished",
+                        success: function (data) {
+                            $table.bootstrapTable('updateRow', {index: index, row: data});
+                        }
+                    });
+                }
             })
         }
         function initReviewTable() {
@@ -422,26 +424,27 @@
             $('#interview-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var id = button.data('id')
+                interviewModalVM.applicationId = id;
 
-                var interview_form = $("#interview-form")
-                if ( $('[type="date"]').prop('type') != 'date' ) {
-                    $('[type="date"]').datepicker();
-                }
-                interview_form.find("#from,#to").timepicker();
+            })
+            var interview_form = $("#interview-form")
+            if ( $('[type="date"]').prop('type') != 'date' ) {
+                $('[type="date"]').datepicker();
+            }
+            interview_form.find("#from,#to").timepicker();
 
-                var interviewer_select = $("#interviewer-select")
-                initEmployeeSelect(interviewer_select, "Search")
-                interviewer_select.on('change',function(){
-                    interviewModalVM.interviewer = {"id": $(this).val()};
-                });
+            var interviewer_select = $("#interviewer-select")
+            initEmployeeSelect(interviewer_select, "Search")
+            interviewer_select.on('change',function(){
+                interviewModalVM.interviewer = {"id": $(this).val()};
+            });
 
-                interview_form.on('submit', function (e) {
-                    e.preventDefault();
-                    submitInterviewForm(id);
-                })
+            interview_form.on('submit', function (e) {
+                e.preventDefault();
+                submitInterviewForm();
             })
         }
-        function submitInterviewForm(id) {
+        function submitInterviewForm() {
             var interview_form = $("#interview-form")
             var from = interview_form.find("#from")
             var to = interview_form.find("#to")
@@ -451,7 +454,7 @@
             data.interviewer = interviewModalVM.interviewer;
             data.start = from.timepicker('getTime', new Date(interviewModalVM.date));
             data.end = to.timepicker('getTime', new Date(interviewModalVM.date));
-            data.application = {"id": id};
+            data.application = {"id": interviewModalVM.applicationId};
 
             notify = $.notify({
                 icon: 'fa fa-info-circle',

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Calendar</title>
+
+    <script type="text/javascript" th:src="@{/static/js/Chart.min.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h3>Workforce Chart</h3>
+    <div class="row" id="page">
+        <div>
+            <button class="btn btn-default" onclick="calculateData()">Recalculate Data <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></button>
+            <span class="help-block">This will recalculate the workforce from now to the last month of all existing contracts in your company that can reach</span>
+
+        </div>
+        <br/>
+        <div v-if="isHR()">
+            <select id="department-select"></select>
+        </div>
+        <br/>
+        <div>
+            1st data:
+            <a role="button" onclick="changeYear('prev', 1)"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+            <input type="number" min="2014" max="{{ curYear }}" v-model="year" style="text-align: center"/>
+            <a role="button" onclick="changeYear('next', 1)"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </div>
+        <br/>
+        <div>
+            2nd data:
+            <input type="radio" v-model="picked" value="year" />
+            <a role="button" onclick="changeYear('prev', 2)"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+            <input type="number" min="2014" max="{{ curYear }}" v-model="year2" style="text-align: center"/>
+            <a role="button" onclick="changeYear('next', 2)"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+
+            <input type="radio" v-model="picked" value="average" /> or Average from
+            <input type="number" min="2014" max="{{ curYear }}" v-model="from" style="text-align: center"/>
+            to
+            <input type="number" min="2014" max="{{ curYear }}" v-model="to" style="text-align: center"/>
+
+            <button class="btn btn-default" onclick="refreshData()"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></button>
+        </div>
+        <canvas id="chart" width="400" height="200"></canvas>
+    </div>
+
+
+    <script type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        var ctx = $("#chart")
+        var chart;
+        var vm = new Vue({
+            el: '#page',
+            data: {
+                departmentId: currentUser.id,
+                year: new Date().getFullYear(),
+                year2: new Date().addYears(-1).getFullYear(),
+                data: null,
+                data2: null,
+                data3: [],
+                from: 2014,
+                to: 2015,
+                curYear: new Date().getFullYear(),
+                picked: "year"
+            },
+            computed: {
+                data3: function () {
+                    var result = []
+                    if (this.data && this.data2) {
+                        for (var i = 0; i < 12; ++i) {
+                            result.push(this.data2[i] - this.data[i])
+                        }
+
+                    }
+                    return result;
+                }
+            },
+            methods: {
+                isHR: function () {
+                    return currentUser.role == "ADMIN";
+                }
+            }
+        })
+
+        jQuery(document).ready(function ($) {
+            var department_select = $("#department-select");
+            initDepartmentList(department_select, "Select a department");
+            department_select.on('change',function(){
+                vm.departmentId = $(this).val();
+            });
+
+            initData()
+        });
+        function initChart() {
+            var data = {
+                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                datasets: [ {
+                    label: vm.year,
+                    backgroundColor: "rgba(255,99,132,0.2)",
+                    borderColor: "rgba(255,99,132,1)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)",
+                    data: vm.data,
+                }, {
+                    label: vm.year2,
+                    backgroundColor: "rgba(75,192,192,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgba(75,192,192,1)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: vm.data2,
+                }, {
+                    label: "diff",
+                    borderWidth: 1,
+                    data: vm.data3,
+                }]
+            }
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Workforce'
+                    },
+                    legend: {
+                        display: true,
+                        labels: {
+                            fontColor: 'rgb(255, 99, 132)'
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        function changeYear(action, number) {
+            if (action == "prev") {
+                if (number == 1) {
+                    vm.year--;
+                } else {
+                    vm.year2--;
+                }
+            } else {
+                if (number == 1) {
+                    vm.year++;
+                } else {
+                    vm.year2++;
+                }
+            }
+            if (number == 1) {
+                getData(1)
+            } else {
+                getData(2)
+            }
+        }
+        function initData(number) {
+            var query = {};
+            query.departmentId = vm.departmentId;
+            query.year = vm.year;
+            $.ajax({
+                type: "get",
+                url: "/api/workforce/",
+                data: query,
+                success: function (data) {
+                    vm.data = data;
+
+                    query.year = vm.year2;
+                    $.ajax({
+                        type: "get",
+                        url: "/api/workforce/",
+                        data: query,
+                        success: function (data) {
+                            vm.data2 = data;
+                            initChart()
+                        }
+                    });
+                }
+            });
+        }
+        function getData(number) {
+            var data = {};
+            data.departmentId = vm.departmentId;
+            data.year = number == 1? vm.year : vm.year2;
+            $.ajax({
+                type: "get",
+                url: "/api/workforce/",
+                data: data,
+                success: function (data) {
+                    if (number == 1) {
+                        chart.data.datasets[0].label = vm.year;
+                        chart.data.datasets[0].data = data;
+                        chart.update();
+                    } else if (number == 2) {
+                        chart.data.datasets[1].label = vm.year2;
+                        chart.data.datasets[1].data = data;
+                        chart.update();
+                    }
+                }
+            });
+        }
+        function getAverageData() {
+            var data = {};
+            data.departmentId = vm.departmentId;
+            data.from = vm.from;
+            data.to = vm.to;
+            $.ajax({
+                type: "get",
+                url: "/api/workforce/average",
+                data: data,
+                success: function (data) {
+                    chart.data.datasets[1].label = "Average " + vm.from + "-" + vm.to;
+                    chart.data.datasets[1].data = data;
+                    chart.update();
+                }
+            });
+        }
+        function calculateData() {
+            $.ajax({
+                type: "post",
+                url: "/api/workforce/calculate",
+                success: function (data) {
+
+                }
+            });
+        }
+        function refreshData() {
+            if (vm.picked == "year") {
+                getData(2)
+            } else if (vm.picked == "average") {
+                getAverageData()
+            }
+            getData(1)
+        }
+        //]]>
+    </script>
+</div>
+</body>
+</html>

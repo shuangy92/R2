@@ -25,6 +25,10 @@ public class Setup {
         property.setName(Property.PropertyName.contractNotifyDayLength);
         property.setValue(30);
         propertyRepository.save(property);
+
+        property.setName(Property.PropertyName.emailNotification);
+        property.setValue(0);
+        propertyRepository.save(property);
     }
 
 }

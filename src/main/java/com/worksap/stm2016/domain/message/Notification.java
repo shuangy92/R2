@@ -21,7 +21,7 @@ public class Notification implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_id", nullable = false, updatable = false)
+    @Column(name = "notification_id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "content", columnDefinition = "text")
@@ -38,11 +38,11 @@ public class Notification implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "item_id")
+    /*@Column(name = "item_id")
     private Long itemId;
 
     @Column(name = "item_note")
-    private String itemNote;
+    private String itemNote;*/
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -11,14 +11,13 @@
                 <li class="all"><a href="/dashboard"> Dashboard</a></li>
                 <li class="all"><a href="/user/calendar"> My schedule</a></li>
                 <li class="manager"><a th:href="@{/user/request}"> My Requests</a></li>
-                <li class="admin manager"><a th:href="@{/schedule_filter}"> Schedule Filter</a></li>
                 <li class="admin"><a id="user-menu" th:href="@{/user}"> User List</a></li>
                 <li class="admin">
                     <a href="#"> Recruitment<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li class="admin manager" ><a th:href="@{/job_post}"> Job Post List</a></li>
                         <li class="admin manager" ><a th:href="@{/job_application}"> Application List</a></li>
-                        <li class="admin manager" ><a th:href="@{/review_flow}"> Review Flow List</a></li>
+                        <!--<li class="admin manager" ><a th:href="@{/review_flow}"> Review Flow List</a></li>-->
                     </ul>
                 </li>
                 <li class="admin manager employee" >
@@ -31,6 +30,13 @@
                         <li class="admin manager"><a th:href="@{/contract}"> Contract List</a></li>
                         <li class="admin manager"><a th:href="@{/job_history}"> Job History List</a></li>
                         <li class="admin manager employee"><a  th:href="@{/file_template}"> File Template List</a></li>
+                    </ul>
+                </li>
+                <li class="admin manager" >
+                    <a href="#"> Utility<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="admin manager"><a th:href="@{/schedule_filter}"> Schedule Filter</a></li>
+                        <li class="admin manager"><a th:href="@{/workforce}"> Workforce Chart</a></li>
                     </ul>
                 </li>
                 <li class="admin"><a th:href="@{/setting}"> Setting</a></li>

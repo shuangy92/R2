@@ -73,6 +73,13 @@ public class DateUtil extends java.util.Date {
         return c.getTime();
     }
 
+    public static Date addMonth(Date date, int months) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, months);
+        return c.getTime();
+    }
+
     public static Long diffInHours(Date start, Date end) {
         long duration  = end.getTime() - start.getTime();
         return TimeUnit.MILLISECONDS.toHours(duration);

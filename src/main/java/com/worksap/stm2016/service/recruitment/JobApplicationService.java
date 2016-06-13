@@ -125,12 +125,8 @@ public class JobApplicationService {
     public JobApplication update(JobApplication jobApplication){
         JobPost jobPost = jobApplication.getJobPost();
         switch (jobApplication.getStatus()) {
-            case REVIEWING:
-                /*if (jobPost.getReviewFlow() != null) {
-                    this.createResponseList(jobApplication);
-                }*/
-                break;
             case CONTRACTED:
+                // close other applications of the applicant
                 Collection<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(jobApplication.getApplicant());
                 for (JobApplication otherApplications : jobApplications) {
                     if (otherApplications != jobApplication) {
@@ -140,6 +136,23 @@ public class JobApplicationService {
                 }
 
                 jobPost.decreaseVacancies();
+
+                // close other applications of the job post
+                if (!jobPost.getOpen()) {
+                    jobApplications = jobApplicationRepository.findByJobPost(jobPost);
+                    for (JobApplication otherApplications : jobApplications) {
+                        if (otherApplications != jobApplication) {
+                            if (otherApplications.getStatus() == JobApplication.JobApplicationStatus.SUBMITTED ||
+                                    otherApplications.getStatus() == JobApplication.JobApplicationStatus.REVIEWING ||
+                                    otherApplications.getStatus() == JobApplication.JobApplicationStatus.OFFER_SENT ||
+                                    otherApplications.getStatus() == JobApplication.JobApplicationStatus.OFFER_ACCEPTED) {
+                                otherApplications.setStatus(JobApplication.JobApplicationStatus.CLOSED);
+                                jobApplicationRepository.save(otherApplications);
+                            }
+                        }
+                    }
+                }
+
                 jobPostRepository.save(jobPost);
 
                 User user = jobApplication.getApplicant();

@@ -1,4 +1,4 @@
-package com.worksap.stm2016.controller;
+package com.worksap.stm2016.controller.file;
 
 import com.worksap.stm2016.repository.FileProfileRepository;
 import org.slf4j.Logger;

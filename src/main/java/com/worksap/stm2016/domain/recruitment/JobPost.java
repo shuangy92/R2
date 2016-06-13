@@ -67,12 +67,13 @@ public class JobPost implements Serializable {
     @Column(name = "vacancies")
     private Integer vacancies;
 
-    public void setVacancies (Integer vacancies) {
-        this.vacancies = vacancies;
-        this.open = vacancies > 0;
-    }
     public void decreaseVacancies () {
-        --this.vacancies;
+        if (this.vacancies > 0) {
+            --this.vacancies;
+            if (this.vacancies == 0) {
+                this.open = false;
+            }
+        }
     }
 
     @Column(name = "startDate")

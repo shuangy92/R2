@@ -30,7 +30,11 @@ public class EmailService {
     public JsonResponse send(Email email) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-        helper.setFrom(new InternetAddress(email.getFrom().getEmail(), email.getFrom().getName()));
+        if (email.getFrom() != null) {
+            helper.setFrom(new InternetAddress(email.getFrom().getEmail(), email.getFrom().getName()));
+        } else {
+            helper.setFrom(new InternetAddress("yangshuangstms@gmail.com"));
+        }
         helper.setTo(new InternetAddress(email.getTo().getEmail(), email.getTo().getName()));
         // helper.setReplyTo(replyTo);
         helper.setSubject(email.getSubject());

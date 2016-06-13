@@ -66,7 +66,7 @@ function initDepartmentList($select, placeholder) {
         url: "/api/department/all",
         success: function (data) {
             var departments = $.map(data, function (obj) {
-                return {id: obj.id, text: obj.name};
+                return {id: obj.id, text: obj.name + '(' + obj.location + ')'};
             })
             $select.html('').select2({data: [{id: '', text: ''}]});
             $select.select2({

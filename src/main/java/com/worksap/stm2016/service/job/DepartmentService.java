@@ -76,13 +76,17 @@ public class DepartmentService {
     public Department update(Department department) throws ParseException {
         User prevManager = departmentRepository.findOne(department.getId()).getManager();
         if (prevManager != null) {
-            prevManager.setRole(Role.EMPLOYEE);
-            userRepository.save(prevManager);
+            if (prevManager.getRole() != Role.ADMIN) {
+                prevManager.setRole(Role.EMPLOYEE);
+                userRepository.save(prevManager);
+            }
         }
         if (department.getManager() != null) {
             User newManager = userRepository.findOne(department.getManager().getId());
-            newManager.setRole(Role.MANAGER);
-            userRepository.save(newManager);
+            if (newManager.getRole() != Role.ADMIN) {
+                newManager.setRole(Role.MANAGER);
+                userRepository.save(newManager);
+            }
         }
         return departmentRepository.save(department);
     }

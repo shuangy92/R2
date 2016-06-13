@@ -101,6 +101,11 @@
             <artifactId>xmlworker</artifactId>
             <version>5.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.4</version>
+        </dependency>
 
     </dependencies>
 
@@ -122,7 +127,7 @@
 
 
     <!-- disable central repository and use Shanghai local mirror instead to accelerate development -->
-    <!--<repositories>
+    <repositories>
         <repository>
             <id>central</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -154,5 +159,5 @@
             <id>central-mirror</id>
             <url>http://172.26.131.142:8081/content/repositories/central/</url>
         </pluginRepository>
-    </pluginRepositories>-->
+    </pluginRepositories>
 </project>
