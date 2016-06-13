@@ -12,7 +12,7 @@
                     <h4 class="modal-title">Create a job category</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" class="form-horizontal" id="job-profile-form">
+                    <form role="form" class="form-horizontal" id="job-profile-form" onsubmit="return submitJobProfileForm()">
                         <div class="form-group required">
                             <label for="title" class="col-sm-4 control-label">Title</label>
                             <div class="col-sm-8">
@@ -87,11 +87,6 @@
         jQuery(document).ready(function ($) {
             initJobCategoryList($("#jobCategory"), "Select a category");
             initDepartmentList($("#department"), "Select a department");
-            form.on('submit', function (e) {
-                e.preventDefault();
-                $('#job-modal').modal('hide')
-                submitJobProfileForm(method, $(this));
-            })
 
             $('#job-modal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
@@ -148,7 +143,9 @@
                 }
             });
         }
-        function submitJobProfileForm(method) {
+        function submitJobProfileForm() {
+            $('#job-modal').modal('hide')
+
             var data = {};
             $.each(form.serializeArray(), function (i, field) {
                 switch (field.name) {
@@ -183,6 +180,7 @@
                     notify.update('message', "Error");
                 }
             });
+            return false;
         }
         function initJobCategoryList($select, placeholder) {
             var categories;

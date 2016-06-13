@@ -17,9 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
-import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
+import static com.worksap.stm2016.specification.BasicSpecs.*;
 
 @Service
 public class ReviewFlowService {

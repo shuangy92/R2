@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+      layout:decorator="layout">
 <head>
     <title>Calendar</title>
 
@@ -15,7 +15,7 @@
     <div class="row" id="page">
         <div>
             <button class="btn btn-default" onclick="calculateData()">Recalculate Data <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></button>
-            <span class="help-block">This will recalculate the workforce from now to the last month of all existing contracts in your company that can reach</span>
+            <span class="help-block">This will recalculate the workforce from now to the last month among all existing contracts in your company</span>
 
         </div>
         <br/>
@@ -73,7 +73,6 @@
                         for (var i = 0; i < 12; ++i) {
                             result.push(this.data2[i] - this.data[i])
                         }
-
                     }
                     return result;
                 }
@@ -142,6 +141,14 @@
                     }
                 }
             });
+            vm.$watch('data', function (val) {
+                chart.data.datasets[2].data = vm.data3;
+                chart.update()
+            })
+            vm.$watch('data2', function (val) {
+                chart.data.datasets[2].data = vm.data3;
+                chart.update()
+            })
         }
         function changeYear(action, number) {
             if (action == "prev") {
@@ -200,10 +207,12 @@
                         chart.data.datasets[0].label = vm.year;
                         chart.data.datasets[0].data = data;
                         chart.update();
+                        vm.data = data;
                     } else if (number == 2) {
                         chart.data.datasets[1].label = vm.year2;
                         chart.data.datasets[1].data = data;
                         chart.update();
+                        vm.data2 = data;
                     }
                 }
             });
@@ -220,7 +229,7 @@
                 success: function (data) {
                     chart.data.datasets[1].label = "Average " + vm.from + "-" + vm.to;
                     chart.data.datasets[1].data = data;
-                    chart.update();
+                    vm.data2 = data;
                 }
             });
         }
@@ -240,6 +249,16 @@
                 getAverageData()
             }
             getData(1)
+
+        }
+        function getDiff() {
+            var result = [];
+            if (vm.data && vm.data2) {
+                for (var i = 0; i < 12; ++i) {
+                    result.push(this.data2[i] - this.data[i])
+                }
+                vm.data3 = result;
+            }
         }
         //]]>
     </script>

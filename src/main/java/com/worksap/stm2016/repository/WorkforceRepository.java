@@ -6,7 +6,6 @@ import com.worksap.stm2016.domain.workforce.Workforce;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.Year;
 import java.util.List;
 
 @Repository

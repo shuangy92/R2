@@ -3,7 +3,6 @@ package com.worksap.stm2016.api.job;
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.service.job.ContractService;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -9,15 +9,12 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import static com.worksap.stm2016.specification.BasicSpecs.andFilter;
 import static com.worksap.stm2016.specification.BasicSpecs.hasValue;
-import static com.worksap.stm2016.specification.BasicSpecs.isValue;
 
 /**
  * Created by Shuang on 4/27/2016.
@@ -61,11 +58,11 @@ public class FileTemplateService {
     }
 
     public FileTemplate save(FileTemplate fileTemplate) {
-        return fileTemplateRepository.save(fileTemplate);
-    }
-
-    public FileTemplate update(FileTemplate fileTemplate) {
-        return fileTemplateRepository.save(fileTemplate);
+        try{
+            return fileTemplateRepository.save(fileTemplate);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public Long deleteList(ArrayList<Long> ids){

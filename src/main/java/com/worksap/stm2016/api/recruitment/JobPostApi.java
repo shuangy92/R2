@@ -4,7 +4,6 @@ import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.service.recruitment.JobPostService;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

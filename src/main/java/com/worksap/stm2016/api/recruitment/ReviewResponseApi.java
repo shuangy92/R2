@@ -1,8 +1,6 @@
 package com.worksap.stm2016.api.recruitment;
 
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
-import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.service.recruitment.ReviewResponseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

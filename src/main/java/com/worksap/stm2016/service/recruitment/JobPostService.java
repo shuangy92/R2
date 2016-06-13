@@ -1,8 +1,8 @@
 package com.worksap.stm2016.service.recruitment;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
-import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.job.JobCategory;
+import com.worksap.stm2016.domain.message.Request;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
 import com.worksap.stm2016.repository.job.JobCategoryRepository;
@@ -82,11 +82,19 @@ public class JobPostService {
     }
 
     public JobPost save(JobPost post){
-        return jobPostRepository.save(post);
+        try{
+            return jobPostRepository.save(post);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public JobPost update(JobPost post){
-        return jobPostRepository.save(post);
+        try{
+            return jobPostRepository.save(post);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public void delete(Long id){

@@ -2,24 +2,17 @@ package com.worksap.stm2016.service.recruitment;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.calendar.CalendarEvent;
-import com.worksap.stm2016.domain.job.Contract;
-import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.recruitment.JobPost;
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
-import com.worksap.stm2016.domain.review.ReviewRun;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.calendar.CalendarEventRepository;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
-import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
-import com.worksap.stm2016.service.job.ContractService;
 import com.worksap.stm2016.service.message.NotificationService;
-import com.worksap.stm2016.service.user.UserService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -27,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
@@ -118,8 +108,12 @@ public class JobApplicationService {
     public JobApplication getByJobPostAndApplicant(JobPost jobPost, User applicant) {
         return jobApplicationRepository.findOneByJobPostAndApplicant(jobPost, applicant);
     }
-    public JobApplication save(JobApplication application){
-        return jobApplicationRepository.save(application);
+    public JobApplication save(JobApplication jobApplication){
+        try{
+            return jobApplicationRepository.save(jobApplication);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public JobApplication update(JobApplication jobApplication){
@@ -160,7 +154,11 @@ public class JobApplicationService {
                 userRepository.save(user);
                 break;
         }
-        return jobApplicationRepository.save(jobApplication);
+        try{
+            return jobApplicationRepository.save(jobApplication);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public void delete(Long id){

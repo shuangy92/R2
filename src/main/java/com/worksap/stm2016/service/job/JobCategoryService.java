@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,12 +57,12 @@ public class JobCategoryService {
         return andFilter(sort, order, limit, offset, filter, specs, jobCategoryRepository);
     }
 
-    public void save(JobCategory jobCategory) throws ParseException {
-        jobCategoryRepository.save(jobCategory);
-    }
-
-    public void update(JobCategory jobCategory) throws ParseException {
-        jobCategoryRepository.save(jobCategory);
+    public JobCategory save(JobCategory jobCategory) {
+        try {
+            return jobCategoryRepository.save(jobCategory);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Long deleteList(ArrayList<Long> ids){

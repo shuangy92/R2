@@ -1,15 +1,13 @@
 package com.worksap.stm2016.service.job;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
-import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.job.Contract;
-import com.worksap.stm2016.domain.recruitment.JobApplication;
-import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
-import com.worksap.stm2016.repository.job.JobHistoryRepository;
 import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
+import com.worksap.stm2016.repository.job.JobHistoryRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.util.DateUtil;
 import org.json.simple.JSONObject;
@@ -89,6 +87,9 @@ public class ContractService {
     }
 
     public Contract save(Contract contract){
+        if (contract.getUser() == null || contract.getUser().getId() == null) {
+            return null;
+        }
         User user = userRepository.findOne(contract.getUser().getId());
 
         Contract oldContract = user.getContract();
@@ -96,8 +97,11 @@ public class ContractService {
             contractRepository.delete(oldContract);
             jobHistoryRepository.save(new JobHistory(oldContract));
         }
-
-        contract = contractRepository.save(contract);
+        try {
+            contract = contractRepository.save(contract);
+        } catch(Exception e){
+            return null;
+        }
 
         user.setDepartment(contract.getJob().getDepartment());
         //user.setActive(true);
@@ -108,7 +112,11 @@ public class ContractService {
     }
 
     public Contract update(Contract contract){
-        return contractRepository.save(contract);
+        try {
+            return contractRepository.save(contract);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public Long deleteList(ArrayList<Long> ids){

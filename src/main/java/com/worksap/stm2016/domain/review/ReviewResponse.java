@@ -3,12 +3,10 @@ package com.worksap.stm2016.domain.review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -26,10 +24,10 @@ public class ReviewResponse implements Comparable<ReviewResponse> {
 
     @JsonBackReference(value="application-responses")
     @ManyToOne
-    @JoinColumn(name = "job_application_id")
+    @JoinColumn(name = "job_application_id", nullable = false)
     private JobApplication jobApplication;
 
-    @Column(name = "run_number")
+    @Column(name = "run_number", nullable = false)
     private Short runNumber;
 
     @Column(name = "type", nullable = false)
@@ -37,7 +35,7 @@ public class ReviewResponse implements Comparable<ReviewResponse> {
     private ReviewType type;
 
     @ManyToOne
-    @JoinColumn(name = "reviewer_id")
+    @JoinColumn(name = "reviewer_id", nullable = false)
     private User reviewer;
 
     @Column(name = "response", columnDefinition = "text")

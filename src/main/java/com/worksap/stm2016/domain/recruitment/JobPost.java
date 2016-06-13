@@ -1,13 +1,10 @@
 package com.worksap.stm2016.domain.recruitment;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.job.Job;
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -20,7 +17,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -38,13 +34,13 @@ public class JobPost implements Serializable {
 
     @OrderBy("title ASC")
     @ManyToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
     private Job job;
 
-    @Column(name = "salary")
+    @Column(name = "salary", nullable = false)
     private String salary;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PayRate payRate;
 
@@ -61,10 +57,10 @@ public class JobPost implements Serializable {
 
     /* from staffing request */
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title; //job title
 
-    @Column(name = "vacancies")
+    @Column(name = "vacancies", nullable = false)
     private Integer vacancies;
 
     public void decreaseVacancies () {
@@ -76,11 +72,11 @@ public class JobPost implements Serializable {
         }
     }
 
-    @Column(name = "startDate")
+    @Column(name = "startDate", nullable = false)
     @Type(type="date")
     private Date startDate; // contract start date
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     @Type(type="date")
     private Date endDate;
 
@@ -98,10 +94,10 @@ public class JobPost implements Serializable {
 
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @Column(name = "open")
+    @Column(name = "open", nullable = false)
     private Boolean open = true;
 
     /* auditing */

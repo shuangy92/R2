@@ -27,10 +27,10 @@ public class User implements Serializable {
     private Long id;
 
     @Email
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Transient
@@ -39,7 +39,7 @@ public class User implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 

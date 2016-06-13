@@ -4,7 +4,6 @@ import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.service.job.JobService;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +42,16 @@ public class JobApi {
     }
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
-    public void save(@RequestBody Job job){
-        jobService.save(job);
+    public Job save(@RequestBody Job job){
+        logger.debug("job saved: {}" + job);
+        return jobService.save(job);
     }
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
     public void update(@RequestBody Job job){
-        jobService.update(job);
+        logger.debug("job updated: {}" + job);
+        jobService.save(job);
     }
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")

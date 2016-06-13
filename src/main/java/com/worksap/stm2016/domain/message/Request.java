@@ -37,14 +37,14 @@ public abstract class Request implements Serializable {
     private Thread thread;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @ManyToOne
     @JoinColumn(name = "prev_id", referencedColumnName = "request_id")
     private Request prev;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "sender_message", columnDefinition = "text")
@@ -53,32 +53,32 @@ public abstract class Request implements Serializable {
     @Column(name = "replier_message", columnDefinition = "text")
     private String replierMessage;
 
-    @Column(name = "request_type")
+    @Column(name = "request_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private RequestStatus status = RequestStatus.PENDING;
 
     /* auditing */
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id", name = "sender_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "sender_id", nullable = false)
     @CreatedBy
     private User sender;
 
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id", name = "replier_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "replier_id", nullable = false)
     @LastModifiedBy
     private User replier;
 
-    @Column(name = "send_date")
+    @Column(name = "send_date", nullable = false)
     @CreatedDate
     private Date sendDate;
 
-    @Column(name = "reply_date")
+    @Column(name = "reply_date", nullable = false)
     @LastModifiedDate
     private Date replyDate;
 

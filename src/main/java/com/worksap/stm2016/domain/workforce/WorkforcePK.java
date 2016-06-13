@@ -1,10 +1,8 @@
 package com.worksap.stm2016.domain.workforce;
 
 
-import com.worksap.stm2016.domain.job.Department;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 @Data

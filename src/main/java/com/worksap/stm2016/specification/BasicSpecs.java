@@ -1,7 +1,6 @@
 package com.worksap.stm2016.specification;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
-import org.json.simple.JSONObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

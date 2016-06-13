@@ -142,8 +142,9 @@
                 success: function (data) {
                     event_modal.modal('hide')
                     if (eventVM.method == 'edit') {
-                        calendar.fullCalendar('updateEvent', data);
+                        calendar.fullCalendar('updateEvent', event);
                     } else if (eventVM.method == 'create') {
+                        data.editable = currentUser.id == eventVM.uid;
                         calendar.fullCalendar('renderEvent', data, true);
                     }
                 }

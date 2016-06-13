@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
@@ -63,7 +62,7 @@ public class FileTemplateApi {
 
     @RequestMapping(method = RequestMethod.PUT)
     public FileTemplate update(@RequestBody FileTemplate fileTemplate) {
-        return fileTemplateService.update(fileTemplate);
+        return fileTemplateService.save(fileTemplate);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

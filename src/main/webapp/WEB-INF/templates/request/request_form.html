@@ -177,7 +177,7 @@
             var endDate;
 
             $("#department").val(currentUser.department.name);
-            $("#startDate").datepicker();
+            $("#startDate").datepicker({ minDate: new Date() });
 
             handleContractDate();
 

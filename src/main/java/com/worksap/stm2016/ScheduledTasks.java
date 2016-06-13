@@ -1,35 +1,33 @@
 package com.worksap.stm2016;
 
-import com.worksap.stm2016.domain.workforce.Workforce;
-import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.Property;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.job.Department;
-import com.worksap.stm2016.domain.message.Notification;
+import com.worksap.stm2016.domain.job.JobHistory;
 import com.worksap.stm2016.domain.recruitment.JobPost;
+import com.worksap.stm2016.domain.workforce.Workforce;
 import com.worksap.stm2016.enums.Role;
+import com.worksap.stm2016.repository.PropertyRepository;
 import com.worksap.stm2016.repository.WorkforceRepository;
+import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.job.DepartmentRepository;
 import com.worksap.stm2016.repository.job.JobHistoryRepository;
-import com.worksap.stm2016.repository.PropertyRepository;
-import com.worksap.stm2016.repository.job.ContractRepository;
 import com.worksap.stm2016.repository.recruitment.JobPostRepository;
 import com.worksap.stm2016.repository.user.UserRepository;
 import com.worksap.stm2016.service.message.NotificationService;
 import com.worksap.stm2016.util.DateUtil;
-import lombok.Getter;
-import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
 import static org.springframework.data.jpa.domain.Specifications.where;

@@ -26,7 +26,7 @@ public class FileTemplate implements Serializable {
     @Column(name = "file_template_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

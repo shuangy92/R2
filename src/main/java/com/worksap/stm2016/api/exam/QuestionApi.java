@@ -3,7 +3,6 @@ package com.worksap.stm2016.api.exam;
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.exam.Question;
 import com.worksap.stm2016.service.exam.QuestionService;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

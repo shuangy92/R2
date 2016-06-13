@@ -4,7 +4,6 @@ import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.api.util.JsonResponse;
 import com.worksap.stm2016.domain.job.JobCategory;
 import com.worksap.stm2016.service.job.JobCategoryService;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +45,12 @@ public class JobCategoryApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void save(@RequestBody JobCategory jobCategory) throws ParseException {
-        jobCategoryService.save(jobCategory);
+    public JobCategory save(@RequestBody JobCategory jobCategory) {
+        return jobCategoryService.save(jobCategory);
     }
     @RequestMapping(method = RequestMethod.PUT)
-    public void update(@RequestBody JobCategory jobCategory) throws ParseException {
-        jobCategoryService.update(jobCategory);
+    public JobCategory update(@RequestBody JobCategory jobCategory) {
+        return jobCategoryService.save(jobCategory);
     }
 
     //@PreAuthorize("hasAuthority('ADMIN')")

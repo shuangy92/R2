@@ -3,7 +3,6 @@ package com.worksap.stm2016.domain.message;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import lombok.Data;
-import org.json.simple.JSONObject;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

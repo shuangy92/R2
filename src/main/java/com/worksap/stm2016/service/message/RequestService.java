@@ -77,7 +77,11 @@ public class RequestService {
             default:
                 request = mapper.readValue(requestJson.toString(), OtherRequest.class);
         }
-        return (Request) requestRepository.save(request);
+        try{
+            return (Request) requestRepository.save(request);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public Request update(JSONObject requestJson) throws IOException {
@@ -90,7 +94,10 @@ public class RequestService {
             default:
                 request = mapper.readValue(requestJson.toString(), OtherRequest.class);
         }
-
-        return (Request) requestRepository.save(request);
+        try{
+            return (Request) requestRepository.save(request);
+        } catch(Exception e){
+            return null;
+        }
     }
 }

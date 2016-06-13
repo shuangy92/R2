@@ -1,8 +1,6 @@
 package com.worksap.stm2016.domain.job;
 
 
-import com.worksap.stm2016.domain.job.Contract;
-import com.worksap.stm2016.domain.job.Job;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.PayRate;
 import lombok.Data;
@@ -37,26 +35,26 @@ public class JobHistory implements Serializable {
 
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OrderBy("title ASC")
     @ManyToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
     private Job job;
 
     @Column(name = "startDate")
     @Type(type="date")
     private Date startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     @Type(type="date")
     private Date endDate;
 
-    @Column(name = "salary")
+    @Column(name = "salary", nullable = false)
     private String salary;
 
-    @Column(name = "pay_rate")
+    @Column(name = "pay_rate", nullable = false)
     @Enumerated(EnumType.STRING)
     private PayRate payRate;
 }

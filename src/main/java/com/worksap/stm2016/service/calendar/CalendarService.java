@@ -1,29 +1,18 @@
 package com.worksap.stm2016.service.calendar;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.worksap.stm2016.domain.calendar.CalendarEvent;
-import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.calendar.CalendarEventRepository;
 import com.worksap.stm2016.util.CollectionUtil;
 import com.worksap.stm2016.util.DateUtil;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.util.*;
 
 import static com.worksap.stm2016.specification.BasicSpecs.*;
@@ -128,11 +117,19 @@ public class CalendarService {
   
 
     public CalendarEvent save(CalendarEvent calendarEvent)  {
-        return calendarEventRepository.save(calendarEvent);
+        try {
+            return calendarEventRepository.save(calendarEvent);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public CalendarEvent update(CalendarEvent calendarEvent)  {
-        return calendarEventRepository.save(calendarEvent);
+        try {
+            return calendarEventRepository.save(calendarEvent);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void delete(CalendarEvent calendarEvent)  {

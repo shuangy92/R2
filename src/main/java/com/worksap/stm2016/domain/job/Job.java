@@ -32,11 +32,11 @@ public class Job implements Serializable {
 
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @OrderBy("name ASC")
     @ManyToOne
-    @JoinColumn(name = "job_category_id")
+    @JoinColumn(name = "job_category_id", nullable = false)
     private JobCategory jobCategory;
 }

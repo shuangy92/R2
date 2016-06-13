@@ -4,7 +4,6 @@ package com.worksap.stm2016.api.message;
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.service.message.NotificationService;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

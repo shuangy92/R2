@@ -5,7 +5,6 @@ import com.worksap.stm2016.domain.Property;
 import com.worksap.stm2016.domain.job.Contract;
 import com.worksap.stm2016.domain.message.Email;
 import com.worksap.stm2016.domain.message.Notification;
-import com.worksap.stm2016.domain.recruitment.JobApplication;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.PropertyRepository;

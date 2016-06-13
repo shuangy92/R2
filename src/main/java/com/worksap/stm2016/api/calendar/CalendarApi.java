@@ -2,24 +2,16 @@ package com.worksap.stm2016.api.calendar;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.calendar.CalendarEvent;
-import com.worksap.stm2016.domain.job.Department;
 import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.service.calendar.CalendarService;
 import com.worksap.stm2016.service.user.UserService;
 import com.worksap.stm2016.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.parsing.Location;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -51,11 +43,13 @@ public class CalendarApi {
 
     @RequestMapping(method = RequestMethod.POST)
     public CalendarEvent save(@RequestBody CalendarEvent calendarEvent) {
+        logger.debug("calendar event saved: {}" + calendarEvent);
         return calendarService.save(calendarEvent);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public void delete(@RequestBody CalendarEvent calendarEvent) {
+        logger.debug("calendar event deleted: {}" + calendarEvent);
         calendarService.delete(calendarEvent);
     }
 

@@ -105,7 +105,12 @@
                         showbuttons: 'bottom',
                         type: 'text',
                         inputclass: 'form-control',
-                        title: 'Edit'
+                        title: 'Edit',
+                        validate: function(value) {
+                            if($.trim(value) == '') {
+                                return 'This field is required';
+                            }
+                        }
                     }
                 }],
                 url: url,

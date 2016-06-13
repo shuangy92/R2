@@ -1,19 +1,12 @@
 package com.worksap.stm2016.domain.calendar;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.worksap.stm2016.audit.CurrentUser;
 import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.util.DateUtil;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -27,23 +20,23 @@ public class CalendarEvent {
     @Column(name = "calendar_event_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private Date start;
 
-    @Column(name = "end_time")
+    @Column(name = "end_time", nullable = false)
     private Date end;
 
-    @Column(name = "all_day")
+    @Column(name = "all_day", nullable = false)
     private Boolean allDay = false;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id", name = "user_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "user_id", nullable = false)
     private User user;
 
     /*@JsonProperty(access = JsonProperty.Access.READ_ONLY)

@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static com.worksap.stm2016.api.util.JsonResponse.deletionResponse;
 
@@ -57,13 +56,13 @@ public class DepartmentApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
-    public Department save(@RequestBody Department department) throws ParseException {
+    public Department save(@RequestBody Department department) {
         return departmentService.save(department);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
-    public Department update(@RequestBody Department department) throws ParseException {
+    public Department update(@RequestBody Department department) {
         return departmentService.update(department);
     }
 

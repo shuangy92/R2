@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="contract_form">
     <div class="modal fade" id="contract-modal" role="dialog">
@@ -13,7 +13,7 @@
                     <h4 v-if="action=='edit'" class="modal-title">Edit</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" class="form-horizontal" id="contract-form">
+                    <form role="form" class="form-horizontal" id="contract-form" onsubmit="return submitContractForm();">
                         <div class="form-group required">
                             <label for="user" class="col-sm-4 control-label">Employee</label>
                             <div class="col-sm-8">
@@ -57,8 +57,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-4">
-                                <button v-if="action=='edit'" onclick="submitContractForm(); return false;" class="btn btn-primary" id="edit">Save</button>
-                                <button v-if="action!='edit'" onclick="submitContractForm(); return false;" class="btn btn-primary" id="create">Create</button>
+                                <button type="submit" v-if="action=='edit'" class="btn btn-primary" id="edit">Save</button>
+                                <button type="submit" v-if="action!='edit'" class="btn btn-primary" id="create">Create</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -154,6 +154,7 @@
                     notify.update('message', "Error");
                 }
             });
+            return false;
         }
         function checkJobCode() {
             $.ajax({

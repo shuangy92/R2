@@ -2,7 +2,6 @@ package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.worksap.stm2016.domain.user.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;

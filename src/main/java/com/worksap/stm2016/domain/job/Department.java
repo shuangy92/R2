@@ -1,7 +1,6 @@
 package com.worksap.stm2016.domain.job;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.worksap.stm2016.domain.user.User;
 import lombok.Getter;
@@ -29,10 +28,10 @@ public class Department implements Serializable {
     @JoinColumn(name = "manager_id")
     private User manager;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "location")
+    @Column(name = "location", nullable = false)
     private String location;
 
     @Override

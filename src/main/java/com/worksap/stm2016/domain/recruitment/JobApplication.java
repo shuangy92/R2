@@ -1,11 +1,8 @@
 package com.worksap.stm2016.domain.recruitment;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
 import com.worksap.stm2016.domain.user.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -33,29 +30,14 @@ public class JobApplication implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "job_post_id")
+    @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private JobApplicationStatus status = JobApplicationStatus.SAVED;
 
-    /* auditing */
-    @OrderBy("name ASC")
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id", name = "applicant_id")
-    @CreatedBy
-    private User applicant;
-
-    @Column(name = "created_date")
-    @LastModifiedDate
-    private Date applyDate;
-
-    /*@OneToOne
-    @JoinColumn(name = "review_flow_id")
-    private ReviewFlow reviewFlow;*/
-
-    @Column(name = "new_finished")
+    @Column(name = "new_finished", nullable = false)
     private Integer newFinished = 0;
 
     public void increaseNewfinished() {
@@ -78,6 +60,17 @@ public class JobApplication implements Serializable {
             responses.remove(reviewResponse);
         }
     }
+
+    /* auditing */
+    @OrderBy("name ASC")
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "user_id", name = "applicant_id")
+    @CreatedBy
+    private User applicant;
+
+    @Column(name = "created_date")
+    @LastModifiedDate
+    private Date applyDate;
 
     public enum JobApplicationStatus {
         SAVED, SUBMITTED, WITHDREW,

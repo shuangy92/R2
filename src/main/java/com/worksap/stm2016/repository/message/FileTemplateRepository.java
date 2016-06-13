@@ -1,7 +1,6 @@
 package com.worksap.stm2016.repository.message;
 
 
-import com.worksap.stm2016.domain.message.Email;
 import com.worksap.stm2016.domain.message.FileTemplate;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

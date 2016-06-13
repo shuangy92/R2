@@ -2,10 +2,7 @@ package com.worksap.stm2016.service.exam;
 
 import com.worksap.stm2016.api.util.JsonArrayResponse;
 import com.worksap.stm2016.domain.exam.Question;
-import com.worksap.stm2016.domain.user.User;
-import com.worksap.stm2016.enums.Role;
 import com.worksap.stm2016.repository.exam.QuestionRepository;
-import com.worksap.stm2016.repository.user.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Iterator;

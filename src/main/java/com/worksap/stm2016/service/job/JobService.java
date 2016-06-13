@@ -58,12 +58,12 @@ public class JobService {
         return andFilter( sort,  order,  limit,  offset,  filter,  specs, jobRepository);
     }
 
-    public void save(Job job){
-        jobRepository.save(job);
-    }
-
-    public void update(Job job){
-        jobRepository.save(job);
+    public Job save(Job job){
+        try{
+            return jobRepository.save(job);
+        } catch(Exception e){
+            return null;
+        }
     }
 
     public Long deleteList(ArrayList<Long> ids){

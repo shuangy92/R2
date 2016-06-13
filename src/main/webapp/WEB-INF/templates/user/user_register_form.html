@@ -58,6 +58,9 @@
                 }
             });
             form.on('submit', function (e) {
+                if (!form.valid()) {
+                    return false;
+                }
                 e.preventDefault();
                 var data = {};
                 $.each(form.serializeArray(), function (i, field) {

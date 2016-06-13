@@ -2,14 +2,10 @@ package com.worksap.stm2016.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.worksap.stm2016.domain.user.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

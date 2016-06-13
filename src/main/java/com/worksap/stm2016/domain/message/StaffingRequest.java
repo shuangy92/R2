@@ -25,21 +25,21 @@ public class StaffingRequest extends Request implements Serializable {
     @JoinColumn(name = "job_id", nullable = false)
     private Job job;
 
-    @Column(name = "vacancies")
+    @Column(name = "vacancies", nullable = false)
     private Integer vacancies;
 
-    @Column(name = "startDate")
+    @Column(name = "startDate", nullable = false)
     @Type(type="date")
     private Date startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     @Type(type="date")
     private Date endDate;
 
     @Column(name = "contract_length")
     private String contractLength;
 
-    @Column(name = "staff_request_type")
+    @Column(name = "staff_request_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private StaffingRequestType staffingRequestType;
 

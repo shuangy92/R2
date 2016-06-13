@@ -69,11 +69,15 @@ public class DepartmentService {
         return andFilter(sort, order, limit, offset, filter, specs, departmentRepository);
     }
 
-    public Department save(Department department) throws ParseException {
-        return departmentRepository.save(department);
+    public Department save(Department department) {
+        try {
+            return departmentRepository.save(department);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    public Department update(Department department) throws ParseException {
+    public Department update(Department department) {
         User prevManager = departmentRepository.findOne(department.getId()).getManager();
         if (prevManager != null) {
             if (prevManager.getRole() != Role.ADMIN) {
@@ -88,7 +92,11 @@ public class DepartmentService {
                 userRepository.save(newManager);
             }
         }
-        return departmentRepository.save(department);
+        try {
+            return departmentRepository.save(department);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

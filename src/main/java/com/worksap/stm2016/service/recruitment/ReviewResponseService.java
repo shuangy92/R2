@@ -1,13 +1,8 @@
 package com.worksap.stm2016.service.recruitment;
 
-import com.worksap.stm2016.domain.message.Notification;
 import com.worksap.stm2016.domain.recruitment.JobApplication;
-import com.worksap.stm2016.domain.review.ReviewFlow;
 import com.worksap.stm2016.domain.review.ReviewResponse;
-import com.worksap.stm2016.domain.review.ReviewRun;
-import com.worksap.stm2016.domain.user.User;
 import com.worksap.stm2016.repository.recruitment.JobApplicationRepository;
-import com.worksap.stm2016.repository.recruitment.ReviewFlowRepository;
 import com.worksap.stm2016.repository.recruitment.ReviewResponseRepository;
 import com.worksap.stm2016.service.message.NotificationService;
 import org.slf4j.Logger;
